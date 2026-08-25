@@ -1,3 +1,4 @@
+import { LOGIN_PAGE } from '@/router/config'
 import { getLastPage } from '@/utils'
 import { debounce } from '@/utils/debounce'
 
@@ -14,8 +15,7 @@ interface ToLoginPageOptions {
   queryString?: string
 }
 
-// TODO: 自己增加登录页
-const LOGIN_PAGE = '/pages/login/index'
+// 登录页由 router/config 统一维护，避免 Token 失效时跳往已删除的旧路径。
 
 /**
  * 跳转到登录页, 带防抖处理

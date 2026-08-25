@@ -144,6 +144,23 @@ export const useTokenStore = defineStore(
     }
 
     /**
+     * Completes a successful external provider login after that provider has
+     * returned a verified token response. Mock provider results never call this.
+     */
+    const completeExternalLogin = async (tokenInfo: IAuthLoginRes) => {
+      try {
+        await _postLogin(tokenInfo)
+        uni.showToast({
+          title: '登录成功',
+          icon: 'success',
+        })
+      }
+      finally {
+        updateNowTime()
+      }
+    }
+
+    /**
      * 微信登录
      * 有的时候后端会用一个接口返回token和用户信息，有的时候会分开2个接口，一个获取token，一个获取用户信息
      * （各有利弊，看业务场景和系统复杂度），这里使用2个接口返回的来模拟
@@ -299,6 +316,7 @@ export const useTokenStore = defineStore(
     return {
       // 核心API方法
       login,
+      completeExternalLogin,
       wxLogin,
       logout,
 

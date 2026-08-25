@@ -10,8 +10,19 @@ export const isNeedLoginMode = LOGIN_STRATEGY === LOGIN_STRATEGY_MAP.DEFAULT_NEE
 
 export const LOGIN_PAGE = '/pages/auth/login'
 export const REGISTER_PAGE = '/pages/auth/register'
+export const BIND_PHONE_PAGE = '/pages/auth/bind-phone'
+export const RESET_PASSWORD_PAGE = '/pages/auth/reset-password'
+export const SET_PASSWORD_PAGE = '/pages/auth/set-password'
+export const AGREEMENT_PAGE = '/pages/auth/agreement'
 
-export const LOGIN_PAGE_LIST = [LOGIN_PAGE, REGISTER_PAGE]
+export const LOGIN_PAGE_LIST = [
+  LOGIN_PAGE,
+  REGISTER_PAGE,
+  BIND_PHONE_PAGE,
+  RESET_PASSWORD_PAGE,
+  SET_PASSWORD_PAGE,
+  AGREEMENT_PAGE,
+]
 
 // 在 definePage 里面配置了 excludeLoginPath 的页面，功能与 EXCLUDE_LOGIN_PATH_LIST 相同
 export const excludeLoginPathList = getAllPages('excludeLoginPath').map(page => page.path)
@@ -24,7 +35,5 @@ export const EXCLUDE_LOGIN_PATH_LIST = [
   ...excludeLoginPathList, // 都是以 / 开头的 path
 ]
 
-// 在小程序里面是否使用H5的登录页，默认为 false
-// 如果为 true 则复用 h5 的登录逻辑
-// TODO: 3/3 确定自己的登录页是否需要在小程序里面使用
-export const LOGIN_PAGE_ENABLE_IN_MP = false
+// 小程序使用统一认证页；微信授权入口会在页面内根据平台安全分流
+export const LOGIN_PAGE_ENABLE_IN_MP = true

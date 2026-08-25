@@ -3,8 +3,21 @@ import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
 
+const jsoncPagesForTests = {
+  name: 'jsonc-pages-for-tests',
+  enforce: 'pre' as const,
+  transform(code: string, id: string) {
+    if (id.endsWith('/src/pages.json')) {
+      return {
+        code: code.replace(/^\s*\/\/.*$/gm, ''),
+        map: null,
+      }
+    }
+  },
+}
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [jsoncPagesForTests, vue()],
   test: {
     environment: 'jsdom',
     globals: true,
