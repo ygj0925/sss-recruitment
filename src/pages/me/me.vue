@@ -58,12 +58,13 @@ function handleLogout() {
 
 <template>
   <view class="profile-page">
-    <view class="profile-header">
-      <view class="profile-nav pt-safe">
-        <view class="profile-nav__bar">
-          <text>我的</text>
-        </view>
+    <view class="profile-nav pt-safe">
+      <view class="profile-nav__bar">
+        <text>我的</text>
       </view>
+    </view>
+    <view class="profile-header">
+      <view class="profile-nav-spacer pt-safe" />
       <view
         class="profile-user"
         :class="{ 'profile-user--clickable': !tokenStore.hasLogin }"
@@ -184,7 +185,7 @@ function handleLogout() {
 
 .profile-page {
   min-height: 100vh;
-  padding-bottom: calc(44rpx + env(safe-area-inset-bottom));
+  padding-bottom: 44rpx;
   color: #1f2a3d;
   background: #f4f7fb;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
@@ -192,14 +193,24 @@ function handleLogout() {
 
 .profile-header {
   box-sizing: border-box;
-  min-height: 370rpx;
+  min-height: 390rpx;
   padding: 0 32rpx 94rpx;
   color: #fff;
-  background: linear-gradient(132deg, #2867ed 0%, #3f82ff 58%, #5a70f4 100%);
+  background: linear-gradient(125deg, #164de5 0%, #2372f5 26%, #2f9bff 52%, #527df5 74%, #7765eb 100%);
 }
 
 .profile-nav {
-  margin: 0 -32rpx;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+  color: #fff;
+  background: linear-gradient(125deg, #164de5 0%, #2372f5 26%, #2f9bff 52%, #527df5 74%, #7765eb 100%);
+}
+
+.profile-nav-spacer {
+  height: 88rpx;
 }
 
 .profile-nav__bar {
@@ -207,7 +218,7 @@ function handleLogout() {
   height: 88rpx;
   align-items: center;
   justify-content: center;
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: 600;
   line-height: 88rpx;
 }
@@ -255,7 +266,7 @@ function handleLogout() {
 
 .profile-user__name {
   overflow: hidden;
-  font-size: 36rpx;
+  font-size: 38rpx;
   font-weight: 700;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -264,7 +275,7 @@ function handleLogout() {
 
 .profile-user__description {
   margin-top: 10rpx;
-  font-size: 23rpx;
+  font-size: 25rpx;
   line-height: 1.45;
   opacity: 0.82;
 }
@@ -302,7 +313,7 @@ function handleLogout() {
 .resume-card__title {
   display: block;
   color: #1f2a3d;
-  font-size: 29rpx;
+  font-size: 31rpx;
   font-weight: 700;
   line-height: 1.4;
 }
@@ -311,7 +322,7 @@ function handleLogout() {
   display: block;
   margin-top: 9rpx;
   color: #8a96a8;
-  font-size: 21rpx;
+  font-size: 23rpx;
   line-height: 1.45;
 }
 
@@ -322,7 +333,7 @@ function handleLogout() {
   margin-left: 20rpx;
   color: #3478f6;
   cursor: pointer;
-  font-size: 21rpx;
+  font-size: 23rpx;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -358,7 +369,7 @@ function handleLogout() {
   display: block;
   margin-top: 12rpx;
   color: #9aa5b5;
-  font-size: 20rpx;
+  font-size: 22rpx;
 }
 
 .resume-shortcuts {
@@ -376,7 +387,7 @@ function handleLogout() {
   color: #526077;
   cursor: pointer;
   flex-direction: column;
-  font-size: 20rpx;
+  font-size: 22rpx;
   line-height: 1.4;
 }
 
@@ -398,7 +409,7 @@ function handleLogout() {
   display: block;
   margin: 0 8rpx 16rpx;
   color: #1f2a3d;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 700;
 }
 
@@ -442,7 +453,7 @@ function handleLogout() {
 
 .profile-list__label {
   color: #263249;
-  font-size: 25rpx;
+  font-size: 27rpx;
   font-weight: 600;
 }
 
@@ -450,7 +461,7 @@ function handleLogout() {
   margin-top: 7rpx;
   overflow: hidden;
   color: #9aa5b5;
-  font-size: 20rpx;
+  font-size: 22rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -472,14 +483,14 @@ function handleLogout() {
 
 .login-panel__title {
   color: #263249;
-  font-size: 25rpx;
+  font-size: 27rpx;
   font-weight: 600;
 }
 
 .login-panel__description {
   margin-top: 10rpx;
   color: #9aa5b5;
-  font-size: 21rpx;
+  font-size: 23rpx;
 }
 
 .login-panel__button {
@@ -494,7 +505,7 @@ function handleLogout() {
   color: #fff;
   background: #3478f6;
   cursor: pointer;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   transition: opacity 180ms cubic-bezier(0.32, 0.72, 0, 1), transform 180ms cubic-bezier(0.32, 0.72, 0, 1);
 }
@@ -513,7 +524,7 @@ function handleLogout() {
   margin-top: 24rpx;
   color: #df555b;
   cursor: pointer;
-  font-size: 25rpx;
+  font-size: 27rpx;
   font-weight: 600;
 }
 

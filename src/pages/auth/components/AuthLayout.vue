@@ -14,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <view class="auth-page pb-safe">
+  <view class="auth-page">
     <!-- #ifdef H5 -->
     <view class="auth-promo">
       <image class="auth-promo__logo" src="/static/logo.svg" mode="aspectFit" />
@@ -73,7 +73,7 @@ const emit = defineEmits<{
   position: relative;
   box-sizing: border-box;
   min-height: 100%;
-  padding-bottom: 44rpx;
+  padding-bottom: calc(44rpx + env(safe-area-inset-bottom));
   overflow: hidden;
 }
 .auth-content::before {
