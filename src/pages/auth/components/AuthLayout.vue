@@ -16,7 +16,8 @@ const emit = defineEmits<{
 }>()
 
 const headerScrolled = ref(false)
-const headerBackground = 'linear-gradient(160deg, #3065f4 0%, #467bff 42%, #6b5ae8 68%, #f3f6fc 100%)'
+const headerBackground = 'linear-gradient(160deg, #28b7f3 0%, #3d94f3 40%, #705fed 68%, #f6f8fc 100%)'
+const scrolledHeaderBackground = 'linear-gradient(100deg, #27b5f4 0%, #3d91f3 58%, #5f73ee 100%)'
 
 function handleScroll(event: { detail: { scrollTop?: number } }) {
   headerScrolled.value = (event.detail.scrollTop || 0) > 16
@@ -39,7 +40,14 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
     <!-- #endif -->
 
     <!-- #ifndef H5 -->
-    <AppPageHeader :title="title" light :background="headerBackground" :scrolled="headerScrolled">
+    <AppPageHeader
+      :title="title"
+      light
+      :background="headerBackground"
+      :scrolled="headerScrolled"
+      :scrolled-background="scrolledHeaderBackground"
+      scrolled-light
+    >
       <template #left>
         <view v-if="showBack" class="auth-back" role="button" aria-label="返回" @tap="emit('back')">
           <text>‹</text>
@@ -121,7 +129,7 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
   height: 350rpx;
   border-radius: 0 0 52rpx 52rpx;
   content: '';
-  background: linear-gradient(160deg, #3065f4 0%, #467bff 42%, #6b5ae8 68%, #f3f6fc 100%);
+  background: linear-gradient(160deg, #28b7f3 0%, #3d94f3 40%, #705fed 68%, #f6f8fc 100%);
 }
 
 .auth-topbar,
@@ -169,10 +177,10 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
 
 .auth-page--scrolled .auth-back,
 .auth-page--scrolled .auth-help {
-  border-color: #e5eaf3;
-  color: #3478f6;
-  background: #fff;
-  box-shadow: 0 8rpx 20rpx rgba(31, 42, 61, 0.08);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
 }
 
 .auth-card {

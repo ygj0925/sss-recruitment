@@ -36,6 +36,8 @@ const resumeShortcuts = [
   { label: '简历模板', icon: 'i-carbon-template' },
 ]
 
+const profileScrolledBackground = 'linear-gradient(100deg, #27b5f4 0%, #3d91f3 58%, #5f73ee 100%)'
+
 onPageScroll(({ scrollTop }) => {
   headerScrolled.value = scrollTop > 16
 })
@@ -76,7 +78,14 @@ function handleLogout() {
 <template>
   <view class="profile-page">
     <view class="profile-header">
-      <AppPageHeader title="我的" light transparent :scrolled="headerScrolled" />
+      <AppPageHeader
+        title="我的"
+        light
+        transparent
+        :scrolled="headerScrolled"
+        :scrolled-background="profileScrolledBackground"
+        scrolled-light
+      />
       <view
         class="profile-user"
         :class="{ 'profile-user--clickable': !tokenStore.hasLogin }"
@@ -204,7 +213,7 @@ function handleLogout() {
   min-height: 100vh;
   padding-bottom: 44rpx;
   color: #1f2a3d;
-  background: #f4f7fb;
+  background: #f6f8fc;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
 }
 
@@ -213,7 +222,7 @@ function handleLogout() {
   min-height: 650rpx;
   padding: 0 52rpx 156rpx;
   color: #fff;
-  background: linear-gradient(160deg, #2f7cf7 0%, #438ff7 38%, #6e63e8 66%, #f4f7fb 100%);
+  background: linear-gradient(160deg, #28b7f3 0%, #3c93f3 38%, #705fed 67%, #f6f8fc 100%);
 }
 
 .profile-user {

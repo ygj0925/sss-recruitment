@@ -15,7 +15,7 @@ const emit = defineEmits<{
     <wd-checkbox
       :model-value="modelValue"
       type="square"
-      checked-color="#467bff"
+      checked-color="#27b5f4"
       custom-class="auth-agreement__checkbox"
       @update:model-value="emit('update:modelValue', $event)"
     >
@@ -44,7 +44,7 @@ const emit = defineEmits<{
 }
 
 .auth-agreement__link {
-  color: #3478f6;
+  color: #2a9ff2;
   cursor: pointer;
 }
 

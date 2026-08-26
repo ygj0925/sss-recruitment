@@ -60,7 +60,9 @@ function updateValue(event: { detail: { value: string } }) {
 </template>
 
 <style scoped lang="scss">
-.auth-field { margin-bottom: 24rpx; }
+.auth-field {
+  margin-bottom: 24rpx;
+}
 .auth-field__control {
   display: flex;
   box-sizing: border-box;
@@ -71,10 +73,18 @@ function updateValue(event: { detail: { value: string } }) {
   border-radius: 26rpx;
   background: #f8faff;
   box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.85);
-  transition: border-color 180ms cubic-bezier(0.32, 0.72, 0, 1), background 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition:
+    border-color 180ms cubic-bezier(0.32, 0.72, 0, 1),
+    background 180ms cubic-bezier(0.32, 0.72, 0, 1);
 }
-.auth-field__control--error { border-color: #e95d63; background: #fff8f8; }
-.auth-field__control--disabled { color: #aeb9ca; background: #f1f4fa; }
+.auth-field__control--error {
+  border-color: #e95d63;
+  background: #fff8f8;
+}
+.auth-field__control--disabled {
+  color: #aeb9ca;
+  background: #f1f4fa;
+}
 .auth-field__icon {
   display: flex;
   width: 42rpx;
@@ -83,14 +93,36 @@ function updateValue(event: { detail: { value: string } }) {
   justify-content: center;
   margin-right: 16rpx;
   border-radius: 14rpx;
-  color: #467bff;
-  background: #eef3ff;
+  color: #2a9ff2;
+  background: #eaf7ff;
   font-size: 26rpx;
   text-align: center;
 }
-.auth-field__input { min-width: 0; flex: 1; color: #263249; font-size: 26rpx; }
+.auth-field__input {
+  min-width: 0;
+  flex: 1;
+  color: #263249;
+  font-size: 26rpx;
+}
 .auth-field__suffix,
-.auth-field__action { min-width: 64rpx; padding-left: 16rpx; color: #8390a6; font-size: 28rpx; text-align: right; cursor: pointer; }
-.auth-field__action { color: #467bff; font-size: 22rpx; font-weight: 700; }
-.auth-field__error { display: block; padding: 9rpx 22rpx 0; color: #e95d63; font-size: 21rpx; line-height: 1.4; }
+.auth-field__action {
+  min-width: 64rpx;
+  padding-left: 16rpx;
+  color: #8390a6;
+  font-size: 28rpx;
+  text-align: right;
+  cursor: pointer;
+}
+.auth-field__action {
+  color: #2a9ff2;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+.auth-field__error {
+  display: block;
+  padding: 9rpx 22rpx 0;
+  color: #e95d63;
+  font-size: 21rpx;
+  line-height: 1.4;
+}
 </style>
