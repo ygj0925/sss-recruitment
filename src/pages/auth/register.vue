@@ -9,7 +9,13 @@ import { canSubmitPhoneCode, normalizePhone, validatePhone, validateVerification
 
 definePage({
   excludeLoginPath: true,
-  style: { navigationStyle: 'custom', navigationBarTitleText: '验证码登录/注册' },
+  style: {
+    navigationStyle: 'custom',
+    navigationBarBackgroundColor: '#3065F4',
+    navigationBarTextStyle: 'white',
+    navigationBarTitleText: '验证码登录/注册',
+    backgroundColorTop: '#3065F4',
+  },
 })
 
 const form = reactive({ phone: '', code: '', agreed: false })

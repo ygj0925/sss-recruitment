@@ -7,7 +7,7 @@ import { isMp } from '@uni-helper/uni-env'
 import { useTokenStore } from '@/store/token'
 import { isPageTabbar, tabbarStore } from '@/tabbar/store'
 import { getAllPages, getLastPage, HOME_PAGE, parseUrlToObj } from '@/utils/index'
-import { EXCLUDE_LOGIN_PATH_LIST, isNeedLoginMode, LOGIN_PAGE, LOGIN_PAGE_ENABLE_IN_MP } from './config'
+import { EXCLUDE_LOGIN_PATH_LIST, isNeedLoginMode, LOGIN_PAGE, LOGIN_PAGE_ENABLE_IN_MP, LOGIN_PAGE_LIST } from './config'
 
 export const FG_LOG_ENABLE = false
 
@@ -84,6 +84,11 @@ export const navigateToInterceptor = {
         return false // 明确表示阻止原路由继续执行
       }
     }
+    // 认证流程页面必须允许未登录用户访问，避免登录页在黑名单模式下重定向到自身
+    if (LOGIN_PAGE_LIST.includes(path)) {
+      return true
+    }
+
     let fullPath = path
 
     if (Object.keys(myQuery).length) {

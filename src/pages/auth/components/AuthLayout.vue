@@ -14,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <view class="auth-page pt-safe pb-safe">
+  <view class="auth-page pb-safe">
     <!-- #ifdef H5 -->
     <view class="auth-promo">
       <image class="auth-promo__logo" src="/static/logo.svg" mode="aspectFit" />
@@ -29,7 +29,7 @@ const emit = defineEmits<{
     <!-- #endif -->
 
     <scroll-view class="auth-scroll" scroll-y>
-      <view class="auth-content">
+      <view class="auth-content pt-safe">
         <view class="auth-topbar">
           <view v-if="showBack" class="auth-back" role="button" aria-label="返回" @tap="emit('back')">
             <text>‹</text>
@@ -55,6 +55,13 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
+/* #ifdef H5 */
+:global(page),
+.auth-page {
+  -webkit-tap-highlight-color: transparent;
+}
+/* #endif */
+
 .auth-page {
   min-height: 100vh;
   color: #263249;
@@ -64,6 +71,7 @@ const emit = defineEmits<{
 .auth-scroll { height: 100vh; }
 .auth-content {
   position: relative;
+  box-sizing: border-box;
   min-height: 100%;
   padding-bottom: 44rpx;
   overflow: hidden;

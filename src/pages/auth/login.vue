@@ -16,7 +16,10 @@ definePage({
   excludeLoginPath: true,
   style: {
     navigationStyle: 'custom',
+    navigationBarBackgroundColor: '#3065F4',
+    navigationBarTextStyle: 'white',
     navigationBarTitleText: '账号密码登录',
+    backgroundColorTop: '#3065F4',
   },
 })
 

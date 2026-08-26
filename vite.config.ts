@@ -1,7 +1,6 @@
 import path from 'node:path'
 import process from 'node:process'
 import Uni from '@uni-helper/plugin-uni'
-import { isMpWeixin } from '@uni-helper/uni-env'
 import UniComponents from '@uni-helper/vite-plugin-uni-components'
 // @see https://uni-helper.js.org/vite-plugin-uni-layouts
 import UniLayouts from '@uni-helper/vite-plugin-uni-layouts'
@@ -14,11 +13,6 @@ import { WotResolver } from './wot-ui-resolver'
 // 需要与 @uni-helper/vite-plugin-uni-pages 插件一起使用
 import UniPlatform from '@uni-helper/vite-plugin-uni-platform'
 
-/**
- * 分包优化、模块异步跨包调用、组件异步跨包引用
- * @see https://github.com/uni-ku/bundle-optimizer
- */
-import UniOptimization from '@uni-ku/bundle-optimizer'
 // https://github.com/uni-ku/root
 import UniKuRoot from '@uni-ku/root'
 import dayjs from 'dayjs'
@@ -85,19 +79,7 @@ export default defineConfig(({ command, mode }) => {
       }),
       UniPages({
         exclude: ['**/components/**/**.*', '**/sections/**/**.*'],
-        // pages 目录为 src/pages，分包目录不能配置在pages目录下！！
-        // 是个数组，可以配置多个，但是不能为pages里面的目录！！
-        // "src/pages-demo" 是unibest demo 预留的，方便后续插入demo示例
-        subPackages: ['src/pages-demo'],
         dts: 'src/types/uni-pages.d.ts',
-      }),
-      // UniOptimization 插件需要 page.json 文件，故应在 UniPages 插件之后执行
-      UniOptimization({
-        enable: isMpWeixin,
-        dts: {
-          base: 'src/types',
-        },
-        logger: false,
       }),
       // 若存在改变 pages.json 的插件，请将 UniKuRoot 放置其后
       UniKuRoot({
