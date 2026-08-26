@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { AGREEMENT_PAGE, LOGIN_PAGE, PRIVACY_PAGE } from '@/router/config'
 import { useUserStore } from '@/store'
@@ -22,6 +22,7 @@ const tokenStore = useTokenStore()
 const { userInfo } = storeToRefs(userStore)
 const profileName = computed(() => userInfo.value.username || '求职者')
 const profileInitial = computed(() => profileName.value.slice(0, 1))
+const headerScrolled = ref(false)
 const profileStats = computed(() => [
   { label: '投递', value: tokenStore.hasLogin ? '0' : '**' },
   { label: '收藏', value: tokenStore.hasLogin ? '0' : '**' },
@@ -34,6 +35,10 @@ const resumeShortcuts = [
   { label: '求职意向', icon: 'i-carbon-favorite' },
   { label: '简历模板', icon: 'i-carbon-template' },
 ]
+
+onPageScroll(({ scrollTop }) => {
+  headerScrolled.value = scrollTop > 16
+})
 
 function handleLogin() {
   uni.navigateTo({
@@ -71,7 +76,7 @@ function handleLogout() {
 <template>
   <view class="profile-page">
     <view class="profile-header">
-      <AppPageHeader title="我的" light transparent />
+      <AppPageHeader title="我的" light transparent :scrolled="headerScrolled" />
       <view
         class="profile-user"
         :class="{ 'profile-user--clickable': !tokenStore.hasLogin }"
@@ -208,7 +213,7 @@ function handleLogout() {
   min-height: 650rpx;
   padding: 0 52rpx 156rpx;
   color: #fff;
-  background: linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%);
+  background: linear-gradient(160deg, #2f7cf7 0%, #438ff7 38%, #6e63e8 66%, #f4f7fb 100%);
 }
 
 .profile-user {

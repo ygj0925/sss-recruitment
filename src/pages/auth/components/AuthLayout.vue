@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import AppPageHeader from '@/components/AppPageHeader.vue'
 
 withDefaults(defineProps<{
@@ -14,11 +15,16 @@ const emit = defineEmits<{
   back: []
 }>()
 
-const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5ae8 100%)'
+const headerScrolled = ref(false)
+const headerBackground = 'linear-gradient(160deg, #3065f4 0%, #467bff 42%, #6b5ae8 68%, #f3f6fc 100%)'
+
+function handleScroll(event: { detail: { scrollTop?: number } }) {
+  headerScrolled.value = (event.detail.scrollTop || 0) > 16
+}
 </script>
 
 <template>
-  <view class="auth-page">
+  <view class="auth-page" :class="{ 'auth-page--scrolled': headerScrolled }">
     <!-- #ifdef H5 -->
     <view class="auth-promo">
       <image class="auth-promo__logo" src="/static/logo.svg" mode="aspectFit" />
@@ -33,7 +39,7 @@ const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5a
     <!-- #endif -->
 
     <!-- #ifndef H5 -->
-    <AppPageHeader :title="title" light :background="headerBackground">
+    <AppPageHeader :title="title" light :background="headerBackground" :scrolled="headerScrolled">
       <template #left>
         <view v-if="showBack" class="auth-back" role="button" aria-label="返回" @tap="emit('back')">
           <text>‹</text>
@@ -48,7 +54,7 @@ const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5a
     </AppPageHeader>
     <!-- #endif -->
 
-    <scroll-view class="auth-scroll" scroll-y>
+    <scroll-view class="auth-scroll" scroll-y @scroll="handleScroll">
       <view class="auth-content">
         <!-- #ifdef H5 -->
         <view class="auth-topbar">
@@ -115,7 +121,7 @@ const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5a
   height: 350rpx;
   border-radius: 0 0 52rpx 52rpx;
   content: '';
-  background: linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5ae8 100%);
+  background: linear-gradient(160deg, #3065f4 0%, #467bff 42%, #6b5ae8 68%, #f3f6fc 100%);
 }
 
 .auth-topbar,
@@ -159,6 +165,14 @@ const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5a
 .auth-help {
   font-size: 26rpx;
   font-weight: 700;
+}
+
+.auth-page--scrolled .auth-back,
+.auth-page--scrolled .auth-help {
+  border-color: #e5eaf3;
+  color: #3478f6;
+  background: #fff;
+  box-shadow: 0 8rpx 20rpx rgba(31, 42, 61, 0.08);
 }
 
 .auth-card {

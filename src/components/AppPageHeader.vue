@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 const props = withDefaults(defineProps<{
   title: string
   light?: boolean
   transparent?: boolean
   background?: string
+  scrolled?: boolean
+  scrolledBackground?: string
+  scrolledLight?: boolean
 }>(), {
   light: false,
   transparent: false,
   background: '',
+  scrolled: false,
+  scrolledBackground: '#ffffff',
+  scrolledLight: false,
 })
 
 let statusBarHeight = 0
@@ -20,9 +28,10 @@ catch {
 }
 
 const safeAreaStyle = statusBarHeight > 0 ? { paddingTop: `${statusBarHeight}px` } : undefined
-const headerStyle = props.background
-  ? { ...safeAreaStyle, background: props.background }
-  : safeAreaStyle
+const headerStyle = computed(() => {
+  const background = props.scrolled ? props.scrolledBackground : props.background
+  return background ? { ...safeAreaStyle, background } : safeAreaStyle
+})
 </script>
 
 <template>
@@ -30,8 +39,9 @@ const headerStyle = props.background
     <view
       class="app-page-header"
       :class="{
-        'app-page-header--light': light,
-        'app-page-header--transparent': transparent,
+        'app-page-header--light': scrolled ? scrolledLight : light,
+        'app-page-header--transparent': transparent && !scrolled,
+        'app-page-header--scrolled': scrolled,
       }"
       :style="headerStyle"
     >
@@ -66,6 +76,10 @@ const headerStyle = props.background
   color: #202b3c;
   background: #fff;
   padding-top: env(safe-area-inset-top);
+  transition:
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease;
 }
 
 .app-page-header--transparent {
@@ -74,6 +88,10 @@ const headerStyle = props.background
 
 .app-page-header--light {
   color: #fff;
+}
+
+.app-page-header--scrolled {
+  box-shadow: 0 8rpx 24rpx rgba(31, 42, 61, 0.1);
 }
 
 .app-page-header__bar {
