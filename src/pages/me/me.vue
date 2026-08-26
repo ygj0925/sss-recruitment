@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
@@ -33,6 +34,8 @@ const resumeShortcuts = [
   { label: '求职意向', icon: 'i-carbon-favorite' },
   { label: '简历模板', icon: 'i-carbon-template' },
 ]
+
+const profileHeaderBackground = 'linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%)'
 
 function handleLogin() {
   uni.navigateTo({
@@ -69,12 +72,8 @@ function handleLogout() {
 
 <template>
   <view class="profile-page">
-    <view class="profile-nav pt-safe">
-      <view class="profile-nav__bar" />
-    </view>
-
     <view class="profile-header">
-      <view class="profile-nav-spacer pt-safe" />
+      <AppPageHeader title="我的" light :background="profileHeaderBackground" />
       <view
         class="profile-user"
         :class="{ 'profile-user--clickable': !tokenStore.hasLogin }"
@@ -212,25 +211,6 @@ function handleLogout() {
   padding: 0 52rpx 156rpx;
   color: #fff;
   background: linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%);
-}
-
-.profile-nav {
-  position: fixed;
-  z-index: 20;
-  top: 0;
-  right: 0;
-  left: 0;
-  color: #fff;
-  background: linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%);
-}
-
-.profile-nav-spacer,
-.profile-nav__bar {
-  height: 88rpx;
-}
-
-.profile-nav__bar {
-  pointer-events: none;
 }
 
 .profile-user {

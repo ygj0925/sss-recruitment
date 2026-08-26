@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
+
 withDefaults(defineProps<{
   title: string
   subtitle?: string
@@ -11,6 +13,8 @@ withDefaults(defineProps<{
 const emit = defineEmits<{
   back: []
 }>()
+
+const headerBackground = 'linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5ae8 100%)'
 </script>
 
 <template>
@@ -28,8 +32,25 @@ const emit = defineEmits<{
     </view>
     <!-- #endif -->
 
+    <!-- #ifndef H5 -->
+    <AppPageHeader :title="title" light :background="headerBackground">
+      <template #left>
+        <view v-if="showBack" class="auth-back" role="button" aria-label="返回" @tap="emit('back')">
+          <text>‹</text>
+        </view>
+        <view v-else class="auth-back auth-back--placeholder" />
+      </template>
+      <template #right>
+        <view class="auth-help" aria-label="帮助">
+          ?
+        </view>
+      </template>
+    </AppPageHeader>
+    <!-- #endif -->
+
     <scroll-view class="auth-scroll" scroll-y>
-      <view class="auth-content pt-safe">
+      <view class="auth-content">
+        <!-- #ifdef H5 -->
         <view class="auth-topbar">
           <view v-if="showBack" class="auth-back" role="button" aria-label="返回" @tap="emit('back')">
             <text>‹</text>
@@ -39,6 +60,7 @@ const emit = defineEmits<{
             ?
           </view>
         </view>
+        <!-- #endif -->
         <view class="auth-card">
           <slot name="brand">
             <image class="auth-mobile-logo" src="/static/logo.svg" mode="aspectFit" />
@@ -63,12 +85,20 @@ const emit = defineEmits<{
 /* #endif */
 
 .auth-page {
+  display: flex;
+  height: 100vh;
   min-height: 100vh;
+  flex-direction: column;
   color: #263249;
   background: #f3f6fc;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
 }
-.auth-scroll { height: 100vh; }
+
+.auth-scroll {
+  height: 0;
+  flex: 1;
+}
+
 .auth-content {
   position: relative;
   box-sizing: border-box;
@@ -76,6 +106,7 @@ const emit = defineEmits<{
   padding-bottom: calc(44rpx + env(safe-area-inset-bottom));
   overflow: hidden;
 }
+
 .auth-content::before {
   position: absolute;
   top: 0;
@@ -86,14 +117,20 @@ const emit = defineEmits<{
   content: '';
   background: linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5ae8 100%);
 }
+
 .auth-topbar,
-.auth-card { position: relative; z-index: 1; }
+.auth-card {
+  position: relative;
+  z-index: 1;
+}
+
 .auth-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 24rpx 36rpx 0;
 }
+
 .auth-back,
 .auth-help {
   display: flex;
@@ -109,10 +146,21 @@ const emit = defineEmits<{
   font-size: 48rpx;
   line-height: 1;
 }
+
 .auth-back:active,
-.auth-help:active { opacity: 0.74; }
-.auth-back--placeholder { visibility: hidden; }
-.auth-help { font-size: 26rpx; font-weight: 700; }
+.auth-help:active {
+  opacity: 0.74;
+}
+
+.auth-back--placeholder {
+  visibility: hidden;
+}
+
+.auth-help {
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
 .auth-card {
   box-sizing: border-box;
   width: calc(100% - 48rpx);
@@ -124,12 +172,14 @@ const emit = defineEmits<{
   background: #fff;
   box-shadow: 0 24rpx 60rpx rgba(54, 82, 145, 0.12);
 }
+
 .auth-mobile-logo {
   display: block;
   width: 92rpx;
   height: 92rpx;
   margin: 0 auto 30rpx;
 }
+
 .auth-heading {
   display: flex;
   align-items: center;
@@ -137,15 +187,36 @@ const emit = defineEmits<{
   margin-bottom: 54rpx;
   text-align: center;
 }
-.auth-heading__title { color: #263249; font-size: 42rpx; font-weight: 700; line-height: 1.35; }
-.auth-heading__subtitle { margin-top: 14rpx; color: #9aa5b8; font-size: 23rpx; line-height: 1.55; }
-.auth-promo { display: none; }
+
+.auth-heading__title {
+  color: #263249;
+  font-size: 42rpx;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.auth-heading__subtitle {
+  margin-top: 14rpx;
+  color: #9aa5b8;
+  font-size: 23rpx;
+  line-height: 1.55;
+}
+
+.auth-promo {
+  display: none;
+}
 
 @media screen and (min-width: 768px) {
-  .auth-page { display: flex; min-height: 100vh; padding: 0; }
-  .auth-promo {
-    position: relative;
+  .auth-page {
     display: flex;
+    min-height: 100vh;
+    padding: 0;
+    flex-direction: row;
+  }
+
+  .auth-promo {
+    display: flex;
+    position: relative;
     box-sizing: border-box;
     width: 48%;
     min-height: 100vh;
@@ -156,21 +227,103 @@ const emit = defineEmits<{
     color: #fff;
     background: linear-gradient(145deg, #3065f4, #467bff 56%, #6b5ae8);
   }
-  .auth-promo__logo { width: 120rpx; height: 120rpx; margin-bottom: 72rpx; filter: brightness(0) invert(1); }
-  .auth-promo__copy { position: relative; z-index: 1; display: flex; flex-direction: column; }
-  .auth-promo__eyebrow { font-size: 22rpx; font-weight: 700; letter-spacing: 5rpx; opacity: 0.75; }
-  .auth-promo__title { margin-top: 28rpx; font-size: 64rpx; font-weight: 700; line-height: 1.25; }
-  .auth-promo__description { max-width: 580rpx; margin-top: 32rpx; font-size: 28rpx; line-height: 1.8; opacity: 0.82; }
-  .auth-promo__orb { position: absolute; border: 1rpx solid rgba(255, 255, 255, 0.14); border-radius: 50%; }
-  .auth-promo__orb--one { right: -180rpx; bottom: -160rpx; width: 640rpx; height: 640rpx; }
-  .auth-promo__orb--two { top: 90rpx; right: 100rpx; width: 180rpx; height: 180rpx; background: rgba(255, 255, 255, 0.08); }
-  .auth-scroll { width: 52%; height: 100vh; }
-  .auth-content { display: flex; box-sizing: border-box; min-height: 100%; flex-direction: column; padding: 0; }
-  .auth-content::before { display: none; }
-  .auth-topbar { padding: 36rpx 64rpx 0; }
+
+  .auth-promo__logo {
+    width: 120rpx;
+    height: 120rpx;
+    margin-bottom: 72rpx;
+    filter: brightness(0) invert(1);
+  }
+
+  .auth-promo__copy {
+    display: flex;
+    position: relative;
+    z-index: 1;
+    flex-direction: column;
+  }
+
+  .auth-promo__eyebrow {
+    font-size: 22rpx;
+    font-weight: 700;
+    letter-spacing: 5rpx;
+    opacity: 0.75;
+  }
+
+  .auth-promo__title {
+    margin-top: 28rpx;
+    font-size: 64rpx;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  .auth-promo__description {
+    max-width: 580rpx;
+    margin-top: 32rpx;
+    font-size: 28rpx;
+    line-height: 1.8;
+    opacity: 0.82;
+  }
+
+  .auth-promo__orb {
+    position: absolute;
+    border: 1rpx solid rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+  }
+
+  .auth-promo__orb--one {
+    right: -180rpx;
+    bottom: -160rpx;
+    width: 640rpx;
+    height: 640rpx;
+  }
+
+  .auth-promo__orb--two {
+    top: 90rpx;
+    right: 100rpx;
+    width: 180rpx;
+    height: 180rpx;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .auth-scroll {
+    width: 52%;
+    height: 100vh;
+    flex: none;
+  }
+
+  .auth-content {
+    display: flex;
+    box-sizing: border-box;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .auth-content::before {
+    display: none;
+  }
+
+  .auth-topbar {
+    padding: 36rpx 64rpx 0;
+  }
+
   .auth-back,
-  .auth-help { border-color: #e8edf7; color: #467bff; background: #fff; box-shadow: 0 10rpx 26rpx rgba(54, 82, 145, 0.08); }
-  .auth-card { width: calc(100% - 128rpx); margin: auto; padding: 88rpx 96rpx; border-radius: 40rpx; }
-  .auth-mobile-logo { display: none; }
+  .auth-help {
+    border-color: #e8edf7;
+    color: #467bff;
+    background: #fff;
+    box-shadow: 0 10rpx 26rpx rgba(54, 82, 145, 0.08);
+  }
+
+  .auth-card {
+    width: calc(100% - 128rpx);
+    margin: auto;
+    padding: 88rpx 96rpx;
+    border-radius: 40rpx;
+  }
+
+  .auth-mobile-logo {
+    display: none;
+  }
 }
 </style>

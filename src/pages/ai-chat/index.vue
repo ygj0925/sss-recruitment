@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
@@ -41,11 +42,7 @@ function sendMessage(content = inputValue.value) {
 
 <template>
   <view class="ai-page">
-    <view class="ai-nav pt-safe">
-      <view class="ai-nav__bar">
-        <text>AI 聊天</text>
-      </view>
-    </view>
+    <AppPageHeader title="AI 聊天" />
 
     <view class="ai-content">
       <view class="ai-welcome">
@@ -90,19 +87,6 @@ function sendMessage(content = inputValue.value) {
   color: #25203a;
   background: #f7f5fb;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.ai-nav {
-  background: #fff;
-}
-
-.ai-nav__bar {
-  display: flex;
-  height: 96rpx;
-  align-items: center;
-  justify-content: center;
-  font-size: 35rpx;
-  font-weight: 700;
 }
 
 .ai-content {

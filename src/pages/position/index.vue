@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
@@ -30,11 +31,7 @@ function showJobDetail() {
 
 <template>
   <view class="position-page">
-    <view class="position-nav pt-safe">
-      <view class="position-nav__bar">
-        <text>职位</text>
-      </view>
-    </view>
+    <AppPageHeader title="职位" />
 
     <view class="position-content">
       <view class="search-entry" role="button" @tap="showJobDetail">
@@ -76,19 +73,6 @@ function showJobDetail() {
   color: #202b3c;
   background: #f4f7fb;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.position-nav {
-  background: #fff;
-}
-
-.position-nav__bar {
-  display: flex;
-  height: 96rpx;
-  align-items: center;
-  justify-content: center;
-  font-size: 35rpx;
-  font-weight: 700;
 }
 
 .position-content {

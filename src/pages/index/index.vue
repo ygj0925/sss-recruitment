@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
@@ -49,11 +50,7 @@ function switchToTab(pagePath: string) {
 
 <template>
   <view class="home-page">
-    <view class="home-nav pt-safe">
-      <view class="home-nav__bar">
-        <text>三生制药招聘</text>
-      </view>
-    </view>
+    <AppPageHeader title="三生制药招聘" />
 
     <view class="home-content">
       <swiper
@@ -141,20 +138,6 @@ function switchToTab(pagePath: string) {
   color: #1e293b;
   background: #f4f7fb;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.home-nav {
-  color: #1c2431;
-  background: #fff;
-}
-
-.home-nav__bar {
-  display: flex;
-  height: 100rpx;
-  align-items: center;
-  justify-content: center;
-  font-size: 36rpx;
-  font-weight: 700;
 }
 
 .home-content {

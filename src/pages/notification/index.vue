@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppPageHeader from '@/components/AppPageHeader.vue'
 import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
@@ -21,11 +22,7 @@ const notifications = [
 
 <template>
   <view class="notification-page">
-    <view class="notification-nav pt-safe">
-      <view class="notification-nav__bar">
-        <text>通知</text>
-      </view>
-    </view>
+    <AppPageHeader title="通知" />
 
     <view class="notification-content">
       <view v-for="notification in notifications" :key="notification.title" class="notification-card">
@@ -53,19 +50,6 @@ const notifications = [
   color: #202b3c;
   background: #f4f7fb;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.notification-nav {
-  background: #fff;
-}
-
-.notification-nav__bar {
-  display: flex;
-  height: 96rpx;
-  align-items: center;
-  justify-content: center;
-  font-size: 35rpx;
-  font-weight: 700;
 }
 
 .notification-content {

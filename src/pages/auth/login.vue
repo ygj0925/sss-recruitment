@@ -44,7 +44,11 @@ onLoad((options) => {
 })
 
 function goBack() {
-  uni.navigateBack()
+  if (getCurrentPages().length > 1) {
+    uni.navigateBack()
+    return
+  }
+  uni.reLaunch({ url: '/pages/index/index' })
 }
 
 function goTo(url: string) {
