@@ -57,16 +57,29 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .auth-page {
   min-height: 100vh;
-  background: #f7f9fc;
-  color: #1f2937;
+  color: #263249;
+  background: #f3f6fc;
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
 }
-
-.auth-scroll {
-  height: 100vh;
-}
+.auth-scroll { height: 100vh; }
 .auth-content {
+  position: relative;
   min-height: 100%;
+  padding-bottom: 44rpx;
+  overflow: hidden;
 }
+.auth-content::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 350rpx;
+  border-radius: 0 0 52rpx 52rpx;
+  content: '';
+  background: linear-gradient(132deg, #3065f4 0%, #467bff 54%, #6b5ae8 100%);
+}
+.auth-topbar,
+.auth-card { position: relative; z-index: 1; }
 .auth-topbar {
   display: flex;
   align-items: center;
@@ -76,65 +89,52 @@ const emit = defineEmits<{
 .auth-back,
 .auth-help {
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 64rpx;
   height: 64rpx;
-  color: #1f2937;
-  font-size: 52rpx;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid rgba(255, 255, 255, 0.22);
+  border-radius: 20rpx;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  font-size: 48rpx;
   line-height: 1;
 }
-.auth-back--placeholder {
-  visibility: hidden;
-}
-.auth-help {
-  border: 2rpx solid #98a2b3;
-  border-radius: 50%;
-  color: #98a2b3;
-  font-size: 28rpx;
-  font-weight: 700;
-}
+.auth-back:active,
+.auth-help:active { opacity: 0.74; }
+.auth-back--placeholder { visibility: hidden; }
+.auth-help { font-size: 26rpx; font-weight: 700; }
 .auth-card {
   box-sizing: border-box;
-  width: 100%;
+  width: calc(100% - 48rpx);
   max-width: 680rpx;
-  margin: 72rpx auto 0;
-  padding: 0 48rpx 64rpx;
+  margin: 44rpx auto 0;
+  padding: 42rpx 40rpx 56rpx;
+  border: 1rpx solid rgba(232, 237, 247, 0.92);
+  border-radius: 36rpx;
+  background: #fff;
+  box-shadow: 0 24rpx 60rpx rgba(54, 82, 145, 0.12);
 }
 .auth-mobile-logo {
   display: block;
-  width: 104rpx;
-  height: 104rpx;
-  margin: 0 auto 40rpx;
+  width: 92rpx;
+  height: 92rpx;
+  margin: 0 auto 30rpx;
 }
 .auth-heading {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-bottom: 64rpx;
+  flex-direction: column;
+  margin-bottom: 54rpx;
   text-align: center;
 }
-.auth-heading__title {
-  font-size: 44rpx;
-  font-weight: 700;
-  line-height: 1.35;
-}
-.auth-heading__subtitle {
-  margin-top: 16rpx;
-  color: #98a2b3;
-  font-size: 24rpx;
-  line-height: 1.5;
-}
-.auth-promo {
-  display: none;
-}
+.auth-heading__title { color: #263249; font-size: 42rpx; font-weight: 700; line-height: 1.35; }
+.auth-heading__subtitle { margin-top: 14rpx; color: #9aa5b8; font-size: 23rpx; line-height: 1.55; }
+.auth-promo { display: none; }
 
 @media screen and (min-width: 768px) {
-  .auth-page {
-    display: flex;
-    min-height: 100vh;
-    padding: 0;
-  }
+  .auth-page { display: flex; min-height: 100vh; padding: 0; }
   .auth-promo {
     position: relative;
     display: flex;
@@ -146,78 +146,23 @@ const emit = defineEmits<{
     justify-content: center;
     padding: 96rpx 11%;
     color: #fff;
-    background: linear-gradient(145deg, #0748be, #0957de 56%, #3b82f6);
+    background: linear-gradient(145deg, #3065f4, #467bff 56%, #6b5ae8);
   }
-  .auth-promo__logo {
-    width: 120rpx;
-    height: 120rpx;
-    margin-bottom: 72rpx;
-    filter: brightness(0) invert(1);
-  }
-  .auth-promo__copy {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .auth-promo__eyebrow {
-    font-size: 22rpx;
-    font-weight: 700;
-    letter-spacing: 5rpx;
-    opacity: 0.75;
-  }
-  .auth-promo__title {
-    margin-top: 28rpx;
-    font-size: 64rpx;
-    font-weight: 700;
-    line-height: 1.25;
-  }
-  .auth-promo__description {
-    max-width: 580rpx;
-    margin-top: 32rpx;
-    font-size: 28rpx;
-    line-height: 1.8;
-    opacity: 0.82;
-  }
-  .auth-promo__orb {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-  }
-  .auth-promo__orb--one {
-    right: -180rpx;
-    bottom: -160rpx;
-    width: 640rpx;
-    height: 640rpx;
-  }
-  .auth-promo__orb--two {
-    top: 90rpx;
-    right: 100rpx;
-    width: 180rpx;
-    height: 180rpx;
-  }
-  .auth-scroll {
-    width: 52%;
-    height: 100vh;
-  }
-  .auth-content {
-    display: flex;
-    box-sizing: border-box;
-    min-height: 100%;
-    flex-direction: column;
-  }
-  .auth-topbar {
-    padding: 36rpx 64rpx 0;
-  }
-  .auth-card {
-    margin: auto;
-    padding: 88rpx 96rpx;
-    border-radius: 36rpx;
-    background: #fff;
-    box-shadow: 0 32rpx 80rpx rgba(9, 87, 222, 0.1);
-  }
-  .auth-mobile-logo {
-    display: none;
-  }
+  .auth-promo__logo { width: 120rpx; height: 120rpx; margin-bottom: 72rpx; filter: brightness(0) invert(1); }
+  .auth-promo__copy { position: relative; z-index: 1; display: flex; flex-direction: column; }
+  .auth-promo__eyebrow { font-size: 22rpx; font-weight: 700; letter-spacing: 5rpx; opacity: 0.75; }
+  .auth-promo__title { margin-top: 28rpx; font-size: 64rpx; font-weight: 700; line-height: 1.25; }
+  .auth-promo__description { max-width: 580rpx; margin-top: 32rpx; font-size: 28rpx; line-height: 1.8; opacity: 0.82; }
+  .auth-promo__orb { position: absolute; border: 1rpx solid rgba(255, 255, 255, 0.14); border-radius: 50%; }
+  .auth-promo__orb--one { right: -180rpx; bottom: -160rpx; width: 640rpx; height: 640rpx; }
+  .auth-promo__orb--two { top: 90rpx; right: 100rpx; width: 180rpx; height: 180rpx; background: rgba(255, 255, 255, 0.08); }
+  .auth-scroll { width: 52%; height: 100vh; }
+  .auth-content { display: flex; box-sizing: border-box; min-height: 100%; flex-direction: column; padding: 0; }
+  .auth-content::before { display: none; }
+  .auth-topbar { padding: 36rpx 64rpx 0; }
+  .auth-back,
+  .auth-help { border-color: #e8edf7; color: #467bff; background: #fff; box-shadow: 0 10rpx 26rpx rgba(54, 82, 145, 0.08); }
+  .auth-card { width: calc(100% - 128rpx); margin: auto; padding: 88rpx 96rpx; border-radius: 40rpx; }
+  .auth-mobile-logo { display: none; }
 }
 </style>

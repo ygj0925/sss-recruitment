@@ -145,47 +145,14 @@ async function loginWithWechat() {
 </template>
 
 <style scoped lang="scss">
-.login-options {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.login-options__agreement {
-  min-width: 0;
-  flex: 1;
-}
-.login-options__forgot {
-  min-height: 48rpx;
-  margin: 2rpx 0 28rpx 20rpx;
-  color: #3b82f6;
-  font-size: 22rpx;
-  white-space: nowrap;
-}
+.login-options { display: flex; align-items: flex-start; justify-content: space-between; }
+.login-options__agreement { min-width: 0; flex: 1; }
+.login-options__forgot { min-height: 50rpx; margin: 4rpx 0 30rpx 20rpx; color: #467bff; cursor: pointer; font-size: 21rpx; font-weight: 600; white-space: nowrap; }
 .login-error,
-.login-feedback {
-  display: block;
-  margin: -14rpx 0 22rpx;
-  font-size: 22rpx;
-  line-height: 1.5;
-  text-align: center;
-}
+.login-feedback { display: block; margin: -14rpx 0 24rpx; font-size: 22rpx; line-height: 1.5; text-align: center; }
 .login-error,
-.login-feedback--error {
-  color: #e5484d;
-}
-.login-feedback--info {
-  color: #3b82f6;
-}
-.login-feedback--success {
-  color: #0f9f6e;
-}
-.login-switch {
-  display: block;
-  min-height: 72rpx;
-  margin-top: 26rpx;
-  color: #3b82f6;
-  font-size: 24rpx;
-  line-height: 72rpx;
-  text-align: center;
-}
+.login-feedback--error { color: #e95d63; }
+.login-feedback--info { color: #467bff; }
+.login-feedback--success { color: #1eae72; }
+.login-switch { display: block; min-height: 74rpx; margin-top: 26rpx; color: #467bff; cursor: pointer; font-size: 24rpx; font-weight: 600; line-height: 74rpx; text-align: center; }
 </style>

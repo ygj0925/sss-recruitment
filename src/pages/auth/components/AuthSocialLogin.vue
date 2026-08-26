@@ -25,53 +25,14 @@ const emit = defineEmits<{
 </template>
 
 <style scoped lang="scss">
-.auth-social {
-  margin-top: 104rpx;
-}
-.auth-social__divider {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-  color: #98a2b3;
-  font-size: 20rpx;
-}
-.auth-social__divider view {
-  height: 2rpx;
-  flex: 1;
-  background: #e4e7ec;
-}
-.auth-social__list {
-  display: flex;
-  justify-content: center;
-  gap: 40rpx;
-  margin-top: 32rpx;
-}
-.auth-social__item {
-  display: flex;
-  width: 80rpx;
-  height: 80rpx;
-  align-items: center;
-  justify-content: center;
-}
-.auth-social__icon {
-  display: flex;
-  width: 58rpx;
-  height: 58rpx;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 26rpx;
-  font-weight: 700;
-}
-.auth-social__icon--wechat {
-  background: #07c160;
-}
-.auth-social__icon--qq {
-  background: #2485db;
-}
-.auth-social__icon--apple {
-  background: #24292f;
-  font-size: 18rpx;
-}
+.auth-social { margin-top: 80rpx; }
+.auth-social__divider { display: flex; align-items: center; gap: 20rpx; color: #a2acbc; font-size: 20rpx; }
+.auth-social__divider view { height: 1rpx; flex: 1; background: #e8edf7; }
+.auth-social__list { display: flex; justify-content: center; gap: 34rpx; margin-top: 30rpx; }
+.auth-social__item { display: flex; width: 82rpx; height: 82rpx; align-items: center; justify-content: center; border: 1rpx solid #e8edf7; border-radius: 26rpx; background: #fff; cursor: pointer; box-shadow: 0 10rpx 24rpx rgba(54, 82, 145, 0.06); transition: transform 180ms cubic-bezier(0.32, 0.72, 0, 1), background 180ms cubic-bezier(0.32, 0.72, 0, 1); }
+.auth-social__item:active { transform: scale(0.94); background: #f8faff; }
+.auth-social__icon { display: flex; width: 52rpx; height: 52rpx; align-items: center; justify-content: center; border-radius: 18rpx; color: #fff; font-size: 24rpx; font-weight: 700; }
+.auth-social__icon--wechat { background: #12bd70; }
+.auth-social__icon--qq { background: #4f8cf4; }
+.auth-social__icon--apple { background: #263249; font-size: 18rpx; }
 </style>

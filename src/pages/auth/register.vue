@@ -100,26 +100,8 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .register-error,
-.register-feedback {
-  display: block;
-  margin: -16rpx 0 22rpx;
-  font-size: 22rpx;
-  line-height: 1.5;
-  text-align: center;
-}
-.register-error {
-  color: #e5484d;
-}
-.register-feedback {
-  color: #3b82f6;
-}
-.register-switch {
-  display: block;
-  min-height: 72rpx;
-  margin-top: 26rpx;
-  color: #3b82f6;
-  font-size: 24rpx;
-  line-height: 72rpx;
-  text-align: center;
-}
+.register-feedback { display: block; margin: -16rpx 0 24rpx; font-size: 22rpx; line-height: 1.5; text-align: center; }
+.register-error { color: #e95d63; }
+.register-feedback { color: #467bff; }
+.register-switch { display: block; min-height: 74rpx; margin-top: 26rpx; color: #467bff; cursor: pointer; font-size: 24rpx; font-weight: 600; line-height: 74rpx; text-align: center; }
 </style>
