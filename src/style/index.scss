@@ -1,22 +1,41 @@
-// 测试用的 iconfont，可生效
-// @import './iconfont.css';
-
-.test {
-  // 可以通过 @apply 多个样式封装整体样式
-  @apply mt-4 ml-4;
-
-  padding-top: 4px;
-  color: red;
-}
-
 :root,
 page {
-  --wot-color-theme: #0957de;
-  --wot-button-primary-bg-color: #0957de;
+  --wot-color-theme: #2c8cf4;
+  --wot-button-primary-bg-color: #2c8cf4;
   --app-tabbar-height: 108rpx;
-  --app-page-background: #f4f7fb;
+  --app-viewport-height: 100vh;
+  --app-page-background: #f6f8fc;
   --app-page-bottom-safe: calc(var(--app-tabbar-height) + env(safe-area-inset-bottom));
+  --app-brand-sky: #28b7f3;
+  --app-brand-blue: #2c8cf4;
+  --app-brand-violet: #705fed;
+  --app-brand-hero: linear-gradient(
+    160deg,
+    var(--app-brand-sky) 0%,
+    var(--app-brand-blue) 40%,
+    var(--app-brand-violet) 68%,
+    var(--app-page-background) 100%
+  );
+  --app-brand-header: linear-gradient(
+    100deg,
+    var(--app-brand-sky) 0%,
+    var(--app-brand-blue) 58%,
+    var(--app-brand-violet) 100%
+  );
 }
+
+/* #ifdef H5 */
+@supports (height: 100dvh) {
+  :root,
+  page {
+    --app-viewport-height: 100dvh;
+  }
+}
+
+page {
+  -webkit-tap-highlight-color: transparent;
+}
+/* #endif */
 
 /*
 border-t-1

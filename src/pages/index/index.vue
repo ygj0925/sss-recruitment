@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppPageHeader from '@/components/AppPageHeader.vue'
-import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
   name: 'Home',
@@ -11,7 +10,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '首页',
-    backgroundColor: '#F4F7FB',
+    backgroundColor: '#F6F8FC',
   },
 })
 
@@ -29,10 +28,10 @@ const banners = [
 ]
 
 const quickEntries = [
-  { title: '社会招聘', icon: 'i-carbon-document' },
-  { title: '校园招聘', icon: 'i-carbon-bookmark' },
-  { title: '求职工作台', icon: 'i-carbon-task' },
-  { title: '内部推荐', icon: 'i-carbon-chat' },
+  { title: '社会招聘', iconClass: 'i-carbon-document', backgroundClass: 'bg-brand-blue', pagePath: 'pages/position/index' },
+  { title: '校园招聘', iconClass: 'i-carbon-bookmark', backgroundClass: 'bg-[#25bec3]', pagePath: 'pages/position/index' },
+  { title: '求职工作台', iconClass: 'i-carbon-task', backgroundClass: 'bg-[#16bd8e]', pagePath: 'pages/me/me' },
+  { title: '内部推荐', iconClass: 'i-carbon-chat', backgroundClass: 'bg-[#ff7c0b]', pagePath: 'pages/position/index' },
 ]
 
 const popularJobs = [
@@ -49,12 +48,12 @@ function switchToTab(pagePath: string) {
 </script>
 
 <template>
-  <view class="home-page">
+  <view class="app-tab-page font-['Noto_Sans_SC','Microsoft_YaHei',sans-serif]">
     <AppPageHeader title="三生制药招聘" />
 
-    <view class="home-content">
+    <view class="px-20rpx pt-24rpx">
       <swiper
-        class="home-banner"
+        class="h-218rpx overflow-hidden rounded-22rpx"
         circular
         autoplay
         :interval="4200"
@@ -64,315 +63,74 @@ function switchToTab(pagePath: string) {
         indicator-active-color="#FFFFFF"
       >
         <swiper-item v-for="banner in banners" :key="banner.title">
-          <view class="home-banner__slide" :style="{ background: banner.background }">
-            <text class="home-banner__title">{{ banner.title }}</text>
-            <text class="home-banner__description">{{ banner.description }}</text>
+          <view
+            class="box-border h-full flex flex-col items-center justify-center px-40rpx pb-24rpx text-white"
+            :style="{ background: banner.background }"
+          >
+            <text class="text-37rpx font-700 tracking-2rpx">{{ banner.title }}</text>
+            <text class="mt-14rpx text-24rpx opacity-86">{{ banner.description }}</text>
           </view>
         </swiper-item>
       </swiper>
 
-      <view class="ai-entry" role="button" @tap="switchToTab('pages/ai-chat/index')">
-        <view class="ai-entry__icon i-carbon-chat" />
-        <view class="ai-entry__copy">
-          <text class="ai-entry__title">麟才寻你 · AI 对话</text>
-          <text class="ai-entry__description">AI 帮你匹配岗位、一键投递</text>
+      <view
+        class="mt-26rpx min-h-124rpx flex cursor-pointer items-center rounded-22rpx bg-[#eef0ff] px-26rpx active:opacity-76"
+        role="button"
+        @tap="switchToTab('pages/ai-chat/index')"
+      >
+        <view class="i-carbon-chat h-80rpx w-80rpx center rounded-20rpx bg-brand-violet text-45rpx text-white" />
+        <view class="ml-20rpx min-w-0 flex flex-1 flex-col">
+          <text class="text-27rpx text-app-ink font-700">麟才寻你 · AI 对话</text>
+          <text class="mt-8rpx text-21rpx text-[#7f8997]">AI 帮你匹配岗位、一键投递</text>
         </view>
-        <view class="ai-entry__action">
+        <view class="h-56rpx flex items-center rounded-28rpx bg-brand-violet px-18rpx text-24rpx text-white font-600">
           <text>聊一聊</text>
-          <view class="i-carbon-arrow-right" />
+          <view class="i-carbon-arrow-right ml-4rpx text-23rpx" />
         </view>
       </view>
 
-      <view class="quick-card">
+      <view class="grid grid-cols-2 mt-24rpx gap-x-16rpx gap-y-30rpx app-card px-20rpx pb-32rpx pt-34rpx">
         <view
           v-for="entry in quickEntries"
           :key="entry.title"
-          class="quick-entry"
+          class="flex flex-col cursor-pointer items-center text-25rpx font-600 active:opacity-76"
           role="button"
-          @tap="switchToTab(entry.title === '求职工作台' ? 'pages/me/me' : 'pages/position/index')"
+          @tap="switchToTab(entry.pagePath)"
         >
-          <view v-if="entry.title === '社会招聘'" class="quick-entry__icon quick-entry__icon--blue">
-            <view class="quick-entry__symbol i-carbon-document" />
-          </view>
-          <view v-else-if="entry.title === '校园招聘'" class="quick-entry__icon quick-entry__icon--cyan">
-            <view class="quick-entry__symbol i-carbon-bookmark" />
-          </view>
-          <view v-else-if="entry.title === '求职工作台'" class="quick-entry__icon quick-entry__icon--green">
-            <view class="quick-entry__symbol i-carbon-task" />
-          </view>
-          <view v-else class="quick-entry__icon quick-entry__icon--orange">
-            <view class="quick-entry__symbol i-carbon-chat" />
+          <view class="mb-14rpx h-78rpx w-78rpx center rounded-20rpx text-42rpx text-white" :class="entry.backgroundClass">
+            <view class="block h-44rpx w-44rpx text-44rpx text-white leading-1" :class="entry.iconClass" />
           </view>
           <text>{{ entry.title }}</text>
         </view>
       </view>
 
-      <view class="section-heading">
-        <text class="section-heading__title">热门岗位</text>
-        <view class="section-heading__action" role="button" @tap="switchToTab('pages/position/index')">
+      <view class="mx-10rpx mb-16rpx mt-34rpx flex items-center justify-between">
+        <text class="text-31rpx font-700">热门岗位</text>
+        <view
+          class="flex cursor-pointer items-center text-23rpx text-[#7f8997] active:opacity-74"
+          role="button"
+          @tap="switchToTab('pages/position/index')"
+        >
           <text>查看全部</text>
-          <view class="i-carbon-chevron-right" />
+          <view class="i-carbon-chevron-right ml-2rpx text-26rpx" />
         </view>
       </view>
 
-      <view class="job-list">
-        <view v-for="job in popularJobs" :key="job.title" class="job-card" role="button" @tap="switchToTab('pages/position/index')">
-          <view class="job-card__main">
-            <text class="job-card__title">{{ job.title }}</text>
-            <text class="job-card__detail">{{ job.detail }}</text>
+      <view class="app-card px-26rpx">
+        <view
+          v-for="job in popularJobs"
+          :key="job.title"
+          class="min-h-118rpx flex cursor-pointer items-center border-b-1rpx border-b-[#edf1f6] border-b-solid last:border-b-0 active:opacity-76"
+          role="button"
+          @tap="switchToTab('pages/position/index')"
+        >
+          <view class="min-w-0 flex flex-1 flex-col">
+            <text class="overflow-hidden text-ellipsis whitespace-nowrap text-27rpx font-600">{{ job.title }}</text>
+            <text class="mt-12rpx text-21rpx text-[#7f8997]">{{ job.detail }}</text>
           </view>
-          <text class="job-card__salary">{{ job.salary }}</text>
+          <text class="ml-20rpx text-25rpx text-[#ff7311] font-700">{{ job.salary }}</text>
         </view>
       </view>
     </view>
-    <!-- #ifndef MP-WEIXIN -->
-    <FgTabbar />
-    <!-- #endif -->
   </view>
 </template>
-
-<style scoped lang="scss">
-.home-page {
-  min-height: 100vh;
-  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
-  color: #1e293b;
-  background: #f4f7fb;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.home-content {
-  padding: 24rpx 20rpx 0;
-}
-
-.home-banner {
-  height: 218rpx;
-  overflow: hidden;
-  border-radius: 22rpx;
-}
-
-.home-banner__slide {
-  display: flex;
-  height: 100%;
-  box-sizing: border-box;
-  align-items: center;
-  padding: 0 40rpx 24rpx;
-  color: #fff;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.home-banner__title {
-  font-size: 37rpx;
-  font-weight: 700;
-  letter-spacing: 2rpx;
-}
-
-.home-banner__description {
-  margin-top: 14rpx;
-  font-size: 24rpx;
-  opacity: 0.86;
-}
-
-.ai-entry {
-  display: flex;
-  min-height: 124rpx;
-  align-items: center;
-  margin-top: 26rpx;
-  padding: 0 26rpx;
-  border-radius: 22rpx;
-  background: linear-gradient(100deg, #f7e9ff 0%, #f3e8ff 46%, #efe3ff 100%);
-  cursor: pointer;
-}
-
-.ai-entry:active,
-.quick-entry:active,
-.job-card:active {
-  opacity: 0.76;
-}
-
-.ai-entry__icon {
-  display: flex;
-  width: 80rpx;
-  height: 80rpx;
-  align-items: center;
-  justify-content: center;
-  border-radius: 20rpx;
-  color: #fff;
-  font-size: 45rpx;
-  background: #7c32d9;
-}
-
-.ai-entry__copy {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  margin-left: 20rpx;
-  flex-direction: column;
-}
-
-.ai-entry__title {
-  color: #2d2638;
-  font-size: 27rpx;
-  font-weight: 700;
-}
-
-.ai-entry__description {
-  margin-top: 8rpx;
-  color: #897c94;
-  font-size: 21rpx;
-}
-
-.ai-entry__action {
-  display: flex;
-  height: 56rpx;
-  align-items: center;
-  padding: 0 18rpx;
-  border-radius: 28rpx;
-  color: #fff;
-  background: #7c32d9;
-  font-size: 24rpx;
-  font-weight: 600;
-}
-
-.ai-entry__action view {
-  margin-left: 4rpx;
-  font-size: 23rpx;
-}
-
-.quick-card,
-.job-list {
-  border-radius: 22rpx;
-  background: #fff;
-}
-
-.quick-card {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30rpx 16rpx;
-  margin-top: 24rpx;
-  padding: 34rpx 20rpx 32rpx;
-}
-
-.quick-entry {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  flex-direction: column;
-  font-size: 25rpx;
-  font-weight: 600;
-}
-
-.quick-entry__icon {
-  display: flex;
-  width: 78rpx;
-  height: 78rpx;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14rpx;
-  border-radius: 20rpx;
-  color: #fff;
-  font-size: 42rpx;
-}
-
-.quick-entry__icon :deep(.wd-icon) {
-  display: block;
-  line-height: 1;
-}
-
-.quick-entry__symbol {
-  display: block;
-  width: 44rpx;
-  height: 44rpx;
-  color: #fff;
-  font-size: 44rpx;
-  line-height: 1;
-}
-
-.quick-entry__icon--blue {
-  background:
-    linear-gradient(#fff, #fff) center / 34rpx 28rpx no-repeat,
-    #2571e6;
-}
-
-.quick-entry__icon--cyan {
-  background: radial-gradient(circle, #fff 0 17rpx, transparent 18rpx), #25bec3;
-}
-
-.quick-entry__icon--green {
-  background:
-    linear-gradient(#fff, #fff) center / 12rpx 34rpx no-repeat,
-    #16bd8e;
-}
-
-.quick-entry__icon--orange {
-  background: radial-gradient(circle, #fff 0 17rpx, transparent 18rpx), #ff7c0b;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 34rpx 10rpx 16rpx;
-}
-
-.section-heading__title {
-  font-size: 31rpx;
-  font-weight: 700;
-}
-
-.section-heading__action {
-  display: flex;
-  align-items: center;
-  color: #8d99a9;
-  font-size: 23rpx;
-}
-
-.section-heading__action view {
-  margin-left: 2rpx;
-  font-size: 26rpx;
-}
-
-.job-list {
-  padding: 0 26rpx;
-}
-
-.job-card {
-  display: flex;
-  min-height: 118rpx;
-  align-items: center;
-  border-bottom: 1rpx solid #edf1f6;
-  cursor: pointer;
-}
-
-.job-card:last-child {
-  border-bottom: 0;
-}
-
-.job-card__main {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-}
-
-.job-card__title {
-  overflow: hidden;
-  font-size: 27rpx;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.job-card__detail {
-  margin-top: 12rpx;
-  color: #909bad;
-  font-size: 21rpx;
-}
-
-.job-card__salary {
-  margin-left: 20rpx;
-  color: #ff7311;
-  font-size: 25rpx;
-  font-weight: 700;
-}
-</style>

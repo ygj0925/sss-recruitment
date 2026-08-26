@@ -19,17 +19,6 @@ export interface PhoneCodeForm {
   agreed: boolean
 }
 
-export const AUTH_THEME = {
-  primary: '#0957DE',
-  primaryPressed: '#0748BE',
-  primarySoft: '#E8F1FF',
-  primaryDisabled: '#B8D4FF',
-  pageBackground: '#F7F9FC',
-  text: '#1F2937',
-  mutedText: '#98A2B3',
-  link: '#3B82F6',
-} as const
-
 const PHONE_PATTERN = /^1\d{10}$/
 const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 20

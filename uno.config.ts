@@ -69,7 +69,11 @@ export default defineConfig({
   ],
   shortcuts: [
     {
-      center: 'flex justify-center items-center',
+      'center': 'flex justify-center items-center',
+      'app-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink',
+      'app-tab-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink pb-[var(--app-page-bottom-safe)]',
+      'app-card': 'rounded-22rpx bg-white',
+      'app-brand-action': 'text-white bg-brand-hero',
     },
   ],
   // 动态图标需要在这里配置，或者写在vue页面中注释掉
@@ -97,6 +101,8 @@ export default defineConfig({
     'i-carbon-menu',
   ],
   rules: [
+    ['bg-brand-hero', { background: 'var(--app-brand-hero)' }],
+    ['bg-brand-header', { background: 'var(--app-brand-header)' }],
     [
       'p-safe',
       {
@@ -110,7 +116,12 @@ export default defineConfig({
   theme: {
     colors: {
       /** 主题色，用法如: text-primary */
-      primary: 'var(--wot-color-theme,#0957DE)',
+      'primary': 'var(--wot-color-theme,#2C8CF4)',
+      'app-surface': 'var(--app-page-background)',
+      'app-ink': '#1F2A3D',
+      'brand-sky': 'var(--app-brand-sky)',
+      'brand-blue': 'var(--app-brand-blue)',
+      'brand-violet': 'var(--app-brand-violet)',
     },
     fontSize: {
       /** 提供更小号的字体，用法如：text-2xs */

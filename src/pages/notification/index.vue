@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppPageHeader from '@/components/AppPageHeader.vue'
-import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
   name: 'Notification',
@@ -10,7 +9,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '通知',
-    backgroundColor: '#F4F7FB',
+    backgroundColor: '#F6F8FC',
   },
 })
 
@@ -21,109 +20,21 @@ const notifications = [
 </script>
 
 <template>
-  <view class="notification-page">
+  <view class="app-tab-page font-[Noto_Sans_SC,Microsoft_YaHei,sans-serif]">
     <AppPageHeader title="通知" />
 
-    <view class="notification-content">
-      <view v-for="notification in notifications" :key="notification.title" class="notification-card">
-        <view class="notification-card__icon i-carbon-notification" />
-        <view class="notification-card__copy">
-          <view class="notification-card__heading">
-            <text class="notification-card__title">{{ notification.title }}</text>
-            <text class="notification-card__time">{{ notification.time }}</text>
+    <view class="flex flex-col gap-18rpx p-24rpx">
+      <view v-for="notification in notifications" :key="notification.title" class="relative flex items-start rounded-20rpx bg-white p-26rpx">
+        <view class="i-carbon-notification mr-18rpx h-64rpx w-64rpx flex flex-[0_0_64rpx] items-center justify-center rounded-18rpx bg-brand-blue text-34rpx text-white" />
+        <view class="min-w-0 flex-1">
+          <view class="flex items-center justify-between">
+            <text class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-27rpx font-700">{{ notification.title }}</text>
+            <text class="ml-12rpx text-24rpx text-[#9da7b5]">{{ notification.time }}</text>
           </view>
-          <text class="notification-card__description">{{ notification.description }}</text>
+          <text class="mt-12rpx block text-23rpx text-[#8491a2] leading-[1.5]">{{ notification.description }}</text>
         </view>
-        <view v-if="notification.unread" class="notification-card__dot" />
+        <view v-if="notification.unread" class="absolute right-20rpx top-20rpx h-12rpx w-12rpx rounded-full bg-[#ef5260]" />
       </view>
     </view>
-    <!-- #ifndef MP-WEIXIN -->
-    <FgTabbar />
-    <!-- #endif -->
   </view>
 </template>
-
-<style scoped lang="scss">
-.notification-page {
-  min-height: 100vh;
-  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
-  color: #202b3c;
-  background: #f4f7fb;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.notification-content {
-  display: flex;
-  gap: 18rpx;
-  padding: 24rpx;
-  flex-direction: column;
-}
-
-.notification-card {
-  display: flex;
-  position: relative;
-  align-items: flex-start;
-  padding: 26rpx;
-  border-radius: 20rpx;
-  background: #fff;
-}
-
-.notification-card__icon {
-  display: flex;
-  width: 64rpx;
-  height: 64rpx;
-  flex: 0 0 64rpx;
-  align-items: center;
-  justify-content: center;
-  margin-right: 18rpx;
-  border-radius: 18rpx;
-  color: #fff;
-  background: #4c85ef;
-  font-size: 34rpx;
-}
-
-.notification-card__copy {
-  min-width: 0;
-  flex: 1;
-}
-
-.notification-card__heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.notification-card__title {
-  overflow: hidden;
-  min-width: 0;
-  flex: 1;
-  font-size: 27rpx;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.notification-card__time {
-  margin-left: 12rpx;
-  color: #9da7b5;
-  font-size: 24rpx;
-}
-
-.notification-card__description {
-  display: block;
-  margin-top: 12rpx;
-  color: #8491a2;
-  font-size: 23rpx;
-  line-height: 1.5;
-}
-
-.notification-card__dot {
-  position: absolute;
-  top: 20rpx;
-  right: 20rpx;
-  width: 12rpx;
-  height: 12rpx;
-  border-radius: 50%;
-  background: #ef5260;
-}
-</style>

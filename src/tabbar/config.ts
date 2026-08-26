@@ -72,8 +72,8 @@ export const isNativeTabbar = selectedTabbarStrategy === TABBAR_STRATEGY_MAP.NAT
 const _tabbar: TabBar = {
   custom: selectedTabbarStrategy === TABBAR_STRATEGY_MAP.CUSTOM_TABBAR,
   color: '#999999',
-  selectedColor: '#3478F6',
-  backgroundColor: '#F8F8F8',
+  selectedColor: '#2C8CF4',
+  backgroundColor: '#FFFFFF',
   borderStyle: 'black',
   height: '50px',
   fontSize: '10px',

@@ -20,7 +20,8 @@ const emit = defineEmits<{
     block
     type="primary"
     size="large"
-    custom-style="min-height: 96rpx; margin-top: 4rpx; border-radius: 28rpx; background: linear-gradient(105deg, #27b5f4 0%, #3c91f3 56%, #6c60ed 100%); box-shadow: 0 16rpx 30rpx rgba(55, 139, 241, 0.26); font-size: 29rpx; font-weight: 700;"
+    custom-class="!mt-4rpx !min-h-96rpx !rounded-28rpx !text-29rpx !font-700 !shadow-[0_16rpx_30rpx_rgba(55,139,241,0.26)]"
+    custom-style="background: var(--app-brand-header);"
     :disabled="disabled"
     :loading="loading"
     @click="emit('tap')"

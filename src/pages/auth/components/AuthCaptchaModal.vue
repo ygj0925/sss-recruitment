@@ -20,34 +20,19 @@ function confirm() {
 </script>
 
 <template>
-  <view class="captcha-mask" @tap.self="emit('cancel')">
-    <view class="captcha-modal" role="dialog" aria-label="图形验证码">
-      <text class="captcha-modal__title">安全验证</text>
-      <text class="captcha-modal__description">请输入图形验证码后继续</text>
-      <view class="captcha-modal__row">
-        <input v-model="value" class="captcha-modal__input" placeholder="图形验证码" :maxlength="4">
-        <text class="captcha-modal__code">{{ captcha }}</text>
+  <view class="fixed inset-0 z-99 flex items-center justify-center bg-[rgba(35,50,82,0.5)] p-48rpx" @tap.self="emit('cancel')">
+    <view class="box-border max-w-560rpx w-full border-1rpx border-white/72 rounded-34rpx bg-white px-40rpx pb-30rpx pt-48rpx shadow-[0_28rpx_70rpx_rgba(31,51,95,0.22)]" role="dialog" aria-label="图形验证码">
+      <text class="block text-center text-32rpx text-#263249 font-700">安全验证</text>
+      <text class="mt-12rpx block text-center text-22rpx text-#9aa5b8">请输入图形验证码后继续</text>
+      <view class="mt-34rpx h-84rpx flex items-center border-2rpx border-#e8edf7 rounded-22rpx bg-#f8faff px-22rpx">
+        <input v-model="value" class="min-w-0 flex-1 text-24rpx text-#263249" placeholder="图形验证码" :maxlength="4">
+        <text class="py-0 pl-20rpx pr-10rpx text-36rpx text-#467bff font-700 tracking-6rpx italic">{{ captcha }}</text>
       </view>
-      <text v-if="error" class="captcha-modal__error">{{ error }}</text>
-      <view class="captcha-modal__actions">
-        <text role="button" @tap="emit('cancel')">取消</text>
-        <text class="captcha-modal__confirm" role="button" @tap="confirm">确定</text>
+      <text v-if="error" class="mt-12rpx block text-20rpx text-#e95d63">{{ error }}</text>
+      <view class="mt-40rpx flex justify-between border-t-1rpx border-#edf1f8 px-84rpx py-28rpx text-26rpx text-#7f8aa0 -mx-40rpx -mb-30rpx">
+        <text class="cursor-pointer" role="button" @tap="emit('cancel')">取消</text>
+        <text class="cursor-pointer text-#467bff font-700" role="button" @tap="confirm">确定</text>
       </view>
     </view>
   </view>
 </template>
-
-<style scoped lang="scss">
-.captcha-mask { position: fixed; z-index: 99; top: 0; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: center; padding: 48rpx; background: rgba(35, 50, 82, 0.5); }
-.captcha-modal { box-sizing: border-box; width: 100%; max-width: 560rpx; padding: 48rpx 40rpx 30rpx; border: 1rpx solid rgba(255, 255, 255, 0.72); border-radius: 34rpx; background: #fff; box-shadow: 0 28rpx 70rpx rgba(31, 51, 95, 0.22); }
-.captcha-modal__title,
-.captcha-modal__description { display: block; text-align: center; }
-.captcha-modal__title { color: #263249; font-size: 32rpx; font-weight: 700; }
-.captcha-modal__description { margin-top: 12rpx; color: #9aa5b8; font-size: 22rpx; }
-.captcha-modal__row { display: flex; height: 84rpx; align-items: center; margin-top: 34rpx; padding: 0 22rpx; border: 2rpx solid #e8edf7; border-radius: 22rpx; background: #f8faff; }
-.captcha-modal__input { min-width: 0; flex: 1; color: #263249; font-size: 24rpx; }
-.captcha-modal__code { padding: 0 10rpx 0 20rpx; color: #467bff; font-size: 36rpx; font-style: italic; font-weight: 700; letter-spacing: 6rpx; }
-.captcha-modal__error { display: block; margin-top: 12rpx; color: #e95d63; font-size: 20rpx; }
-.captcha-modal__actions { display: flex; justify-content: space-between; margin: 40rpx -40rpx -30rpx; padding: 28rpx 84rpx; border-top: 1rpx solid #edf1f8; color: #7f8aa0; font-size: 26rpx; }
-.captcha-modal__confirm { color: #467bff; font-weight: 700; }
-</style>

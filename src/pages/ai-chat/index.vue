@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppPageHeader from '@/components/AppPageHeader.vue'
-import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
   name: 'AiChat',
@@ -10,7 +9,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: 'AI 聊天',
-    backgroundColor: '#F4F7FB',
+    backgroundColor: '#F6F8FC',
   },
 })
 
@@ -41,199 +40,38 @@ function sendMessage(content = inputValue.value) {
 </script>
 
 <template>
-  <view class="ai-page">
+  <view class="app-tab-page font-[Noto_Sans_SC,Microsoft_YaHei,sans-serif]">
     <AppPageHeader title="AI 聊天" />
 
-    <view class="ai-content">
-      <view class="ai-welcome">
-        <view class="ai-welcome__icon i-carbon-chat" />
+    <view class="px-24rpx pb-112rpx pt-26rpx">
+      <view class="flex items-center rounded-22rpx p-26rpx text-white bg-brand-header">
+        <view class="i-carbon-chat mr-18rpx h-72rpx w-72rpx flex items-center justify-center rounded-18rpx bg-white text-40rpx text-brand-violet" />
         <view>
-          <text class="ai-welcome__title">麟才寻你 · AI 助手</text>
-          <text class="ai-welcome__description">聊一聊，发现更适合你的职业机会</text>
+          <text class="block text-28rpx font-700">麟才寻你 · AI 助手</text>
+          <text class="mt-8rpx block text-22rpx opacity-80">聊一聊，发现更适合你的职业机会</text>
         </view>
       </view>
 
-      <view class="message-list">
-        <view v-for="message in messages" :key="message.id" class="message-row" :class="`message-row--${message.role}`">
-          <view v-if="message.role === 'assistant'" class="message-row__avatar i-carbon-chat" />
-          <text class="message-row__bubble">{{ message.content }}</text>
+      <view class="mt-30rpx flex flex-col gap-20rpx">
+        <view v-for="message in messages" :key="message.id" class="flex items-start" :class="{ 'justify-end': message.role === 'user' }">
+          <view v-if="message.role === 'assistant'" class="i-carbon-chat mr-14rpx h-58rpx w-58rpx flex flex-[0_0_58rpx] items-center justify-center rounded-18rpx bg-brand-violet text-30rpx text-white" />
+          <text class="max-w-[78%] rounded-18rpx px-22rpx py-19rpx text-25rpx leading-[1.6]" :class="message.role === 'user' ? 'bg-brand-violet text-white' : 'bg-white text-app-ink'">{{ message.content }}</text>
         </view>
       </view>
 
-      <view class="quick-questions">
-        <text class="quick-questions__label">你可以这样问我</text>
-        <view class="quick-questions__items">
-          <text v-for="question in quickQuestions" :key="question" role="button" @tap="sendMessage(question)">{{ question }}</text>
+      <view class="mt-34rpx">
+        <text class="text-23rpx text-[#7f8997]">你可以这样问我</text>
+        <view class="mt-16rpx flex flex-wrap gap-14rpx">
+          <text v-for="question in quickQuestions" :key="question" class="cursor-pointer rounded-28rpx bg-[#eef0ff] px-18rpx py-13rpx text-22rpx text-brand-violet active:opacity-74" role="button" @tap="sendMessage(question)">{{ question }}</text>
         </view>
       </view>
     </view>
 
-    <view class="chat-input pb-safe">
-      <view class="chat-input__bar">
-        <input v-model="inputValue" confirm-type="send" placeholder="输入你的求职问题" @confirm="sendMessage()">
-        <view class="chat-input__send i-carbon-send-alt" role="button" @tap="sendMessage()" />
+    <view class="fixed inset-x-0 bottom-[var(--app-page-bottom-safe)] z-20 box-border bg-white px-24rpx py-18rpx">
+      <view class="h-76rpx flex items-center rounded-16rpx bg-[#f3f4f8] pl-24rpx">
+        <input v-model="inputValue" class="min-w-0 flex-1 text-25rpx" confirm-type="send" placeholder="输入你的求职问题" @confirm="sendMessage()">
+        <view class="i-carbon-send-alt h-76rpx w-76rpx flex cursor-pointer items-center justify-center rounded-16rpx bg-brand-violet text-34rpx text-white active:opacity-74" role="button" @tap="sendMessage()" />
       </view>
     </view>
-    <!-- #ifndef MP-WEIXIN -->
-    <FgTabbar />
-    <!-- #endif -->
   </view>
 </template>
-
-<style scoped lang="scss">
-.ai-page {
-  min-height: 100vh;
-  padding-bottom: calc(260rpx + env(safe-area-inset-bottom));
-  color: #25203a;
-  background: #f7f5fb;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.ai-content {
-  padding: 26rpx 24rpx calc(260rpx + env(safe-area-inset-bottom));
-}
-
-.ai-welcome {
-  display: flex;
-  align-items: center;
-  padding: 26rpx;
-  border-radius: 22rpx;
-  color: #fff;
-  background: linear-gradient(115deg, #7132d7, #9a58e8);
-}
-
-.ai-welcome__icon,
-.message-row__avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18rpx;
-}
-
-.ai-welcome__icon {
-  width: 72rpx;
-  height: 72rpx;
-  margin-right: 18rpx;
-  color: #7132d7;
-  background: #fff;
-  font-size: 40rpx;
-}
-
-.ai-welcome__title,
-.ai-welcome__description {
-  display: block;
-}
-
-.ai-welcome__title {
-  font-size: 28rpx;
-  font-weight: 700;
-}
-
-.ai-welcome__description {
-  margin-top: 8rpx;
-  font-size: 22rpx;
-  opacity: 0.8;
-}
-
-.message-list {
-  display: flex;
-  gap: 20rpx;
-  margin-top: 30rpx;
-  flex-direction: column;
-}
-
-.message-row {
-  display: flex;
-  align-items: flex-start;
-}
-
-.message-row--user {
-  justify-content: flex-end;
-}
-
-.message-row__avatar {
-  width: 58rpx;
-  height: 58rpx;
-  flex: 0 0 58rpx;
-  margin-right: 14rpx;
-  color: #fff;
-  background: #7c32d9;
-  font-size: 30rpx;
-}
-
-.message-row__bubble {
-  max-width: 78%;
-  padding: 19rpx 22rpx;
-  border-radius: 18rpx;
-  color: #3b3349;
-  background: #fff;
-  font-size: 25rpx;
-  line-height: 1.6;
-}
-
-.message-row--user .message-row__bubble {
-  color: #fff;
-  background: #7c32d9;
-}
-
-.quick-questions {
-  margin-top: 34rpx;
-}
-
-.quick-questions__label {
-  color: #8a8296;
-  font-size: 23rpx;
-}
-
-.quick-questions__items {
-  display: flex;
-  gap: 14rpx;
-  flex-wrap: wrap;
-  margin-top: 16rpx;
-}
-
-.quick-questions__items text {
-  padding: 13rpx 18rpx;
-  border-radius: 28rpx;
-  color: #7541ca;
-  background: #eee4ff;
-  font-size: 22rpx;
-}
-
-.chat-input {
-  position: fixed;
-  z-index: 20;
-  right: 0;
-  bottom: calc(108rpx + env(safe-area-inset-bottom));
-  left: 0;
-  padding: 18rpx 24rpx;
-  background: #fff;
-}
-
-.chat-input__bar {
-  display: flex;
-  height: 76rpx;
-  align-items: center;
-  padding-left: 24rpx;
-  border-radius: 16rpx;
-  background: #f3f4f8;
-}
-
-.chat-input input {
-  min-width: 0;
-  flex: 1;
-  font-size: 25rpx;
-}
-
-.chat-input__send {
-  display: flex;
-  width: 76rpx;
-  height: 76rpx;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16rpx;
-  color: #fff;
-  background: #7c32d9;
-  font-size: 34rpx;
-}
-</style>

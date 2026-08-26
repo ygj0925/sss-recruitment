@@ -16,10 +16,10 @@ definePage({
   excludeLoginPath: true,
   style: {
     navigationStyle: 'custom',
-    navigationBarBackgroundColor: '#3065F4',
+    navigationBarBackgroundColor: '#2C8CF4',
     navigationBarTextStyle: 'white',
     navigationBarTitleText: '账号密码登录',
-    backgroundColorTop: '#3065F4',
+    backgroundColorTop: '#2C8CF4',
   },
 })
 
@@ -136,66 +136,26 @@ async function loginWithWechat() {
   <AuthLayout title="账号密码登录" subtitle="请使用已注册的账号密码" @back="goBack">
     <AuthInput v-model="form.phone" icon="⌕" placeholder="请输入手机号" input-type="number" :maxlength="11" :error="errors.phone" @blur="checkField('phone')" @update:model-value="updatePhone" />
     <AuthInput v-model="form.password" icon="⌑" placeholder="请输入 6-20 位密码" password :maxlength="20" :error="errors.password" @blur="checkField('password')" />
-    <view class="login-options">
-      <view class="login-options__agreement">
+    <view class="flex items-start justify-between">
+      <view class="min-w-0 flex-1">
         <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
       </view>
-      <text class="login-options__forgot" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
+      <text class="mb-30rpx ml-20rpx mt-4rpx min-h-50rpx cursor-pointer whitespace-nowrap text-21rpx text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
     </view>
-    <text v-if="errors.agreement" class="login-error">{{ errors.agreement }}</text>
+    <text v-if="errors.agreement" class="mb-24rpx mt--14rpx block text-center text-22rpx text-#e95d63 leading-1.5">{{ errors.agreement }}</text>
     <AuthButton :disabled="loading" :loading="loading" @tap="submitAccountLogin" />
-    <text class="login-switch" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
-    <text v-if="feedback" class="login-feedback" :class="[`login-feedback--${feedbackType}`]">{{ feedback }}</text>
+    <text class="mt-26rpx block min-h-74rpx cursor-pointer text-center text-24rpx text-#467bff font-600 leading-74rpx" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
+    <text
+      v-if="feedback"
+      class="mb-24rpx mt--14rpx block text-center text-22rpx leading-1.5"
+      :class="{
+        'text-#e95d63': feedbackType === 'error',
+        'text-#467bff': feedbackType === 'info',
+        'text-#1eae72': feedbackType === 'success',
+      }"
+    >
+      {{ feedback }}
+    </text>
     <AuthSocialLogin @wechat="loginWithWechat" @unavailable="provider => showFeedback(`${provider} 登录暂未开放`)" />
   </AuthLayout>
 </template>
-
-<style scoped lang="scss">
-.login-options {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-.login-options__agreement {
-  min-width: 0;
-  flex: 1;
-}
-.login-options__forgot {
-  min-height: 50rpx;
-  margin: 4rpx 0 30rpx 20rpx;
-  color: #467bff;
-  cursor: pointer;
-  font-size: 21rpx;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.login-error,
-.login-feedback {
-  display: block;
-  margin: -14rpx 0 24rpx;
-  font-size: 22rpx;
-  line-height: 1.5;
-  text-align: center;
-}
-.login-error,
-.login-feedback--error {
-  color: #e95d63;
-}
-.login-feedback--info {
-  color: #467bff;
-}
-.login-feedback--success {
-  color: #1eae72;
-}
-.login-switch {
-  display: block;
-  min-height: 74rpx;
-  margin-top: 26rpx;
-  color: #467bff;
-  cursor: pointer;
-  font-size: 24rpx;
-  font-weight: 600;
-  line-height: 74rpx;
-  text-align: center;
-}
-</style>

@@ -11,44 +11,18 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <view class="auth-agreement">
+  <view class="my-4rpx mb-30rpx min-h-54rpx flex flex-wrap items-center text-23rpx text-[#7f8ca1] leading-1.6">
     <wd-checkbox
       :model-value="modelValue"
       type="square"
-      checked-color="#27b5f4"
-      custom-class="auth-agreement__checkbox"
+      checked-color="var(--app-brand-blue)"
+      custom-class="mr-4rpx"
       @update:model-value="emit('update:modelValue', $event)"
     >
       <text>我已阅读并同意</text>
     </wd-checkbox>
-    <text class="auth-agreement__link" role="link" @tap="emit('agreement')">《用户协议》</text>
-    <text class="auth-agreement__join">和</text>
-    <text class="auth-agreement__link" role="link" @tap="emit('privacy')">《隐私政策》</text>
+    <text class="cursor-pointer text-brand-blue" role="link" @tap="emit('agreement')">《用户协议》</text>
+    <text class="mx-4rpx">和</text>
+    <text class="cursor-pointer text-brand-blue" role="link" @tap="emit('privacy')">《隐私政策》</text>
   </view>
 </template>
-
-<style scoped lang="scss">
-.auth-agreement {
-  display: flex;
-  min-height: 54rpx;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 4rpx 0 30rpx;
-  color: #7f8ca1;
-  font-size: 23rpx;
-  line-height: 1.6;
-}
-
-.auth-agreement :deep(.auth-agreement__checkbox) {
-  margin-right: 4rpx;
-}
-
-.auth-agreement__link {
-  color: #2a9ff2;
-  cursor: pointer;
-}
-
-.auth-agreement__join {
-  margin: 0 4rpx;
-}
-</style>

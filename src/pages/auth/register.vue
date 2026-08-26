@@ -12,10 +12,10 @@ definePage({
   excludeLoginPath: true,
   style: {
     navigationStyle: 'custom',
-    navigationBarBackgroundColor: '#3065F4',
+    navigationBarBackgroundColor: '#2C8CF4',
     navigationBarTextStyle: 'white',
     navigationBarTitleText: '验证码登录/注册',
-    backgroundColorTop: '#3065F4',
+    backgroundColorTop: '#2C8CF4',
   },
 })
 
@@ -97,38 +97,10 @@ onUnmounted(() => {
     <AuthInput v-model="form.phone" icon="⌕" placeholder="请输入手机号" input-type="number" :maxlength="11" :error="errors.phone" @blur="checkPhone" @update:model-value="updatePhone" />
     <AuthInput v-model="form.code" icon="◇" placeholder="请输入验证码" input-type="number" :maxlength="6" :error="errors.code" :action-text="seconds ? `${seconds}s` : '发送验证码'" @blur="checkCode" @action="requestCode" />
     <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
-    <text v-if="errors.agreement" class="register-error">{{ errors.agreement }}</text>
+    <text v-if="errors.agreement" class="mb-24rpx mt--16rpx block text-center text-22rpx text-#e95d63 leading-1.5">{{ errors.agreement }}</text>
     <AuthButton label="登录 / 注册" @tap="submit" />
-    <text class="register-switch" role="link" @tap="goTo('/pages/auth/login')">使用账号密码登录</text>
-    <text v-if="feedback" class="register-feedback">{{ feedback }}</text>
+    <text class="mt-26rpx block min-h-74rpx cursor-pointer text-center text-24rpx text-#467bff font-600 leading-74rpx" role="link" @tap="goTo('/pages/auth/login')">使用账号密码登录</text>
+    <text v-if="feedback" class="mb-24rpx mt--16rpx block text-center text-22rpx text-#467bff leading-1.5">{{ feedback }}</text>
     <AuthCaptchaModal v-if="showCaptcha" @cancel="showCaptcha = false" @confirm="confirmCaptcha" />
   </AuthLayout>
 </template>
-
-<style scoped lang="scss">
-.register-error,
-.register-feedback {
-  display: block;
-  margin: -16rpx 0 24rpx;
-  font-size: 22rpx;
-  line-height: 1.5;
-  text-align: center;
-}
-.register-error {
-  color: #e95d63;
-}
-.register-feedback {
-  color: #467bff;
-}
-.register-switch {
-  display: block;
-  min-height: 74rpx;
-  margin-top: 26rpx;
-  color: #467bff;
-  cursor: pointer;
-  font-size: 24rpx;
-  font-weight: 600;
-  line-height: 74rpx;
-  text-align: center;
-}
-</style>

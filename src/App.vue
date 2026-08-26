@@ -2,8 +2,8 @@
 import { onHide, onLaunch, onShow } from '@dcloudio/uni-app'
 import { getCurrentInstance, onMounted, onUnmounted } from 'vue'
 import { navigateToInterceptor } from '@/router/interceptor'
-import { tabbarStore } from '@/tabbar/store'
 import { permission } from '@/router/permission'
+import { tabbarStore } from '@/tabbar/store'
 
 const { proxy } = (getCurrentInstance() || {}) as any
 const router = proxy?.$router
@@ -46,7 +46,3 @@ onUnmounted(() => {
 })
 // #endif
 </script>
-
-<style lang="scss">
-
-</style>

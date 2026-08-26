@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AppPageHeader from '@/components/AppPageHeader.vue'
-import FgTabbar from '@/tabbar/index.vue'
 
 defineOptions({
   name: 'Position',
@@ -10,7 +9,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '职位',
-    backgroundColor: '#F4F7FB',
+    backgroundColor: '#F6F8FC',
   },
 })
 
@@ -30,143 +29,35 @@ function showJobDetail() {
 </script>
 
 <template>
-  <view class="position-page">
+  <view class="app-tab-page font-[Noto_Sans_SC,Microsoft_YaHei,sans-serif]">
     <AppPageHeader title="职位" />
 
-    <view class="position-content">
-      <view class="search-entry" role="button" @tap="showJobDetail">
-        <view class="i-carbon-search" />
+    <view class="px-24rpx pt-24rpx">
+      <view class="h-82rpx flex items-center rounded-16rpx bg-white px-24rpx text-25rpx text-[#9ba6b5]" role="button" @tap="showJobDetail">
+        <view class="i-carbon-search mr-12rpx text-30rpx text-brand-blue" />
         <text>搜索职位、城市或关键词</text>
       </view>
 
-      <view class="filter-row">
-        <text class="filter-row__active">推荐</text>
+      <view class="flex justify-between px-10rpx pb-22rpx pt-28rpx text-25rpx text-[#8c98a8]">
+        <text class="text-brand-blue font-700">推荐</text>
         <text>研发</text>
         <text>医学</text>
         <text>市场</text>
         <text>职能</text>
       </view>
 
-      <view class="job-list">
-        <view v-for="job in jobs" :key="job.title" class="job-card" role="button" @tap="showJobDetail">
-          <view class="job-card__top">
-            <text class="job-card__title">{{ job.title }}</text>
-            <text class="job-card__salary">{{ job.salary }}</text>
+      <view class="flex flex-col gap-18rpx">
+        <view v-for="job in jobs" :key="job.title" class="cursor-pointer rounded-20rpx bg-white p-28rpx active:opacity-74" role="button" @tap="showJobDetail">
+          <view class="flex items-center justify-between">
+            <text class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-29rpx font-700">{{ job.title }}</text>
+            <text class="ml-18rpx text-27rpx text-[#ff7311] font-700">{{ job.salary }}</text>
           </view>
-          <text class="job-card__detail">{{ job.location }} · {{ job.education }} · {{ job.experience }}</text>
-          <view class="job-card__tags">
-            <text v-for="tag in job.tags" :key="tag">{{ tag }}</text>
+          <text class="mt-16rpx block text-23rpx text-[#8491a2]">{{ job.location }} · {{ job.education }} · {{ job.experience }}</text>
+          <view class="mt-20rpx flex gap-12rpx">
+            <text v-for="tag in job.tags" :key="tag" class="rounded-8rpx bg-[#eff5ff] px-12rpx py-5rpx text-22rpx text-brand-blue">{{ tag }}</text>
           </view>
         </view>
       </view>
     </view>
-    <!-- #ifndef MP-WEIXIN -->
-    <FgTabbar />
-    <!-- #endif -->
   </view>
 </template>
-
-<style scoped lang="scss">
-.position-page {
-  min-height: 100vh;
-  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
-  color: #202b3c;
-  background: #f4f7fb;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.position-content {
-  padding: 24rpx 24rpx 0;
-}
-
-.search-entry {
-  display: flex;
-  height: 82rpx;
-  align-items: center;
-  padding: 0 24rpx;
-  border-radius: 16rpx;
-  color: #9ba6b5;
-  background: #fff;
-  font-size: 25rpx;
-}
-
-.search-entry view {
-  margin-right: 12rpx;
-  color: #4f83ed;
-  font-size: 30rpx;
-}
-
-.filter-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 28rpx 10rpx 22rpx;
-  color: #8c98a8;
-  font-size: 25rpx;
-}
-
-.filter-row__active {
-  color: #3478f6;
-  font-weight: 700;
-}
-
-.job-list {
-  display: flex;
-  gap: 18rpx;
-  flex-direction: column;
-}
-
-.job-card {
-  padding: 28rpx;
-  border-radius: 20rpx;
-  background: #fff;
-  cursor: pointer;
-}
-
-.job-card:active {
-  opacity: 0.74;
-}
-
-.job-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.job-card__title {
-  overflow: hidden;
-  min-width: 0;
-  flex: 1;
-  font-size: 29rpx;
-  font-weight: 700;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.job-card__salary {
-  margin-left: 18rpx;
-  color: #ff7311;
-  font-size: 27rpx;
-  font-weight: 700;
-}
-
-.job-card__detail {
-  display: block;
-  margin-top: 16rpx;
-  color: #8491a2;
-  font-size: 23rpx;
-}
-
-.job-card__tags {
-  display: flex;
-  gap: 12rpx;
-  margin-top: 20rpx;
-}
-
-.job-card__tags text {
-  padding: 5rpx 12rpx;
-  border-radius: 8rpx;
-  color: #4e7fe0;
-  background: #eff5ff;
-  font-size: 22rpx;
-}
-</style>

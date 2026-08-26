@@ -41,17 +41,6 @@ function submit() {
     <AuthInput v-model="form.password" icon="⌑" placeholder="请输入新密码" password :maxlength="20" :error="errors.password" @blur="checkPassword" />
     <AuthInput v-model="form.confirmPassword" icon="⌑" placeholder="请再次输入新密码" password :maxlength="20" :error="errors.confirmPassword" @blur="checkConfirmPassword" />
     <AuthButton label="确认设置" :disabled="!canSubmit" @tap="submit" />
-    <text v-if="feedback" class="password-feedback">{{ feedback }}</text>
+    <text v-if="feedback" class="mt-24rpx block text-center text-22rpx text-#3b82f6 leading-1.5">{{ feedback }}</text>
   </AuthLayout>
 </template>
-
-<style scoped lang="scss">
-.password-feedback {
-  display: block;
-  margin-top: 24rpx;
-  color: #3b82f6;
-  font-size: 22rpx;
-  line-height: 1.5;
-  text-align: center;
-}
-</style>

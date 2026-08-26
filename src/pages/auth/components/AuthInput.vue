@@ -36,11 +36,17 @@ function updateValue(event: { detail: { value: string } }) {
 </script>
 
 <template>
-  <view class="auth-field">
-    <view class="auth-field__control" :class="{ 'auth-field__control--error': error, 'auth-field__control--disabled': disabled }">
-      <text v-if="icon" class="auth-field__icon">{{ icon }}</text>
+  <view class="mb-24rpx">
+    <view
+      class="box-border min-h-96rpx flex items-center border-2rpx border-#e8edf7 rounded-26rpx bg-#f8faff px-24rpx shadow-[inset_0_1rpx_0_rgba(255,255,255,0.85)] transition-colors duration-200 ease-out"
+      :class="{
+        'border-#e95d63 bg-#fff8f8': error,
+        'bg-#f1f4fa text-#aeb9ca': disabled,
+      }"
+    >
+      <text v-if="icon" class="mr-16rpx h-42rpx w-42rpx flex items-center justify-center rounded-14rpx bg-#eaf7ff text-center text-26rpx text-#2a9ff2">{{ icon }}</text>
       <input
-        class="auth-field__input"
+        class="min-w-0 flex-1 text-26rpx text-#263249"
         :value="modelValue"
         :type="actualType"
         :password="password && !showPassword"
@@ -50,79 +56,17 @@ function updateValue(event: { detail: { value: string } }) {
         @input="updateValue"
         @blur="emit('blur')"
       >
-      <text v-if="password" class="auth-field__suffix" role="button" :aria-label="showPassword ? '隐藏密码' : '显示密码'" @tap="showPassword = !showPassword">
+      <text
+        v-if="password"
+        class="min-w-64rpx cursor-pointer pl-16rpx text-right text-28rpx text-#8390a6"
+        role="button"
+        :aria-label="showPassword ? '隐藏密码' : '显示密码'"
+        @tap="showPassword = !showPassword"
+      >
         {{ showPassword ? '◉' : '◌' }}
       </text>
-      <text v-else-if="actionText" class="auth-field__action" role="button" @tap="emit('action')">{{ actionText }}</text>
+      <text v-else-if="actionText" class="min-w-64rpx cursor-pointer pl-16rpx text-right text-22rpx text-#2a9ff2 font-700" role="button" @tap="emit('action')">{{ actionText }}</text>
     </view>
-    <text v-if="error" class="auth-field__error">{{ error }}</text>
+    <text v-if="error" class="block px-22rpx pt-9rpx text-21rpx text-#e95d63 leading-1.4">{{ error }}</text>
   </view>
 </template>
-
-<style scoped lang="scss">
-.auth-field {
-  margin-bottom: 24rpx;
-}
-.auth-field__control {
-  display: flex;
-  box-sizing: border-box;
-  min-height: 96rpx;
-  align-items: center;
-  padding: 0 24rpx;
-  border: 2rpx solid #e8edf7;
-  border-radius: 26rpx;
-  background: #f8faff;
-  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.85);
-  transition:
-    border-color 180ms cubic-bezier(0.32, 0.72, 0, 1),
-    background 180ms cubic-bezier(0.32, 0.72, 0, 1);
-}
-.auth-field__control--error {
-  border-color: #e95d63;
-  background: #fff8f8;
-}
-.auth-field__control--disabled {
-  color: #aeb9ca;
-  background: #f1f4fa;
-}
-.auth-field__icon {
-  display: flex;
-  width: 42rpx;
-  height: 42rpx;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16rpx;
-  border-radius: 14rpx;
-  color: #2a9ff2;
-  background: #eaf7ff;
-  font-size: 26rpx;
-  text-align: center;
-}
-.auth-field__input {
-  min-width: 0;
-  flex: 1;
-  color: #263249;
-  font-size: 26rpx;
-}
-.auth-field__suffix,
-.auth-field__action {
-  min-width: 64rpx;
-  padding-left: 16rpx;
-  color: #8390a6;
-  font-size: 28rpx;
-  text-align: right;
-  cursor: pointer;
-}
-.auth-field__action {
-  color: #2a9ff2;
-  font-size: 22rpx;
-  font-weight: 700;
-}
-.auth-field__error {
-  display: block;
-  padding: 9rpx 22rpx 0;
-  color: #e95d63;
-  font-size: 21rpx;
-  line-height: 1.4;
-}
-</style>
