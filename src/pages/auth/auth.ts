@@ -69,11 +69,11 @@ export function validateVerificationCode(code: string): string {
 }
 
 export function canSubmitAccountLogin(form: AccountLoginForm): boolean {
-  return !validatePhone(form.phone) && !validatePassword(form.password) && form.agreed
+  return !validatePhone(form.phone) && !validatePassword(form.password)
 }
 
 export function canSubmitPhoneCode(form: PhoneCodeForm): boolean {
-  return !validatePhone(form.phone) && !validateVerificationCode(form.code) && form.agreed
+  return !validatePhone(form.phone) && !validateVerificationCode(form.code)
 }
 
 export function getWechatAuthMode(): WechatAuthMode {

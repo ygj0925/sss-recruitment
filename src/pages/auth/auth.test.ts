@@ -23,8 +23,9 @@ describe('authentication form helpers', () => {
 
   it('validates verification code length and account-login availability', () => {
     expect(validateVerificationCode('abc')).toBe('验证码应为 4-6 位数字')
-    expect(canSubmitAccountLogin({ phone: '13800138000', password: 'secure12', agreed: false })).toBe(false)
+    expect(canSubmitAccountLogin({ phone: '13800138000', password: 'secure12', agreed: false })).toBe(true)
     expect(canSubmitAccountLogin({ phone: '13800138000', password: 'secure12', agreed: true })).toBe(true)
+    expect(canSubmitPhoneCode({ phone: '13800138000', code: '123456', agreed: false })).toBe(true)
     expect(canSubmitPhoneCode({ phone: '13800138000', code: '123456', agreed: true })).toBe(true)
   })
 })

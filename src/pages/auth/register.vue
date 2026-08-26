@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, reactive, ref } from 'vue'
+import { AGREEMENT_PAGE, PRIVACY_PAGE } from '@/router/config'
 import AuthAgreement from './components/AuthAgreement.vue'
 import AuthButton from './components/AuthButton.vue'
 import AuthCaptchaModal from './components/AuthCaptchaModal.vue'
@@ -77,8 +78,8 @@ function confirmCaptcha() {
 function submit() {
   checkPhone()
   checkCode()
-  errors.agreement = form.agreed ? '' : '请先阅读并同意用户协议'
-  if (!canSubmit.value) {
+  errors.agreement = form.agreed ? '' : '请先阅读并同意《用户协议》和《隐私政策》'
+  if (!canSubmit.value || errors.agreement) {
     return
   }
   feedback.value = '验证码登录/注册服务待接入，本次不会创建账号。'
@@ -95,9 +96,9 @@ onUnmounted(() => {
   <AuthLayout title="验证码登录/注册" subtitle="未注册的手机号将自动注册" @back="goBack">
     <AuthInput v-model="form.phone" icon="⌕" placeholder="请输入手机号" input-type="number" :maxlength="11" :error="errors.phone" @blur="checkPhone" @update:model-value="updatePhone" />
     <AuthInput v-model="form.code" icon="◇" placeholder="请输入验证码" input-type="number" :maxlength="6" :error="errors.code" :action-text="seconds ? `${seconds}s` : '发送验证码'" @blur="checkCode" @action="requestCode" />
-    <AuthAgreement v-model="form.agreed" @agreement="goTo('/pages/auth/agreement')" />
+    <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
     <text v-if="errors.agreement" class="register-error">{{ errors.agreement }}</text>
-    <AuthButton label="登录 / 注册" :disabled="!canSubmit" @tap="submit" />
+    <AuthButton label="登录 / 注册" @tap="submit" />
     <text class="register-switch" role="link" @tap="goTo('/pages/auth/login')">使用账号密码登录</text>
     <text v-if="feedback" class="register-feedback">{{ feedback }}</text>
     <AuthCaptchaModal v-if="showCaptcha" @cancel="showCaptcha = false" @confirm="confirmCaptcha" />
@@ -106,8 +107,28 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .register-error,
-.register-feedback { display: block; margin: -16rpx 0 24rpx; font-size: 22rpx; line-height: 1.5; text-align: center; }
-.register-error { color: #e95d63; }
-.register-feedback { color: #467bff; }
-.register-switch { display: block; min-height: 74rpx; margin-top: 26rpx; color: #467bff; cursor: pointer; font-size: 24rpx; font-weight: 600; line-height: 74rpx; text-align: center; }
+.register-feedback {
+  display: block;
+  margin: -16rpx 0 24rpx;
+  font-size: 22rpx;
+  line-height: 1.5;
+  text-align: center;
+}
+.register-error {
+  color: #e95d63;
+}
+.register-feedback {
+  color: #467bff;
+}
+.register-switch {
+  display: block;
+  min-height: 74rpx;
+  margin-top: 26rpx;
+  color: #467bff;
+  cursor: pointer;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 74rpx;
+  text-align: center;
+}
 </style>

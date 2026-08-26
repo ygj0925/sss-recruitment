@@ -1,7 +1,8 @@
-<script lang="ts" setup>
+<script setup lang="ts">
+import FgTabbar from '@/tabbar/index.vue'
 import { computed } from 'vue'
 import { storeToRefs } from 'pinia'
-import { LOGIN_PAGE } from '@/router/config'
+import { AGREEMENT_PAGE, LOGIN_PAGE, PRIVACY_PAGE } from '@/router/config'
 import { useUserStore } from '@/store'
 import { useTokenStore } from '@/store/token'
 
@@ -20,10 +21,22 @@ const tokenStore = useTokenStore()
 const { userInfo } = storeToRefs(userStore)
 const profileName = computed(() => userInfo.value.username || '求职者')
 const profileInitial = computed(() => profileName.value.slice(0, 1))
+const profileStats = computed(() => [
+  { label: '投递', value: tokenStore.hasLogin ? '0' : '**' },
+  { label: '收藏', value: tokenStore.hasLogin ? '0' : '**' },
+  { label: '面试', value: tokenStore.hasLogin ? '0' : '**' },
+  { label: '足迹', value: tokenStore.hasLogin ? '0' : '**' },
+])
+const resumeShortcuts = [
+  { label: '在线简历', icon: 'i-carbon-document' },
+  { label: '附件简历', icon: 'i-carbon-attachment' },
+  { label: '求职意向', icon: 'i-carbon-favorite' },
+  { label: '简历模板', icon: 'i-carbon-template' },
+]
 
 function handleLogin() {
   uni.navigateTo({
-    url: `${LOGIN_PAGE}`,
+    url: LOGIN_PAGE,
   })
 }
 
@@ -31,6 +44,10 @@ function handleProfileTap() {
   if (!tokenStore.hasLogin) {
     handleLogin()
   }
+}
+
+function handleLegalTap(url: string) {
+  uni.navigateTo({ url })
 }
 
 function handleLogout() {
@@ -44,12 +61,6 @@ function handleLogout() {
           title: '退出登录成功',
           icon: 'success',
         })
-        // #ifdef MP-WEIXIN
-        // uni.reLaunch({ url: '/pages/index/index' })
-        // #endif
-        // #ifndef MP-WEIXIN
-        // uni.navigateTo({ url: LOGIN_PAGE })
-        // #endif
       }
     },
   })
@@ -59,10 +70,9 @@ function handleLogout() {
 <template>
   <view class="profile-page">
     <view class="profile-nav pt-safe">
-      <view class="profile-nav__bar">
-        <text>我的</text>
-      </view>
+      <view class="profile-nav__bar" />
     </view>
+
     <view class="profile-header">
       <view class="profile-nav-spacer pt-safe" />
       <view
@@ -76,49 +86,33 @@ function handleLogout() {
           <view v-else class="profile-avatar__icon i-carbon-user-avatar" />
         </view>
         <view class="profile-user__main">
-          <text class="profile-user__name">{{ tokenStore.hasLogin ? profileName : '登录 / 注册' }}</text>
+          <text class="profile-user__name">{{ tokenStore.hasLogin ? profileName : '点击登录/注册' }}</text>
           <text class="profile-user__description">
-            {{ tokenStore.hasLogin ? '查看并完善你的求职资料' : '登录后管理简历、投递与沟通' }}
+            {{ tokenStore.hasLogin ? '查看并完善你的求职资料' : '可解锁全部信息' }}
           </text>
         </view>
-        <view v-if="!tokenStore.hasLogin" class="profile-user__arrow i-carbon-chevron-right" />
+      </view>
+
+      <view class="profile-stats">
+        <view v-for="stat in profileStats" :key="stat.label" class="profile-stat">
+          <text class="profile-stat__value">{{ stat.value }}</text>
+          <text class="profile-stat__label">{{ stat.label }}</text>
+        </view>
       </view>
     </view>
 
     <view class="profile-content">
       <view class="resume-card">
-        <view class="resume-card__heading">
-          <view>
-            <text class="resume-card__title">我的在线简历</text>
-            <text class="resume-card__subtitle">完善资料，获得更精准的职位推荐</text>
-          </view>
-          <view class="resume-card__action">
-            <text>{{ tokenStore.hasLogin ? '继续完善' : '登录查看' }}</text>
-            <view class="i-carbon-chevron-right" />
-          </view>
-        </view>
-        <view class="resume-progress">
-          <view class="resume-progress__track">
-            <view class="resume-progress__value" :class="{ 'resume-progress__value--logged-in': tokenStore.hasLogin }" />
-          </view>
-          <text class="resume-progress__text">{{ tokenStore.hasLogin ? '简历完整度 42%' : '登录后查看简历完整度' }}</text>
-        </view>
         <view class="resume-shortcuts">
-          <view class="resume-shortcut">
-            <view class="resume-shortcut__icon i-carbon-document" />
-            <text>编辑简历</text>
-          </view>
-          <view class="resume-shortcut">
-            <view class="resume-shortcut__icon i-carbon-task" />
-            <text>投递记录</text>
-          </view>
-          <view class="resume-shortcut">
-            <view class="resume-shortcut__icon i-carbon-bookmark" />
-            <text>职位收藏</text>
-          </view>
-          <view class="resume-shortcut">
-            <view class="resume-shortcut__icon i-carbon-chat" />
-            <text>面试沟通</text>
+          <view
+            v-for="shortcut in resumeShortcuts"
+            :key="shortcut.label"
+            class="resume-shortcut"
+            role="button"
+            @tap="handleProfileTap"
+          >
+            <view class="resume-shortcut__icon" :class="[shortcut.icon]" />
+            <text>{{ shortcut.label }}</text>
           </view>
         </view>
       </view>
@@ -158,13 +152,31 @@ function handleLogout() {
             </view>
             <view class="profile-list__arrow i-carbon-chevron-right" />
           </view>
+          <view class="profile-list__item" role="link" @tap="handleLegalTap(AGREEMENT_PAGE)">
+            <view class="profile-list__icon i-carbon-document" />
+            <view class="profile-list__copy">
+              <text class="profile-list__label">用户协议</text>
+              <text class="profile-list__description">了解服务使用规则</text>
+            </view>
+            <view class="profile-list__arrow i-carbon-chevron-right" />
+          </view>
+          <view class="profile-list__item" role="link" @tap="handleLegalTap(PRIVACY_PAGE)">
+            <view class="profile-list__icon i-carbon-locked" />
+            <view class="profile-list__copy">
+              <text class="profile-list__label">隐私政策</text>
+              <text class="profile-list__description">了解个人信息处理方式</text>
+            </view>
+            <view class="profile-list__arrow i-carbon-chevron-right" />
+          </view>
         </view>
       </view>
 
       <view v-if="!tokenStore.hasLogin" class="login-panel">
         <text class="login-panel__title">登录后使用完整求职服务</text>
         <text class="login-panel__description">同步简历、投递记录与面试消息</text>
-        <navigator :url="LOGIN_PAGE" open-type="navigate" hover-class="none" class="login-panel__button">前往登录</navigator>
+        <navigator :url="LOGIN_PAGE" open-type="navigate" hover-class="none" class="login-panel__button">
+          前往登录
+        </navigator>
       </view>
 
       <view v-else class="logout-button" role="button" @tap="handleLogout">
@@ -172,6 +184,9 @@ function handleLogout() {
         <text>退出登录</text>
       </view>
     </view>
+    <!-- #ifndef MP-WEIXIN -->
+    <FgTabbar />
+    <!-- #endif -->
   </view>
 </template>
 
@@ -193,10 +208,10 @@ function handleLogout() {
 
 .profile-header {
   box-sizing: border-box;
-  min-height: 390rpx;
-  padding: 0 32rpx 94rpx;
+  min-height: 650rpx;
+  padding: 0 52rpx 156rpx;
   color: #fff;
-  background: linear-gradient(125deg, #164de5 0%, #2372f5 26%, #2f9bff 52%, #527df5 74%, #7765eb 100%);
+  background: linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%);
 }
 
 .profile-nav {
@@ -206,27 +221,22 @@ function handleLogout() {
   right: 0;
   left: 0;
   color: #fff;
-  background: linear-gradient(125deg, #164de5 0%, #2372f5 26%, #2f9bff 52%, #527df5 74%, #7765eb 100%);
+  background: linear-gradient(132deg, #2f7cf7 0%, #438ff7 42%, #5a79ed 73%, #6e63e8 100%);
 }
 
-.profile-nav-spacer {
+.profile-nav-spacer,
+.profile-nav__bar {
   height: 88rpx;
 }
 
 .profile-nav__bar {
-  display: flex;
-  height: 88rpx;
-  align-items: center;
-  justify-content: center;
-  font-size: 34rpx;
-  font-weight: 600;
-  line-height: 88rpx;
+  pointer-events: none;
 }
 
 .profile-user {
   display: flex;
   align-items: center;
-  margin-top: 28rpx;
+  margin-top: 68rpx;
 }
 
 .profile-user--clickable {
@@ -239,22 +249,23 @@ function handleLogout() {
 
 .profile-avatar {
   display: flex;
-  width: 108rpx;
-  height: 108rpx;
-  flex: 0 0 108rpx;
+  width: 112rpx;
+  height: 112rpx;
+  flex: 0 0 112rpx;
   align-items: center;
   justify-content: center;
   margin-right: 24rpx;
-  border: 4rpx solid rgba(255, 255, 255, 0.38);
+  border: 2rpx solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
-  color: #3478f6;
-  font-size: 42rpx;
+  color: #fff;
+  font-size: 44rpx;
   font-weight: 700;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 2rpx 8rpx rgba(255, 255, 255, 0.14);
 }
 
 .profile-avatar__icon {
-  font-size: 54rpx;
+  font-size: 64rpx;
 }
 
 .profile-user__main {
@@ -266,7 +277,7 @@ function handleLogout() {
 
 .profile-user__name {
   overflow: hidden;
-  font-size: 38rpx;
+  font-size: 44rpx;
   font-weight: 700;
   line-height: 1.35;
   text-overflow: ellipsis;
@@ -274,120 +285,74 @@ function handleLogout() {
 }
 
 .profile-user__description {
-  margin-top: 10rpx;
-  font-size: 25rpx;
+  margin-top: 8rpx;
+  font-size: 29rpx;
   line-height: 1.45;
-  opacity: 0.82;
+  opacity: 0.78;
 }
 
-.profile-user__arrow {
-  margin-left: 20rpx;
-  font-size: 34rpx;
-  opacity: 0.85;
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 62rpx;
+}
+
+.profile-stat {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.profile-stat__value {
+  font-size: 37rpx;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.profile-stat__label {
+  margin-top: 12rpx;
+  font-size: 29rpx;
+  line-height: 1.35;
+  opacity: 0.75;
 }
 
 .profile-content {
-  margin-top: -58rpx;
-  padding: 0 24rpx;
+  position: relative;
+  z-index: 1;
+  margin-top: -78rpx;
+  padding: 0 32rpx;
 }
 
 .resume-card,
 .profile-list,
 .login-panel,
 .logout-button {
-  border-radius: 24rpx;
+  border-radius: 28rpx;
   background: #fff;
 }
 
 .resume-card {
-  padding: 30rpx 28rpx 0;
-  box-shadow: 0 10rpx 32rpx rgba(52, 93, 160, 0.08);
-}
-
-.resume-card__heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-}
-
-.resume-card__title {
-  display: block;
-  color: #1f2a3d;
-  font-size: 31rpx;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-.resume-card__subtitle {
-  display: block;
-  margin-top: 9rpx;
-  color: #8a96a8;
-  font-size: 23rpx;
-  line-height: 1.45;
-}
-
-.resume-card__action {
-  display: flex;
-  min-height: 48rpx;
-  align-items: center;
-  margin-left: 20rpx;
-  color: #3478f6;
-  cursor: pointer;
-  font-size: 23rpx;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.resume-card__action view {
-  margin-left: 4rpx;
-  font-size: 24rpx;
-}
-
-.resume-progress {
-  margin-top: 24rpx;
-}
-
-.resume-progress__track {
-  height: 8rpx;
-  overflow: hidden;
-  border-radius: 8rpx;
-  background: #e8eef8;
-}
-
-.resume-progress__value {
-  width: 12%;
-  height: 100%;
-  border-radius: inherit;
-  background: #ff8a34;
-}
-
-.resume-progress__value--logged-in {
-  width: 42%;
-}
-
-.resume-progress__text {
-  display: block;
-  margin-top: 12rpx;
-  color: #9aa5b5;
-  font-size: 22rpx;
+  padding: 30rpx 4rpx;
+  box-shadow: 0 16rpx 40rpx rgba(42, 92, 178, 0.12);
 }
 
 .resume-shortcuts {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  margin: 26rpx -28rpx 0;
-  border-top: 1rpx solid #edf1f7;
 }
 
 .resume-shortcut {
   display: flex;
   min-width: 0;
+  min-height: 158rpx;
   align-items: center;
-  padding: 26rpx 4rpx 28rpx;
-  color: #526077;
+  justify-content: center;
+  color: #1f2a3d;
   cursor: pointer;
   flex-direction: column;
-  font-size: 22rpx;
+  font-size: 27rpx;
   line-height: 1.4;
 }
 
@@ -396,9 +361,9 @@ function handleLogout() {
 }
 
 .resume-shortcut__icon {
-  margin-bottom: 13rpx;
-  color: #3478f6;
-  font-size: 36rpx;
+  margin-bottom: 18rpx;
+  color: #5d96f5;
+  font-size: 56rpx;
 }
 
 .profile-section {
@@ -409,7 +374,7 @@ function handleLogout() {
   display: block;
   margin: 0 8rpx 16rpx;
   color: #1f2a3d;
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 700;
 }
 
@@ -441,7 +406,7 @@ function handleLogout() {
   justify-content: center;
   margin-right: 18rpx;
   color: #3478f6;
-  font-size: 32rpx;
+  font-size: 34rpx;
 }
 
 .profile-list__copy {
@@ -453,7 +418,7 @@ function handleLogout() {
 
 .profile-list__label {
   color: #263249;
-  font-size: 27rpx;
+  font-size: 29rpx;
   font-weight: 600;
 }
 
@@ -461,7 +426,7 @@ function handleLogout() {
   margin-top: 7rpx;
   overflow: hidden;
   color: #9aa5b5;
-  font-size: 22rpx;
+  font-size: 24rpx;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -469,7 +434,7 @@ function handleLogout() {
 .profile-list__arrow {
   margin-left: 16rpx;
   color: #bec7d4;
-  font-size: 28rpx;
+  font-size: 30rpx;
 }
 
 .login-panel {
@@ -483,14 +448,14 @@ function handleLogout() {
 
 .login-panel__title {
   color: #263249;
-  font-size: 27rpx;
+  font-size: 29rpx;
   font-weight: 600;
 }
 
 .login-panel__description {
   margin-top: 10rpx;
   color: #9aa5b5;
-  font-size: 23rpx;
+  font-size: 25rpx;
 }
 
 .login-panel__button {
@@ -505,9 +470,11 @@ function handleLogout() {
   color: #fff;
   background: #3478f6;
   cursor: pointer;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 600;
-  transition: opacity 180ms cubic-bezier(0.32, 0.72, 0, 1), transform 180ms cubic-bezier(0.32, 0.72, 0, 1);
+  transition:
+    opacity 180ms cubic-bezier(0.32, 0.72, 0, 1),
+    transform 180ms cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 .login-panel__button:active {
@@ -524,7 +491,7 @@ function handleLogout() {
   margin-top: 24rpx;
   color: #df555b;
   cursor: pointer;
-  font-size: 27rpx;
+  font-size: 29rpx;
   font-weight: 600;
 }
 

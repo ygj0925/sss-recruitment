@@ -6,23 +6,49 @@ defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   'agreement': []
+  'privacy': []
 }>()
 </script>
 
 <template>
   <view class="auth-agreement">
-    <view class="auth-agreement__check" role="checkbox" :aria-checked="modelValue" aria-label="同意用户协议" @tap="emit('update:modelValue', !modelValue)">
-      <text class="auth-agreement__mark" :class="[{ 'auth-agreement__mark--checked': modelValue }]">{{ modelValue ? '✓' : '' }}</text>
-      <text class="auth-agreement__label">我已阅读并同意</text>
-    </view>
+    <wd-checkbox
+      :model-value="modelValue"
+      type="square"
+      checked-color="#467bff"
+      custom-class="auth-agreement__checkbox"
+      @update:model-value="emit('update:modelValue', $event)"
+    >
+      <text>我已阅读并同意</text>
+    </wd-checkbox>
     <text class="auth-agreement__link" role="link" @tap="emit('agreement')">《用户协议》</text>
+    <text class="auth-agreement__join">和</text>
+    <text class="auth-agreement__link" role="link" @tap="emit('privacy')">《隐私政策》</text>
   </view>
 </template>
 
 <style scoped lang="scss">
-.auth-agreement { display: flex; min-height: 50rpx; align-items: center; margin: 4rpx 0 30rpx; color: #8b96aa; font-size: 21rpx; }
-.auth-agreement__check { display: flex; min-height: 50rpx; align-items: center; cursor: pointer; }
-.auth-agreement__mark { display: flex; width: 28rpx; height: 28rpx; align-items: center; justify-content: center; margin-right: 12rpx; border: 2rpx solid #cdd6e6; border-radius: 10rpx; color: #fff; font-size: 18rpx; font-weight: 700; background: #fff; transition: background 160ms cubic-bezier(0.32, 0.72, 0, 1), border-color 160ms cubic-bezier(0.32, 0.72, 0, 1); }
-.auth-agreement__mark--checked { border-color: #467bff; background: #467bff; }
-.auth-agreement__link { color: #467bff; cursor: pointer; }
+.auth-agreement {
+  display: flex;
+  min-height: 54rpx;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 4rpx 0 30rpx;
+  color: #7f8ca1;
+  font-size: 23rpx;
+  line-height: 1.6;
+}
+
+.auth-agreement :deep(.auth-agreement__checkbox) {
+  margin-right: 4rpx;
+}
+
+.auth-agreement__link {
+  color: #3478f6;
+  cursor: pointer;
+}
+
+.auth-agreement__join {
+  margin: 0 4rpx;
+}
 </style>

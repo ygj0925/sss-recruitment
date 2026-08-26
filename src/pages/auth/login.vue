@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { wxLogin } from '@/api/login'
-import { AGREEMENT_PAGE, BIND_PHONE_PAGE, REGISTER_PAGE, RESET_PASSWORD_PAGE } from '@/router/config'
+import { AGREEMENT_PAGE, BIND_PHONE_PAGE, PRIVACY_PAGE, REGISTER_PAGE, RESET_PASSWORD_PAGE } from '@/router/config'
 import { startWechatAuthorization } from '@/service/auth/wechat-auth'
 import { useTokenStore } from '@/store/token'
 import AuthAgreement from './components/AuthAgreement.vue'
@@ -9,7 +9,7 @@ import AuthButton from './components/AuthButton.vue'
 import AuthInput from './components/AuthInput.vue'
 import AuthLayout from './components/AuthLayout.vue'
 import AuthSocialLogin from './components/AuthSocialLogin.vue'
-import { canSubmitAccountLogin, normalizePhone, validatePassword, validatePhone } from './auth'
+import { normalizePhone, validatePassword, validatePhone } from './auth'
 import { navigateAfterAuthenticated } from './navigation'
 
 definePage({
@@ -38,7 +38,6 @@ const feedback = ref('')
 const feedbackType = ref<'error' | 'info' | 'success'>('info')
 const loading = ref(false)
 const redirectUrl = ref('')
-const canSubmit = computed(() => canSubmitAccountLogin(form))
 
 onLoad((options) => {
   redirectUrl.value = typeof options?.redirect === 'string' ? options.redirect : ''
@@ -66,7 +65,7 @@ function updatePhone(value: string) {
 function validateForm() {
   checkField('phone')
   checkField('password')
-  errors.agreement = form.agreed ? '' : '请先阅读并同意用户协议'
+  errors.agreement = form.agreed ? '' : '请先阅读并同意《用户协议》和《隐私政策》'
   return !errors.phone && !errors.password && !errors.agreement
 }
 
@@ -98,7 +97,7 @@ async function submitAccountLogin() {
 
 async function loginWithWechat() {
   if (!form.agreed) {
-    errors.agreement = '请先阅读并同意用户协议'
+    errors.agreement = '请先阅读并同意《用户协议》和《隐私政策》'
     return
   }
 
@@ -135,12 +134,12 @@ async function loginWithWechat() {
     <AuthInput v-model="form.password" icon="⌑" placeholder="请输入 6-20 位密码" password :maxlength="20" :error="errors.password" @blur="checkField('password')" />
     <view class="login-options">
       <view class="login-options__agreement">
-        <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" />
+        <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
       </view>
       <text class="login-options__forgot" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
     </view>
     <text v-if="errors.agreement" class="login-error">{{ errors.agreement }}</text>
-    <AuthButton :disabled="!canSubmit" :loading="loading" @tap="submitAccountLogin" />
+    <AuthButton :disabled="loading" :loading="loading" @tap="submitAccountLogin" />
     <text class="login-switch" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
     <text v-if="feedback" class="login-feedback" :class="[`login-feedback--${feedbackType}`]">{{ feedback }}</text>
     <AuthSocialLogin @wechat="loginWithWechat" @unavailable="provider => showFeedback(`${provider} 登录暂未开放`)" />
@@ -148,14 +147,51 @@ async function loginWithWechat() {
 </template>
 
 <style scoped lang="scss">
-.login-options { display: flex; align-items: flex-start; justify-content: space-between; }
-.login-options__agreement { min-width: 0; flex: 1; }
-.login-options__forgot { min-height: 50rpx; margin: 4rpx 0 30rpx 20rpx; color: #467bff; cursor: pointer; font-size: 21rpx; font-weight: 600; white-space: nowrap; }
+.login-options {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.login-options__agreement {
+  min-width: 0;
+  flex: 1;
+}
+.login-options__forgot {
+  min-height: 50rpx;
+  margin: 4rpx 0 30rpx 20rpx;
+  color: #467bff;
+  cursor: pointer;
+  font-size: 21rpx;
+  font-weight: 600;
+  white-space: nowrap;
+}
 .login-error,
-.login-feedback { display: block; margin: -14rpx 0 24rpx; font-size: 22rpx; line-height: 1.5; text-align: center; }
+.login-feedback {
+  display: block;
+  margin: -14rpx 0 24rpx;
+  font-size: 22rpx;
+  line-height: 1.5;
+  text-align: center;
+}
 .login-error,
-.login-feedback--error { color: #e95d63; }
-.login-feedback--info { color: #467bff; }
-.login-feedback--success { color: #1eae72; }
-.login-switch { display: block; min-height: 74rpx; margin-top: 26rpx; color: #467bff; cursor: pointer; font-size: 24rpx; font-weight: 600; line-height: 74rpx; text-align: center; }
+.login-feedback--error {
+  color: #e95d63;
+}
+.login-feedback--info {
+  color: #467bff;
+}
+.login-feedback--success {
+  color: #1eae72;
+}
+.login-switch {
+  display: block;
+  min-height: 74rpx;
+  margin-top: 26rpx;
+  color: #467bff;
+  cursor: pointer;
+  font-size: 24rpx;
+  font-weight: 600;
+  line-height: 74rpx;
+  text-align: center;
+}
 </style>

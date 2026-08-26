@@ -13,6 +13,9 @@
 page {
   --wot-color-theme: #0957de;
   --wot-button-primary-bg-color: #0957de;
+  --app-tabbar-height: 108rpx;
+  --app-page-background: #f4f7fb;
+  --app-page-bottom-safe: calc(var(--app-tabbar-height) + env(safe-area-inset-bottom));
 }
 
 /*

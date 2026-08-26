@@ -14,6 +14,7 @@ export const BIND_PHONE_PAGE = '/pages/auth/bind-phone'
 export const RESET_PASSWORD_PAGE = '/pages/auth/reset-password'
 export const SET_PASSWORD_PAGE = '/pages/auth/set-password'
 export const AGREEMENT_PAGE = '/pages/auth/agreement'
+export const PRIVACY_PAGE = '/pages/auth/privacy'
 
 export const LOGIN_PAGE_LIST = [
   LOGIN_PAGE,
@@ -22,6 +23,7 @@ export const LOGIN_PAGE_LIST = [
   RESET_PASSWORD_PAGE,
   SET_PASSWORD_PAGE,
   AGREEMENT_PAGE,
+  PRIVACY_PAGE,
 ]
 
 // 在 definePage 里面配置了 excludeLoginPath 的页面，功能与 EXCLUDE_LOGIN_PATH_LIST 相同
