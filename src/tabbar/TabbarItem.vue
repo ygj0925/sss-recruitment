@@ -18,7 +18,7 @@ function getImageByIndex(index: number, item: CustomTabBarItem) {
 </script>
 
 <template>
-  <view class="flex flex-col items-center justify-center">
+  <view class="relative flex flex-col items-center justify-center">
     <template v-if="item.iconType === 'uiLib'" />
 
     <template v-if="item.iconType === 'unocss' || item.iconType === 'iconfont'">

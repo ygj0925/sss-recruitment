@@ -101,7 +101,7 @@ function handleLogout() {
           <text class="overflow-hidden text-ellipsis whitespace-nowrap text-44rpx font-700 leading-[1.35]">
             {{ tokenStore.hasLogin ? profileName : '点击登录/注册' }}
           </text>
-          <text class="mt-8rpx text-29rpx leading-[1.45] opacity-78">
+          <text class="mt-8rpx block text-29rpx leading-[1.45] opacity-78">
             {{ tokenStore.hasLogin ? '查看并完善你的求职资料' : '可解锁全部信息' }}
           </text>
         </view>
@@ -110,7 +110,7 @@ function handleLogout() {
       <view class="grid grid-cols-4 mt-62rpx">
         <view v-for="stat in profileStats" :key="stat.label" class="min-w-0 flex flex-col items-center text-center">
           <text class="text-37rpx font-700 leading-[1.3]">{{ stat.value }}</text>
-          <text class="mt-12rpx text-29rpx leading-[1.35] opacity-75">{{ stat.label }}</text>
+          <text class="mt-12rpx block text-29rpx leading-[1.35] opacity-75">{{ stat.label }}</text>
         </view>
       </view>
     </view>
@@ -138,7 +138,7 @@ function handleLogout() {
             <view class="i-carbon-location mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">求职意向</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">设置期望职位与工作城市</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">设置期望职位与工作城市</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -146,7 +146,7 @@ function handleLogout() {
             <view class="i-carbon-notification mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">消息通知</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">职位进展与面试提醒</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">职位进展与面试提醒</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -154,7 +154,7 @@ function handleLogout() {
             <view class="i-carbon-help mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">帮助与反馈</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">常见问题与意见反馈</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">常见问题与意见反馈</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -162,7 +162,7 @@ function handleLogout() {
             <view class="i-carbon-settings mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">账号设置</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">隐私、安全与个人信息</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">隐私、安全与个人信息</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -170,7 +170,7 @@ function handleLogout() {
             <view class="i-carbon-document mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">用户协议</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">了解服务使用规则</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">了解服务使用规则</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -178,7 +178,7 @@ function handleLogout() {
             <view class="i-carbon-locked mr-18rpx w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-34rpx text-brand-blue" />
             <view class="min-w-0 flex flex-1 flex-col">
               <text class="text-29rpx text-[#263249] font-600">隐私政策</text>
-              <text class="mt-7rpx overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">了解个人信息处理方式</text>
+              <text class="mt-7rpx block overflow-hidden text-ellipsis whitespace-nowrap text-24rpx text-[#9aa5b5]">了解个人信息处理方式</text>
             </view>
             <view class="i-carbon-chevron-right ml-16rpx text-30rpx text-[#bec7d4]" />
           </view>
@@ -187,7 +187,7 @@ function handleLogout() {
 
       <view v-if="!tokenStore.hasLogin" class="mt-24rpx flex flex-col items-center rounded-28rpx bg-white px-28rpx py-30rpx text-center">
         <text class="text-29rpx text-[#263249] font-600">登录后使用完整求职服务</text>
-        <text class="mt-10rpx text-25rpx text-[#9aa5b5]">同步简历、投递记录与面试消息</text>
+        <text class="mt-10rpx block text-25rpx text-[#9aa5b5]">同步简历、投递记录与面试消息</text>
         <navigator
           :url="LOGIN_PAGE"
           open-type="navigate"

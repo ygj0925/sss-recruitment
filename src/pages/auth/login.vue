@@ -140,7 +140,7 @@ async function loginWithWechat() {
       <view class="min-w-0 flex-1">
         <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
       </view>
-      <text class="mb-30rpx ml-20rpx mt-4rpx min-h-50rpx cursor-pointer whitespace-nowrap text-21rpx text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
+      <text class="mb-30rpx ml-20rpx mt-4rpx block min-h-50rpx cursor-pointer whitespace-nowrap text-21rpx text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
     </view>
     <text v-if="errors.agreement" class="mb-24rpx mt--14rpx block text-center text-22rpx text-#e95d63 leading-1.5">{{ errors.agreement }}</text>
     <AuthButton :disabled="loading" :loading="loading" @tap="submitAccountLogin" />

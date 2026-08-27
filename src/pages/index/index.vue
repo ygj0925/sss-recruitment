@@ -68,7 +68,7 @@ function switchToTab(pagePath: string) {
             :style="{ background: banner.background }"
           >
             <text class="text-37rpx font-700 tracking-2rpx">{{ banner.title }}</text>
-            <text class="mt-14rpx text-24rpx opacity-86">{{ banner.description }}</text>
+            <text class="mt-14rpx block text-24rpx opacity-86">{{ banner.description }}</text>
           </view>
         </swiper-item>
       </swiper>
@@ -81,7 +81,7 @@ function switchToTab(pagePath: string) {
         <view class="i-carbon-chat h-80rpx w-80rpx center rounded-20rpx bg-brand-violet text-45rpx text-white" />
         <view class="ml-20rpx min-w-0 flex flex-1 flex-col">
           <text class="text-27rpx text-app-ink font-700">麟才寻你 · AI 对话</text>
-          <text class="mt-8rpx text-21rpx text-[#7f8997]">AI 帮你匹配岗位、一键投递</text>
+          <text class="mt-8rpx block text-21rpx text-[#7f8997]">AI 帮你匹配岗位、一键投递</text>
         </view>
         <view class="h-56rpx flex items-center rounded-28rpx bg-brand-violet px-18rpx text-24rpx text-white font-600">
           <text>聊一聊</text>
@@ -126,7 +126,7 @@ function switchToTab(pagePath: string) {
         >
           <view class="min-w-0 flex flex-1 flex-col">
             <text class="overflow-hidden text-ellipsis whitespace-nowrap text-27rpx font-600">{{ job.title }}</text>
-            <text class="mt-12rpx text-21rpx text-[#7f8997]">{{ job.detail }}</text>
+            <text class="mt-12rpx block text-21rpx text-[#7f8997]">{{ job.detail }}</text>
           </view>
           <text class="ml-20rpx text-25rpx text-[#ff7311] font-700">{{ job.salary }}</text>
         </view>
