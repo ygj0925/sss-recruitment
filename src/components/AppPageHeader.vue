@@ -3,6 +3,8 @@ import { computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   title: string
+  align?: 'center' | 'left'
+  prominent?: boolean
   light?: boolean
   transparent?: boolean
   background?: string
@@ -10,6 +12,8 @@ const props = withDefaults(defineProps<{
   scrolledBackground?: string
   scrolledLight?: boolean
 }>(), {
+  align: 'center',
+  prominent: false,
   light: false,
   transparent: false,
   background: '',
@@ -50,11 +54,20 @@ const headerStyle = computed(() => {
       ]"
       :style="headerStyle"
     >
-      <view class="relative h-96rpx flex items-center justify-center px-24rpx">
+      <view
+        class="relative h-96rpx flex items-center px-24rpx"
+        :class="align === 'left' ? 'justify-start' : 'justify-center'"
+      >
         <view class="absolute left-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">
           <slot name="left" />
         </view>
-        <text class="max-w-[calc(100%_-_220rpx)] overflow-hidden text-ellipsis whitespace-nowrap text-34rpx font-600 leading-[1.35] tracking-1rpx">
+        <text
+          class="overflow-hidden text-ellipsis whitespace-nowrap leading-[1.35] tracking-1rpx"
+          :class="[
+            align === 'left' ? 'max-w-[calc(100%_-_130rpx)]' : 'max-w-[calc(100%_-_220rpx)]',
+            prominent ? 'text-40rpx font-700' : 'text-34rpx font-600',
+          ]"
+        >
           {{ title }}
         </text>
         <view class="absolute right-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">

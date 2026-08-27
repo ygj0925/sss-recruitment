@@ -78,6 +78,13 @@ const tabbarStore = reactive({
       list[idx].badge = badge
     }
   },
+  setTabbarItemBadgeByPath(path: string, badge: CustomTabBarItemBadge) {
+    const index = findTabbarIndexByPath(path)
+    const list = tabbarList.value
+    if (index >= 0 && list[index]) {
+      list[index].badge = badge
+    }
+  },
   setAutoCurIdx(path: string) {
     const list = tabbarList.value
     if (list.length === 0) {
