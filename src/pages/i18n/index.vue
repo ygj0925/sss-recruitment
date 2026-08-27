@@ -5,7 +5,7 @@ import { setTabbarItem } from '@/tabbar/i18n'
 definePage({
   style: {
     navigationBarTitleText: '%i18n.title%',
-    backgroundColor: '#F6F8FC',
+    backgroundColor: '#EDF6FF',
   },
 })
 

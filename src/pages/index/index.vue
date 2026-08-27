@@ -10,7 +10,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '首页',
-    backgroundColor: '#F6F8FC',
+    backgroundColor: '#EDF6FF',
   },
 })
 

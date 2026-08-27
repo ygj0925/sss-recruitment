@@ -2,7 +2,7 @@
 definePage({
   style: {
     navigationBarTitleText: '关于三生制药招聘',
-    backgroundColor: '#F6F8FC',
+    backgroundColor: '#EDF6FF',
   },
 })
 </script>

@@ -2,12 +2,13 @@ import { defineUniPages } from '@uni-helper/vite-plugin-uni-pages'
 import { tabBar } from './src/tabbar/config'
 
 export default defineUniPages({
+  lazyCodeLoading: 'requiredComponents',
   globalStyle: {
     navigationStyle: 'default',
     navigationBarTitleText: '三生制药招聘',
-    navigationBarBackgroundColor: '#F6F8FC',
+    navigationBarBackgroundColor: '#EDF6FF',
     navigationBarTextStyle: 'black',
-    backgroundColor: '#F6F8FC',
+    backgroundColor: '#EDF6FF',
   },
   easycom: {
     autoscan: true,

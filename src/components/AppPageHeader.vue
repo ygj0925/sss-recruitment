@@ -14,7 +14,7 @@ const props = withDefaults(defineProps<{
   transparent: false,
   background: '',
   scrolled: false,
-  scrolledBackground: '#ffffff',
+  scrolledBackground: 'rgba(237, 246, 255, 0.96)',
   scrolledLight: false,
 })
 
@@ -27,7 +27,12 @@ catch {
   statusBarHeight = 0
 }
 
-const safeAreaStyle = statusBarHeight > 0 ? { paddingTop: `${statusBarHeight}px` } : undefined
+let safeAreaTop = `${statusBarHeight}px`
+// #ifdef H5
+safeAreaTop = 'env(safe-area-inset-top)'
+// #endif
+
+const safeAreaStyle = { paddingTop: safeAreaTop }
 const headerStyle = computed(() => {
   const background = props.scrolled ? props.scrolledBackground : props.background
   return background ? { ...safeAreaStyle, background } : safeAreaStyle
@@ -35,21 +40,21 @@ const headerStyle = computed(() => {
 </script>
 
 <template>
-  <view class="box-content h-96rpx pt-safe" :style="safeAreaStyle">
+  <view class="box-content h-96rpx" :style="safeAreaStyle">
     <view
-      class="transition-[background,box-shadow,color] fixed inset-x-0 top-0 z-100 box-content h-96rpx duration-180 ease-out pt-safe"
+      class="app-page-header transition-[background,box-shadow,color] fixed inset-x-0 top-0 z-100 box-content h-96rpx duration-180 ease-out"
       :class="[
-        scrolled ? 'shadow-[0_8rpx_24rpx_rgba(31,42,61,0.1)]' : '',
-        scrolled ? (scrolledLight ? 'text-white' : 'text-[#202b3c]') : (light ? 'text-white' : 'text-[#202b3c]'),
-        transparent && !scrolled ? 'bg-transparent' : 'bg-white',
+        scrolled ? 'app-page-header--scrolled' : '',
+        scrolled ? (scrolledLight ? 'text-white' : 'text-[#121c39]') : (light ? 'text-white' : 'text-[#121c39]'),
+        transparent && !scrolled ? 'bg-transparent' : 'bg-[rgba(237,246,255,0.96)]',
       ]"
       :style="headerStyle"
     >
-      <view class="relative h-96rpx flex items-center justify-center">
+      <view class="relative h-96rpx flex items-center justify-center px-24rpx">
         <view class="absolute left-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">
           <slot name="left" />
         </view>
-        <text class="max-w-[calc(100%_-_200rpx)] overflow-hidden text-ellipsis whitespace-nowrap text-35rpx font-700 leading-[1.35]">
+        <text class="max-w-[calc(100%_-_220rpx)] overflow-hidden text-ellipsis whitespace-nowrap text-34rpx font-600 leading-[1.35] tracking-1rpx">
           {{ title }}
         </text>
         <view class="absolute right-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">
@@ -59,3 +64,14 @@ const headerStyle = computed(() => {
     </view>
   </view>
 </template>
+
+<style scoped>
+.app-page-header {
+  border-bottom: 1rpx solid transparent;
+}
+
+.app-page-header--scrolled {
+  border-bottom-color: rgba(107, 139, 204, 0.14);
+  box-shadow: 0 8rpx 24rpx rgba(55, 94, 174, 0.1);
+}
+</style>

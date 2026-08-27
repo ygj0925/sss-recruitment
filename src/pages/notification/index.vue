@@ -9,7 +9,7 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '通知',
-    backgroundColor: '#F6F8FC',
+    backgroundColor: '#EDF6FF',
   },
 })
 

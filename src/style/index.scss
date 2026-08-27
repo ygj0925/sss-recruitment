@@ -1,27 +1,40 @@
 :root,
 page {
-  --wot-color-theme: #2c8cf4;
-  --wot-button-primary-bg-color: #2c8cf4;
+  --wot-color-theme: #2d6fe6;
+  --wot-button-primary-bg-color: #2d6fe6;
   --app-tabbar-height: 108rpx;
   --app-viewport-height: 100vh;
-  --app-page-background: #f6f8fc;
+  --app-page-background: #edf6ff;
   --app-page-bottom-safe: calc(var(--app-tabbar-height) + env(safe-area-inset-bottom));
-  --app-brand-sky: #28b7f3;
-  --app-brand-blue: #2c8cf4;
-  --app-brand-violet: #705fed;
+  --app-ink: #121c39;
+  --app-ink-soft: #33415f;
+  --app-muted: #7c8799;
+  --app-placeholder: #8f9cb1;
+  --app-surface: rgba(255, 255, 255, 0.94);
+  --app-surface-soft: rgba(255, 255, 255, 0.74);
+  --app-border: rgba(107, 139, 204, 0.22);
+  --app-brand-sky: #13b8ed;
+  --app-brand-blue: #2d6fe6;
+  --app-brand-violet: #4d7df2;
+  --app-brand-mint: #4de3ba;
+  --app-card-radius: 32rpx;
+  --app-card-shadow: 0 14rpx 34rpx rgba(70, 104, 184, 0.12);
   --app-brand-hero: linear-gradient(
-    160deg,
-    var(--app-brand-sky) 0%,
-    var(--app-brand-blue) 40%,
-    var(--app-brand-violet) 68%,
-    var(--app-page-background) 100%
+    135deg,
+    #0879ff 0%,
+    var(--app-brand-sky) 52%,
+    var(--app-brand-mint) 100%
   );
   --app-brand-header: linear-gradient(
-    100deg,
-    var(--app-brand-sky) 0%,
-    var(--app-brand-blue) 58%,
-    var(--app-brand-violet) 100%
+    104deg,
+    #0d68ed 0%,
+    #3d70ff 62%,
+    #567aff 100%
   );
+  --app-ai-background:
+    radial-gradient(circle at 86% 12%, rgba(77, 227, 186, 0.2), transparent 30%),
+    radial-gradient(circle at 8% 44%, rgba(19, 184, 237, 0.16), transparent 34%),
+    linear-gradient(180deg, #edf6ff 0%, #f5f9ff 100%);
 }
 
 /* #ifdef H5 */
@@ -40,8 +53,8 @@ page {
 /*
 border-t-1
 由于uniapp中无法使用*选择器，使用魔法代替*，加上此规则可以简化border与divide的使用，并提升布局的兼容性
-1. 防止padding和border影响元素宽度。 (https://github.com/mozdevs/cssremedy/issues/4)
-2. 允许仅通过添加边框宽度来向元素添加边框。 (https://github.com/tailwindcss/tailwindcss/pull/116)
+1. 防止padding和border影响元素宽度。 (https://github.com/mozilla/cssremedy/issues/4)
+2. 允许仅通过添加边框宽度来向元素添加边框。 (https://github.com/tailwindlabs/tailwindcss/pull/116)
 3. [UnoCSS]: 允许使用css变量'--un-default-border-color'覆盖默认边框颜色
 */
 // 这个样式有重大BUG，先去掉！！(2025-08-15)

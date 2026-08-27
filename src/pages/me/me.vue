@@ -9,10 +9,10 @@ import { useTokenStore } from '@/store/token'
 definePage({
   style: {
     navigationStyle: 'custom',
-    navigationBarBackgroundColor: '#2C8CF4',
+    navigationBarBackgroundColor: '#2D6FE6',
     navigationBarTextStyle: 'white',
     navigationBarTitleText: '我的',
-    backgroundColorTop: '#2C8CF4',
+    backgroundColorTop: '#2D6FE6',
   },
 })
 

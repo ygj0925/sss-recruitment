@@ -72,7 +72,8 @@ export default defineConfig({
       'center': 'flex justify-center items-center',
       'app-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink',
       'app-tab-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink pb-[var(--app-page-bottom-safe)]',
-      'app-card': 'rounded-22rpx bg-white',
+      'app-card': 'border-1rpx border-[rgba(255,255,255,0.88)] border-solid rounded-32rpx bg-[rgba(255,255,255,0.94)] shadow-[0_14rpx_34rpx_rgba(70,104,184,0.10)]',
+      'app-glass-card': 'border-1rpx border-[rgba(255,255,255,0.88)] border-solid rounded-40rpx bg-[rgba(255,255,255,0.74)] shadow-[0_14rpx_34rpx_rgba(70,104,184,0.14)]',
       'app-brand-action': 'text-white bg-brand-hero',
     },
   ],
@@ -116,12 +117,15 @@ export default defineConfig({
   theme: {
     colors: {
       /** 主题色，用法如: text-primary */
-      'primary': 'var(--wot-color-theme,#2C8CF4)',
+      'primary': 'var(--wot-color-theme,#2D6FE6)',
       'app-surface': 'var(--app-page-background)',
-      'app-ink': '#1F2A3D',
+      'app-ink': 'var(--app-ink)',
+      'app-ink-soft': 'var(--app-ink-soft)',
+      'app-muted': 'var(--app-muted)',
       'brand-sky': 'var(--app-brand-sky)',
       'brand-blue': 'var(--app-brand-blue)',
       'brand-violet': 'var(--app-brand-violet)',
+      'brand-mint': 'var(--app-brand-mint)',
     },
     fontSize: {
       /** 提供更小号的字体，用法如：text-2xs */

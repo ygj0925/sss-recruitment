@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { customTabbarEnable, needHideNativeTabbar } from './config'
 import { setTabbarItem } from './i18n'
-import { tabbarList, tabbarStore } from './store'
+import { normalizeRoutePath, tabbarList, tabbarStore } from './store'
 import TabbarItem from './TabbarItem.vue'
 
 // #ifdef MP-WEIXIN
@@ -10,10 +11,26 @@ defineOptions({
 })
 // #endif
 
-function handleClickBulge() {
-  uni.showToast({
-    title: '点击了中间操作按钮',
-    icon: 'none',
+const AI_PAGE_PATH = '/pages/ai-chat/index'
+const shouldShowTabbar = ref(true)
+
+function syncTabbarVisibility() {
+  const pages = getCurrentPages()
+  const currentPage = pages[pages.length - 1]
+  shouldShowTabbar.value = normalizeRoutePath(currentPage?.route) !== AI_PAGE_PATH
+}
+
+function handleClickBulge(index: number) {
+  const item = tabbarList.value[index]
+  if (!item) {
+    return
+  }
+
+  uni.switchTab({
+    url: item.pagePath,
+    success() {
+      tabbarStore.setCurIdx(index)
+    },
   })
 }
 
@@ -21,77 +38,106 @@ function handleClick(index: number) {
   if (index === tabbarStore.curIdx) {
     return
   }
-
-  const item = tabbarList.value[index]
-  if (!item) {
+  const list = tabbarList.value
+  if (!list[index]) {
     return
   }
-
-  if (item.isBulge) {
-    handleClickBulge()
+  if (list[index].isBulge) {
+    handleClickBulge(index)
     return
   }
-
+  const url = list[index].pagePath
   tabbarStore.setCurIdx(index)
-  uni.switchTab({ url: item.pagePath })
+  uni.switchTab({ url })
 }
 
 // #ifndef MP-WEIXIN || MP-ALIPAY
 onLoad(() => {
-  if (needHideNativeTabbar) {
-    uni.hideTabBar({
-      fail(err) {
-        console.log('hideTabBar fail: ', err)
-      },
-    })
-  }
+  needHideNativeTabbar
+  && uni.hideTabBar({
+    fail(err) {
+      console.log('hideTabBar fail: ', err)
+    },
+  })
 })
 // #endif
 
 // #ifdef MP-ALIPAY
 onMounted(() => {
-  if (customTabbarEnable) {
-    uni.hideTabBar({
-      fail(err) {
-        console.log('hideTabBar fail: ', err)
-      },
-    })
-  }
+  customTabbarEnable
+  && uni.hideTabBar({
+    fail(err) {
+      console.log('hideTabBar fail: ', err)
+    },
+  })
 })
 // #endif
 
-const activeColor = 'var(--app-brand-blue, #2c8cf4)'
-const inactiveColor = '#7f8997'
+const activeColor = 'var(--wot-color-theme, #1890ff)'
+const inactiveColor = '#666'
 
 function getColorByIndex(index: number) {
   return tabbarStore.curIdx === index ? activeColor : inactiveColor
 }
 
 onShow(() => {
+  syncTabbarVisibility()
   tabbarStore.syncCurIdxByCurrentPageAsync()
   setTabbarItem()
 })
+
+onMounted(syncTabbarVisibility)
 </script>
 
 <template>
-  <view
-    class="fixed inset-x-0 bottom-0 z-1000 box-border border-t-1rpx border-t-[#e8edf4] border-t-solid bg-white shadow-[0_-4rpx_18rpx_rgba(44,70,118,0.05)] pb-safe"
-    role="navigation"
-    aria-label="主导航"
-    @touchmove.stop.prevent
-  >
-    <view class="h-108rpx flex items-stretch">
-      <view
-        v-for="(item, index) in tabbarList"
-        :key="item.pagePath"
-        class="min-w-0 flex flex-1 cursor-pointer items-center justify-center active:opacity-72"
-        :style="{ color: getColorByIndex(index) }"
-        role="button"
-        :aria-current="tabbarStore.curIdx === index ? 'page' : undefined"
-        @click="handleClick(index)"
-      >
-        <TabbarItem :item="item" :index="index" />
+  <view v-if="customTabbarEnable && shouldShowTabbar">
+    <view class="border-and-fixed bg-white" @touchmove.stop.prevent>
+      <view class="h-50px flex items-center">
+        <view
+          v-for="(item, index) in tabbarList"
+          :key="index"
+          class="flex flex-1 flex-col items-center justify-center"
+          :style="{ color: getColorByIndex(index) }"
+          @click="handleClick(index)"
+        >
+          <view v-if="item.isBulge" class="relative">
+            <view class="bulge">
+              <TabbarItem :item="item" :index="index" class="text-center" is-bulge />
+            </view>
+          </view>
+          <TabbarItem v-else :item="item" :index="index" class="relative px-3 text-center" />
+        </view>
       </view>
+
+      <view class="pb-safe" />
     </view>
   </view>
 </template>
+
+<style scoped lang="scss">
+.border-and-fixed {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  border-top: 1px solid #eee;
+}
+
+.bulge {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 250rpx;
+  height: 250rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: inset 0 0 0 1px #fefefe;
+  transform: translateX(-50%) scale(0.5) translateY(-33%);
+  transform-origin: top center;
+}
+</style>

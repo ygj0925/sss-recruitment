@@ -18,28 +18,29 @@ function getImageByIndex(index: number, item: CustomTabBarItem) {
 </script>
 
 <template>
-  <view class="relative min-w-0 flex flex-col items-center justify-center color-inherit">
-    <view
-      v-if="item.iconType === 'unocss' || item.iconType === 'iconfont'"
-      class="h-42rpx w-42rpx text-42rpx color-inherit leading-none"
-      :class="item.icon"
-      aria-hidden="true"
-    />
-    <image
-      v-else-if="item.iconType === 'image'"
-      :src="getImageByIndex(index, item)"
-      mode="aspectFit"
-      class="h-42rpx w-42rpx"
-      aria-hidden="true"
-    />
-    <view v-if="!isBulge" class="mt-6rpx whitespace-nowrap text-21rpx color-inherit leading-[1.2]">
+  <view class="flex flex-col items-center justify-center">
+    <template v-if="item.iconType === 'uiLib'" />
+
+    <template v-if="item.iconType === 'unocss' || item.iconType === 'iconfont'">
+      <view :class="[item.icon, isBulge ? 'text-80px' : 'text-20px']" />
+    </template>
+
+    <template v-if="item.iconType === 'image'">
+      <image :src="getImageByIndex(index, item)" mode="scaleToFill" :class="isBulge ? 'h-116px w-116px' : 'h-24px w-24px'" />
+    </template>
+
+    <view v-if="!isBulge" class="mt-2px text-12px">
       {{ getI18nText(item.text) }}
     </view>
-    <view
-      v-if="item.badge"
-      class="absolute right-8rpx top-8rpx h-12rpx min-w-12rpx flex items-center justify-center rounded-full bg-[#f05d69] px-5rpx text-18rpx text-white"
-    >
-      {{ item.badge === 'dot' ? '' : item.badge > 99 ? '99+' : item.badge }}
+    <view v-if="item.badge">
+      <template v-if="item.badge === 'dot'">
+        <view class="absolute right-0 top-0 h-2 w-2 rounded-full bg-#f56c6c" />
+      </template>
+      <template v-else>
+        <view class="absolute top-0 box-border h-5 min-w-5 center rounded-full bg-#f56c6c px-1 text-center text-xs text-white -right-3">
+          {{ item.badge > 99 ? '99+' : item.badge }}
+        </view>
+      </template>
     </view>
   </view>
 </template>

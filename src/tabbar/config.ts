@@ -38,10 +38,12 @@ export const customTabbarList: CustomTabBarItem[] = [
     icon: 'i-carbon-task',
   },
   {
-    text: 'AI聊天',
+    text: '',
     pagePath: 'pages/ai-chat/index',
-    iconType: 'unocss',
-    icon: 'i-carbon-chat',
+    iconType: 'image',
+    icon: 'https://3sbio-yizhantong.oss-cn-shanghai.aliyuncs.com/images/底部入口图标.png',
+    iconActive: 'https://3sbio-yizhantong.oss-cn-shanghai.aliyuncs.com/images/底部入口图标.png',
+    isBulge: true,
   },
   {
     text: '通知',
@@ -72,8 +74,8 @@ export const isNativeTabbar = selectedTabbarStrategy === TABBAR_STRATEGY_MAP.NAT
 const _tabbar: TabBar = {
   custom: selectedTabbarStrategy === TABBAR_STRATEGY_MAP.CUSTOM_TABBAR,
   color: '#999999',
-  selectedColor: '#2C8CF4',
-  backgroundColor: '#FFFFFF',
+  selectedColor: '#018D71',
+  backgroundColor: '#F8F8F8',
   borderStyle: 'black',
   height: '50px',
   fontSize: '10px',
