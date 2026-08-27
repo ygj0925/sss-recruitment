@@ -25,15 +25,15 @@ function radioChange(evt: any) {
 </script>
 
 <template>
-  <view class="app-page px-24rpx py-32rpx">
-    <view class="rounded-24rpx bg-white p-32rpx shadow-[0_12rpx_36rpx_rgba(42,92,178,0.08)]">
-      <text class="block text-32rpx font-700">{{ $t('i18n.title') }}</text>
-      <text class="mt-12rpx block text-24rpx text-[#7f8ca1] leading-7">选择语言后，应用标题和已配置的文本会立即更新。</text>
+  <view class="app-page px-3 py-4">
+    <view class="rounded-24rpx bg-white p-4 shadow-[0_12rpx_36rpx_rgba(42,92,178,0.08)]">
+      <text class="block text-base font-700">{{ $t('i18n.title') }}</text>
+      <text class="mt-1.5 block text-xs text-[#7f8ca1] leading-7">选择语言后，应用标题和已配置的文本会立即更新。</text>
     </view>
-    <wd-cell-group custom-class="mt-24rpx overflow-hidden rounded-24rpx">
+    <wd-cell-group custom-class="mt-3 overflow-hidden rounded-24rpx">
       <radio-group @change="radioChange">
-        <label v-for="language in languages" :key="language.value" class="min-h-100rpx flex items-center justify-between px-28rpx">
-          <text class="text-27rpx">{{ language.name }}</text>
+        <label v-for="language in languages" :key="language.value" class="min-h-100rpx flex items-center justify-between px-3.5">
+          <text class="text-sm">{{ language.name }}</text>
           <radio :value="language.value" :checked="language.value === current" color="#2C8CF4" />
         </label>
       </radio-group>

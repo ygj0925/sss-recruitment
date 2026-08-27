@@ -51,7 +51,7 @@ function switchToTab(pagePath: string) {
   <view class="app-tab-page font-['Noto_Sans_SC','Microsoft_YaHei',sans-serif]">
     <AppPageHeader title="三生制药招聘" />
 
-    <view class="px-20rpx pt-24rpx">
+    <view class="px-2.5 pt-3">
       <swiper
         class="h-218rpx overflow-hidden rounded-22rpx"
         circular
@@ -64,59 +64,59 @@ function switchToTab(pagePath: string) {
       >
         <swiper-item v-for="banner in banners" :key="banner.title">
           <view
-            class="box-border h-full flex flex-col items-center justify-center px-40rpx pb-24rpx text-white"
+            class="box-border h-full flex flex-col items-center justify-center px-5 pb-3 text-white"
             :style="{ background: banner.background }"
           >
-            <text class="text-37rpx font-700 tracking-2rpx">{{ banner.title }}</text>
-            <text class="mt-14rpx block text-24rpx opacity-86">{{ banner.description }}</text>
+            <text class="text-lg font-700 tracking-2rpx">{{ banner.title }}</text>
+            <text class="mt-1.5 block text-xs opacity-86">{{ banner.description }}</text>
           </view>
         </swiper-item>
       </swiper>
 
       <view
-        class="mt-26rpx min-h-124rpx flex cursor-pointer items-center rounded-22rpx bg-[#eef0ff] px-26rpx active:opacity-76"
+        class="mt-3 min-h-124rpx flex cursor-pointer items-center rounded-22rpx bg-[#eef0ff] px-3 active:opacity-76"
         role="button"
         @tap="switchToTab('pages/ai-chat/index')"
       >
-        <view class="i-carbon-chat h-80rpx w-80rpx center rounded-20rpx bg-brand-violet text-45rpx text-white" />
-        <view class="ml-20rpx min-w-0 flex flex-1 flex-col">
-          <text class="text-27rpx text-app-ink font-700">麟才寻你 · AI 对话</text>
-          <text class="mt-8rpx block text-21rpx text-[#7f8997]">AI 帮你匹配岗位、一键投递</text>
+        <view class="i-carbon-chat h-80rpx w-80rpx center rounded-20rpx bg-brand-violet text-2xl text-white leading-none" />
+        <view class="ml-2.5 min-w-0 flex flex-1 flex-col">
+          <text class="text-sm text-app-ink font-700">麟才寻你 · AI 对话</text>
+          <text class="mt-1 block text-2xs text-[#7f8997]">AI 帮你匹配岗位、一键投递</text>
         </view>
-        <view class="h-56rpx flex items-center rounded-28rpx bg-brand-violet px-18rpx text-24rpx text-white font-600">
+        <view class="h-56rpx flex items-center rounded-28rpx bg-brand-violet px-2 text-xs text-white font-600">
           <text>聊一聊</text>
-          <view class="i-carbon-arrow-right ml-4rpx text-23rpx" />
+          <view class="i-carbon-arrow-right ml-0.5 text-xs leading-none" />
         </view>
       </view>
 
-      <view class="grid grid-cols-2 mt-24rpx gap-x-16rpx gap-y-30rpx app-card px-20rpx pb-32rpx pt-34rpx">
+      <view class="grid grid-cols-2 mt-3 gap-x-2 gap-y-4 app-card px-2.5 pb-4 pt-4">
         <view
           v-for="entry in quickEntries"
           :key="entry.title"
-          class="flex flex-col cursor-pointer items-center text-25rpx font-600 active:opacity-76"
+          class="flex flex-col cursor-pointer items-center text-xs font-600 active:opacity-76"
           role="button"
           @tap="switchToTab(entry.pagePath)"
         >
-          <view class="mb-14rpx h-78rpx w-78rpx center rounded-20rpx text-42rpx text-white" :class="entry.backgroundClass">
-            <view class="block h-44rpx w-44rpx text-44rpx text-white leading-1" :class="entry.iconClass" />
+          <view class="mb-1.5 h-78rpx w-78rpx center rounded-20rpx text-2xl text-white leading-none" :class="entry.backgroundClass">
+            <view class="block h-44rpx w-44rpx text-2xl text-white leading-none" :class="entry.iconClass" />
           </view>
           <text>{{ entry.title }}</text>
         </view>
       </view>
 
-      <view class="mx-10rpx mb-16rpx mt-34rpx flex items-center justify-between">
-        <text class="text-31rpx font-700">热门岗位</text>
+      <view class="mx-1.5 mb-2 mt-4 flex items-center justify-between">
+        <text class="text-base font-700">热门岗位</text>
         <view
-          class="flex cursor-pointer items-center text-23rpx text-[#7f8997] active:opacity-74"
+          class="flex cursor-pointer items-center text-xs text-[#7f8997] active:opacity-74"
           role="button"
           @tap="switchToTab('pages/position/index')"
         >
           <text>查看全部</text>
-          <view class="i-carbon-chevron-right ml-2rpx text-26rpx" />
+          <view class="i-carbon-chevron-right ml-px text-sm leading-none" />
         </view>
       </view>
 
-      <view class="app-card px-26rpx">
+      <view class="app-card px-3">
         <view
           v-for="job in popularJobs"
           :key="job.title"
@@ -125,10 +125,10 @@ function switchToTab(pagePath: string) {
           @tap="switchToTab('pages/position/index')"
         >
           <view class="min-w-0 flex flex-1 flex-col">
-            <text class="overflow-hidden text-ellipsis whitespace-nowrap text-27rpx font-600">{{ job.title }}</text>
-            <text class="mt-12rpx block text-21rpx text-[#7f8997]">{{ job.detail }}</text>
+            <text class="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-600">{{ job.title }}</text>
+            <text class="mt-1.5 block text-2xs text-[#7f8997]">{{ job.detail }}</text>
           </view>
-          <text class="ml-20rpx text-25rpx text-[#ff7311] font-700">{{ job.salary }}</text>
+          <text class="ml-2.5 text-xs text-[#ff7311] font-700">{{ job.salary }}</text>
         </view>
       </view>
     </view>

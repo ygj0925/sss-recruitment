@@ -71,7 +71,7 @@ export default defineConfig({
     {
       'center': 'flex justify-center items-center',
       'app-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink',
-      'app-tab-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink pb-[var(--app-page-bottom-safe)]',
+      'app-tab-page': 'box-border min-h-[var(--app-viewport-height)] bg-app-surface text-app-ink pb-app-page-safe',
       'app-card': 'border-1rpx border-[rgba(255,255,255,0.88)] border-solid rounded-32rpx bg-[rgba(255,255,255,0.94)] shadow-[0_14rpx_34rpx_rgba(70,104,184,0.10)]',
       'app-glass-card': 'border-1rpx border-[rgba(255,255,255,0.88)] border-solid rounded-40rpx bg-[rgba(255,255,255,0.74)] shadow-[0_14rpx_34rpx_rgba(70,104,184,0.14)]',
       'app-brand-action': 'text-white bg-brand-hero',
@@ -113,6 +113,8 @@ export default defineConfig({
     ],
     ['pt-safe', { 'padding-top': 'env(safe-area-inset-top)' }],
     ['pb-safe', { 'padding-bottom': 'env(safe-area-inset-bottom)' }],
+    ['pb-app-page-safe', { 'padding-bottom': 'var(--app-page-bottom-safe)' }],
+    ['pb-auth-layout-safe', { 'padding-bottom': 'calc(44rpx + env(safe-area-inset-bottom))' }],
   ],
   theme: {
     colors: {

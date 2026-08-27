@@ -20,8 +20,8 @@ const emit = defineEmits<{
     block
     type="primary"
     size="large"
-    custom-class="!mt-4rpx !min-h-96rpx !rounded-28rpx !text-29rpx !font-700 !shadow-[0_16rpx_30rpx_rgba(55,139,241,0.26)]"
-    custom-style="background: var(--app-brand-header);"
+    custom-class="!mt-0.5 !min-h-96rpx !rounded-28rpx !text-sm !font-700 !shadow-[0_16rpx_30rpx_rgba(45,111,230,0.24)] !transition-[opacity,transform,box-shadow] !duration-180 !ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:!transition-none"
+    custom-style="background: var(--app-brand-blue);"
     :disabled="disabled"
     :loading="loading"
     @click="emit('tap')"

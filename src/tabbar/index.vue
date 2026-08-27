@@ -35,20 +35,28 @@ function handleClickBulge(index: number) {
 }
 
 function handleClick(index: number) {
-  if (index === tabbarStore.curIdx) {
-    return
-  }
   const list = tabbarList.value
-  if (!list[index]) {
+  const item = list[index]
+  if (!item) {
     return
   }
-  if (list[index].isBulge) {
+
+  if (tabbarStore.isCurrentRouteTabbarItem(index)) {
+    if (tabbarStore.isBackToTopPath(item.pagePath)) {
+      uni.pageScrollTo({
+        scrollTop: 0,
+        duration: 300,
+      })
+    }
+    return
+  }
+
+  if (item.isBulge) {
     handleClickBulge(index)
     return
   }
-  const url = list[index].pagePath
   tabbarStore.setCurIdx(index)
-  uni.switchTab({ url })
+  uni.switchTab({ url: item.pagePath })
 }
 
 // #ifndef MP-WEIXIN || MP-ALIPAY

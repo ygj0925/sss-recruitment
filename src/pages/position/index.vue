@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import AppPageHeader from '@/components/AppPageHeader.vue'
+import { tabbarStore } from '@/tabbar/store'
+import { positions } from './data'
+import PositionSearchBar from './components/PositionSearchBar.vue'
 
 defineOptions({
   name: 'Position',
@@ -9,55 +13,224 @@ definePage({
   style: {
     navigationStyle: 'custom',
     navigationBarTitleText: '职位',
-    backgroundColor: '#EDF6FF',
+    navigationBarBackgroundColor: '#2F80ED',
+    navigationBarTextStyle: 'white',
+    backgroundColor: '#F5F7FA',
+    backgroundColorTop: '#2F80ED',
+    backgroundColorBottom: '#F5F7FA',
   },
 })
 
-const jobs = [
-  { title: '生物药研发高级研究员', location: '上海', education: '硕士', experience: '3-5年', salary: '25-40K', tags: ['创新药', '生物药'] },
-  { title: '医学联络官（MSL）', location: '北京', education: '本科', experience: '1-3年', salary: '20-35K', tags: ['医学事务', '临床沟通'] },
-  { title: '质量注册专员', location: '沈阳', education: '本科', experience: '经验不限', salary: '12-18K', tags: ['药品注册', '质量体系'] },
-  { title: '招商主管', location: '广州', education: '大专', experience: '3-5年', salary: '15-25K', tags: ['招商主管', '医药商业'] },
-]
+const POSITION_PATH = '/pages/position/index'
+const HEADER_SEARCH_THRESHOLD = uni.upx2px(104)
+const BACK_TO_TOP_ENTER_THRESHOLD = uni.upx2px(760)
+const BACK_TO_TOP_EXIT_THRESHOLD = uni.upx2px(32)
 
-function showJobDetail() {
+const headerScrolled = ref(false)
+const currentScrollTop = ref(0)
+const activeCategory = ref('推荐')
+const categories = ['推荐', '研发', '医学', '市场', '销售', '职能']
+const quickLinks = [
+  { label: '附近机会', description: '发现身边好工作', icon: 'i-carbon-location-company', colorClass: 'text-[#26b8bd]' },
+  { label: '热门职位', description: '精选高匹配岗位', icon: 'i-carbon-fire', colorClass: 'text-[#ff805c]' },
+]
+const jobs = positions
+
+let statusBarHeight = 0
+try {
+  statusBarHeight = uni.getWindowInfo?.().statusBarHeight || uni.getSystemInfoSync().statusBarHeight || 0
+}
+catch {
+  statusBarHeight = 0
+}
+
+let positionHeaderOffset = `${statusBarHeight + uni.upx2px(96)}px`
+// #ifdef H5
+positionHeaderOffset = 'calc(env(safe-area-inset-top) + 96rpx)'
+// #endif
+
+const pageStyle = {
+  '--position-header-offset': positionHeaderOffset,
+}
+
+function syncScrollState(scrollTop: number) {
+  currentScrollTop.value = scrollTop
+  headerScrolled.value = scrollTop >= HEADER_SEARCH_THRESHOLD
+
+  if (scrollTop >= BACK_TO_TOP_ENTER_THRESHOLD) {
+    tabbarStore.setBackToTopVisible(POSITION_PATH, true)
+  }
+  else if (scrollTop <= BACK_TO_TOP_EXIT_THRESHOLD) {
+    tabbarStore.setBackToTopVisible(POSITION_PATH, false)
+  }
+}
+
+function showJobDetail(positionId: string) {
+  uni.navigateTo({
+    url: `/pages/position/detail?id=${encodeURIComponent(positionId)}`,
+  })
+}
+
+function handleQuickLink(label: string) {
   uni.showToast({
-    title: '岗位详情即将开放',
+    title: `${label}功能即将开放`,
     icon: 'none',
   })
 }
+
+function handleSearch() {
+  uni.showToast({
+    title: '职位搜索即将开放',
+    icon: 'none',
+  })
+}
+
+function handleCategoryTap(category: string) {
+  activeCategory.value = category
+}
+
+onPageScroll(({ scrollTop }) => {
+  syncScrollState(scrollTop)
+})
+
+onShow(() => {
+  syncScrollState(currentScrollTop.value)
+})
+
+onHide(() => {
+  tabbarStore.setBackToTopVisible(POSITION_PATH, false)
+})
+
+onUnload(() => {
+  tabbarStore.setBackToTopVisible(POSITION_PATH, false)
+})
 </script>
 
 <template>
-  <view class="app-tab-page font-[Noto_Sans_SC,Microsoft_YaHei,sans-serif]">
-    <AppPageHeader title="职位" />
+  <view class="position-page app-tab-page font-[Noto_Sans_SC,Microsoft_YaHei,sans-serif]" :style="pageStyle">
+    <view class="position-hero">
+      <AppPageHeader
+        title="职位"
+        light
+        transparent
+        center-wide
+        :scrolled="headerScrolled"
+        scrolled-background="var(--app-header-surface, rgba(255,255,255,0.98))"
+      >
+        <template #center>
+          <PositionSearchBar v-if="headerScrolled" compact @tap="handleSearch" />
+          <text v-else class="block text-center text-lg text-white font-700 leading-none tracking-1rpx">职位</text>
+        </template>
+      </AppPageHeader>
 
-    <view class="px-24rpx pt-24rpx">
-      <view class="h-82rpx flex items-center rounded-16rpx bg-white px-24rpx text-25rpx text-[#9ba6b5]" role="button" @tap="showJobDetail">
-        <view class="i-carbon-search mr-12rpx text-30rpx text-brand-blue" />
-        <text>搜索职位、城市或关键词</text>
-      </view>
+      <view class="relative z-1 px-4 pb-5 pt-3">
+        <PositionSearchBar @tap="handleSearch" />
 
-      <view class="flex justify-between px-10rpx pb-22rpx pt-28rpx text-25rpx text-[#8c98a8]">
-        <text class="text-brand-blue font-700">推荐</text>
-        <text>研发</text>
-        <text>医学</text>
-        <text>市场</text>
-        <text>职能</text>
-      </view>
-
-      <view class="flex flex-col gap-18rpx">
-        <view v-for="job in jobs" :key="job.title" class="cursor-pointer rounded-20rpx bg-white p-28rpx active:opacity-74" role="button" @tap="showJobDetail">
-          <view class="flex items-center justify-between">
-            <text class="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-29rpx font-700">{{ job.title }}</text>
-            <text class="ml-18rpx text-27rpx text-[#ff7311] font-700">{{ job.salary }}</text>
+        <view class="grid grid-cols-2 mt-4 overflow-hidden border-1rpx border-white/60 rounded-3xl border-solid bg-white/72 shadow-[0_12rpx_32rpx_rgba(39,105,180,0.08)] backdrop-blur-8rpx">
+          <view
+            v-for="(link, index) in quickLinks"
+            :key="link.label"
+            class="min-h-28 flex cursor-pointer items-center px-4 active:bg-white/72"
+            :class="index === 0 ? 'border-r-1rpx border-r-white/76 border-r-solid' : ''"
+            role="button"
+            @tap="handleQuickLink(link.label)"
+          >
+            <view class="mr-3 text-3xl leading-none" :class="[link.icon, link.colorClass]" />
+            <view class="min-w-0 flex flex-1 flex-col">
+              <text class="text-sm text-[#1d2939] font-700">{{ link.label }}</text>
+              <text class="mt-1 block text-xs text-[#7d899a]">{{ link.description }}</text>
+            </view>
           </view>
-          <text class="mt-16rpx block text-23rpx text-[#8491a2]">{{ job.location }} · {{ job.education }} · {{ job.experience }}</text>
-          <view class="mt-20rpx flex gap-12rpx">
-            <text v-for="tag in job.tags" :key="tag" class="rounded-8rpx bg-[#eff5ff] px-12rpx py-5rpx text-22rpx text-brand-blue">{{ tag }}</text>
+        </view>
+
+        <view class="mt-5 flex items-end">
+          <text class="text-xl text-[#17233d] font-700 leading-none">上海</text>
+          <view class="mb-1 ml-2 h-2 w-2 rotate-45 border-b-3rpx border-r-3rpx border-[#4b5c70] border-solid" />
+        </view>
+      </view>
+    </view>
+
+    <scroll-view class="position-category-bar whitespace-nowrap" scroll-x :show-scrollbar="false">
+      <view class="inline-flex items-center px-3 py-3">
+        <view
+          v-for="category in categories"
+          :key="category"
+          class="relative min-w-120rpx flex flex-col cursor-pointer items-center px-3 pb-2 pt-1 text-sm text-[#667085] font-600 active:opacity-72"
+          :class="activeCategory === category ? 'text-brand-blue' : ''"
+          role="button"
+          @tap="handleCategoryTap(category)"
+        >
+          <view
+            class="mb-2 h-68rpx w-68rpx flex items-center justify-center rounded-2xl text-xl leading-none"
+            :class="activeCategory === category ? 'bg-[#e3f3ff] text-brand-blue' : 'bg-[#f0f2f5] text-[#687386]'"
+          >
+            <view :class="category === '推荐' ? 'i-carbon-recommend' : category === '研发' ? 'i-carbon-code' : category === '医学' ? 'i-carbon-medication-alert' : category === '市场' ? 'i-carbon-chart-line' : category === '销售' ? 'i-carbon-store' : 'i-carbon-user-role'" />
+          </view>
+          <text>{{ category }}</text>
+          <view v-if="activeCategory === category" class="absolute bottom-0 h-5rpx w-34rpx rounded-full bg-brand-blue" />
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="px-3 pb-6 pt-3">
+      <view class="mb-3 flex items-center justify-between rounded-2xl bg-white px-4 py-4 shadow-[0_8rpx_24rpx_rgba(38,64,105,0.05)]">
+        <view class="min-w-0 flex flex-1 items-center">
+          <text class="text-base text-[#1d2939] font-700">职位定制</text>
+          <text class="ml-2 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-[#98a2b3]">找工作无需大海捞针</text>
+        </view>
+        <view class="ml-3 h-68rpx flex cursor-pointer items-center justify-center border-1rpx border-brand-blue rounded-full border-solid px-4 text-sm text-brand-blue font-600 active:opacity-70">
+          添加意向
+        </view>
+      </view>
+
+      <view class="flex flex-col gap-3">
+        <view
+          v-for="job in jobs"
+          :key="job.id"
+          class="cursor-pointer rounded-2xl bg-white px-4 py-4 shadow-[0_8rpx_24rpx_rgba(38,64,105,0.05)] active:opacity-74"
+          role="button"
+          @tap="showJobDetail(job.id)"
+        >
+          <view class="flex items-start justify-between gap-3">
+            <text class="min-w-0 flex-1 text-base text-[#1d2939] font-700 leading-[1.35]">{{ job.title }}</text>
+            <text class="flex-none text-sm text-brand-blue font-700">{{ job.salary }}</text>
+          </view>
+          <text class="mt-2 block text-xs text-[#667085]">{{ job.company }} · {{ job.education }} · {{ job.experience }}</text>
+          <view class="mt-3 flex flex-wrap gap-2">
+            <text v-for="tag in job.tags" :key="tag" class="rounded-lg bg-[#f2f4f7] px-2 py-1 text-xs text-[#667085]">{{ tag }}</text>
+          </view>
+          <view class="mt-3 flex items-center justify-between border-t-1rpx border-t-[#f1f3f6] border-t-solid pt-3">
+            <view class="flex items-center">
+              <view class="h-42rpx w-42rpx flex items-center justify-center rounded-full bg-[#e9f3ff] text-sm text-brand-blue leading-none">
+                <view class="i-carbon-user-avatar" />
+              </view>
+              <text class="ml-2 text-xs text-[#475467]">招聘团队 · 简历直投</text>
+            </view>
+            <text class="ml-3 text-xs text-[#98a2b3]">{{ job.location }}</text>
           </view>
         </view>
       </view>
     </view>
   </view>
 </template>
+
+<style scoped>
+.position-page {
+  background: #f5f7fa;
+}
+
+.position-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--app-position-hero-gradient);
+}
+
+.position-category-bar {
+  position: sticky;
+  top: var(--position-header-offset);
+  z-index: 90;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 8rpx 24rpx rgba(38, 64, 105, 0.06);
+}
+</style>

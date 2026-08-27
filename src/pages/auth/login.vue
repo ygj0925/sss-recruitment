@@ -16,10 +16,12 @@ definePage({
   excludeLoginPath: true,
   style: {
     navigationStyle: 'custom',
-    navigationBarBackgroundColor: '#2C8CF4',
+    navigationBarBackgroundColor: '#2D6FE6',
     navigationBarTextStyle: 'white',
     navigationBarTitleText: '账号密码登录',
-    backgroundColorTop: '#2C8CF4',
+    backgroundColor: '#FFFFFF',
+    backgroundColorTop: '#2D6FE6',
+    backgroundColorBottom: '#FFFFFF',
   },
 })
 
@@ -140,14 +142,14 @@ async function loginWithWechat() {
       <view class="min-w-0 flex-1">
         <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
       </view>
-      <text class="mb-30rpx ml-20rpx mt-4rpx block min-h-50rpx cursor-pointer whitespace-nowrap text-21rpx text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
+      <text class="mb-4 ml-2.5 mt-0.5 block min-h-50rpx cursor-pointer whitespace-nowrap text-2xs text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
     </view>
-    <text v-if="errors.agreement" class="mb-24rpx mt--14rpx block text-center text-22rpx text-#e95d63 leading-1.5">{{ errors.agreement }}</text>
+    <text v-if="errors.agreement" class="mb-3 block text-center text-2xs text-#e95d63 leading-1.5 -mt-1.5">{{ errors.agreement }}</text>
     <AuthButton :disabled="loading" :loading="loading" @tap="submitAccountLogin" />
-    <text class="mt-26rpx block min-h-74rpx cursor-pointer text-center text-24rpx text-#467bff font-600 leading-74rpx" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
+    <text class="mt-3 block min-h-74rpx cursor-pointer text-center text-xs text-#467bff font-600 leading-74rpx" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
     <text
       v-if="feedback"
-      class="mb-24rpx mt--14rpx block text-center text-22rpx leading-1.5"
+      class="mb-3 block text-center text-2xs leading-1.5 -mt-1.5"
       :class="{
         'text-#e95d63': feedbackType === 'error',
         'text-#467bff': feedbackType === 'info',

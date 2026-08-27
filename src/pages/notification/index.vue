@@ -149,7 +149,7 @@ onShow(() => {
       <template #right>
         <button
           v-if="isLoggedIn && unreadCount > 0"
-          class="plain-button m-0 border-0 p-0 text-22rpx text-[#3974F6] font-500 leading-none"
+          class="plain-button m-0 border-0 p-0 text-2xs text-[#3974F6] font-500 leading-none"
           aria-label="全部标为已读"
           @click="handleMarkAllRead"
         >
@@ -158,34 +158,34 @@ onShow(() => {
       </template>
     </AppPageHeader>
 
-    <view class="box-border flex flex-col gap-24rpx px-24rpx pb-28rpx pt-24rpx">
+    <view class="box-border flex flex-col gap-3 px-3 pb-3.5 pt-3">
       <template v-if="isLoggedIn">
-        <view v-if="!reminderDismissed" class="subscription-card rounded-32rpx bg-white p-28rpx">
-          <view class="flex items-center gap-12rpx">
-            <view class="i-carbon-notification-filled text-38rpx text-[#3974F6]" />
-            <text class="text-31rpx text-[#17233D] font-700">
+        <view v-if="!reminderDismissed" class="subscription-card rounded-32rpx bg-white p-3.5">
+          <view class="flex items-center gap-1.5">
+            <view class="i-carbon-notification-filled text-lg text-[#3974F6] leading-none" />
+            <text class="text-base text-[#17233D] font-700">
               {{ reminderEnabled ? '消息提醒已开启' : '收到以下消息提醒' }}
             </text>
           </view>
 
-          <view class="mt-24rpx flex items-center justify-between px-2rpx">
-            <view class="flex items-center gap-7rpx text-[#7E8A9D]">
-              <view class="i-carbon-calendar text-27rpx" />
-              <text class="text-23rpx font-500">面试邀请</text>
+          <view class="mt-3 flex items-center justify-between px-px">
+            <view class="flex items-center gap-1 text-[#7E8A9D]">
+              <view class="i-carbon-calendar text-sm leading-none" />
+              <text class="text-xs font-500">面试邀请</text>
             </view>
-            <view class="flex items-center gap-7rpx text-[#7E8A9D]">
-              <view class="i-carbon-document text-27rpx" />
-              <text class="text-23rpx font-500">简历补充</text>
+            <view class="flex items-center gap-1 text-[#7E8A9D]">
+              <view class="i-carbon-document text-sm leading-none" />
+              <text class="text-xs font-500">简历补充</text>
             </view>
-            <view class="flex items-center gap-7rpx text-[#7E8A9D]">
-              <view class="i-carbon-email-new text-27rpx" />
-              <text class="text-23rpx font-500">新消息</text>
+            <view class="flex items-center gap-1 text-[#7E8A9D]">
+              <view class="i-carbon-email-new text-sm leading-none" />
+              <text class="text-xs font-500">新消息</text>
             </view>
           </view>
 
-          <view class="mt-26rpx flex gap-18rpx">
+          <view class="mt-3 flex gap-2">
             <button
-              class="action-button plain-button m-0 h-80rpx flex flex-1 items-center justify-center border-0 rounded-full bg-[#EAF1FF] p-0 text-27rpx text-[#3974F6] font-600 leading-none"
+              class="action-button plain-button m-0 h-80rpx flex flex-1 items-center justify-center border-0 rounded-full bg-[#EAF1FF] p-0 text-sm text-[#3974F6] font-600 leading-none"
               hover-class="button-pressed"
               aria-label="暂不接收消息提醒"
               @click="handleDismissReminder"
@@ -193,7 +193,7 @@ onShow(() => {
               暂不提醒
             </button>
             <button
-              class="action-button plain-button m-0 h-80rpx flex flex-1 items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-27rpx text-white font-700 leading-none"
+              class="action-button plain-button m-0 h-80rpx flex flex-1 items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-sm text-white font-700 leading-none"
               hover-class="button-pressed"
               aria-label="开启消息提醒"
               @click="handleEnableReminder"
@@ -203,19 +203,19 @@ onShow(() => {
           </view>
         </view>
 
-        <view v-if="notifications.length > 0" class="message-list-card overflow-hidden rounded-32rpx bg-white px-28rpx pb-4rpx pt-24rpx">
+        <view v-if="notifications.length > 0" class="message-list-card overflow-hidden rounded-32rpx bg-white px-3.5 pb-0.5 pt-3">
           <view class="h-60rpx flex items-center justify-between">
-            <text class="text-29rpx text-[#17233D] font-700">最近消息</text>
-            <view v-if="unreadCount > 0" class="flex items-center gap-8rpx rounded-full bg-[#FFF1F3] px-17rpx py-8rpx">
+            <text class="text-sm text-[#17233D] font-700">最近消息</text>
+            <view v-if="unreadCount > 0" class="flex items-center gap-1 rounded-full bg-[#FFF1F3] px-2 py-1">
               <view class="h-11rpx w-11rpx rounded-full bg-[#F05261]" />
-              <text class="text-20rpx text-[#F05261] font-600">{{ unreadCount }} 条未读</text>
+              <text class="text-2xs text-[#F05261] font-600">{{ unreadCount }} 条未读</text>
             </view>
           </view>
 
           <view
             v-for="(notification, index) in notifications"
             :key="notification.id"
-            class="message-row flex cursor-pointer items-start gap-20rpx py-28rpx"
+            class="message-row flex cursor-pointer items-start gap-2.5 py-3.5"
             :class="index < notifications.length - 1 ? 'border-b-1rpx border-b-[#E9EEF7]' : ''"
             role="button"
             :aria-label="`查看${notification.title}`"
@@ -223,43 +223,43 @@ onShow(() => {
             @click="handleMessageTap(notification)"
           >
             <view
-              class="h-78rpx w-78rpx flex flex-[0_0_78rpx] items-center justify-center rounded-23rpx text-38rpx"
+              class="h-78rpx w-78rpx flex flex-[0_0_78rpx] items-center justify-center rounded-23rpx text-lg leading-none"
               :class="kindMeta[notification.kind].surfaceClass"
             >
               <view :class="kindMeta[notification.kind].iconClass" />
             </view>
 
             <view class="min-w-0 flex-1">
-              <view class="flex items-center justify-between gap-12rpx">
-                <view class="min-w-0 flex items-center gap-10rpx">
-                  <text class="overflow-hidden text-ellipsis whitespace-nowrap text-27rpx text-[#17233D] font-700">
+              <view class="flex items-center justify-between gap-1.5">
+                <view class="min-w-0 flex items-center gap-1.5">
+                  <text class="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-[#17233D] font-700">
                     {{ notification.title }}
                   </text>
                   <view v-if="notification.unread" class="h-12rpx w-12rpx flex-[0_0_12rpx] rounded-full bg-[#F05261]" />
                 </view>
-                <text class="flex-none text-20rpx text-[#8793A7]">{{ notification.time }}</text>
+                <text class="flex-none text-2xs text-[#8793A7]">{{ notification.time }}</text>
               </view>
-              <text class="mt-9rpx block text-23rpx text-[#526078] font-500 leading-[1.45]">
+              <text class="mt-1 block text-xs text-[#526078] font-500 leading-[1.45]">
                 {{ notification.subtitle }}
               </text>
-              <text class="mt-7rpx block text-21rpx text-[#8793A7] leading-[1.45]">
+              <text class="mt-1 block text-2xs text-[#8793A7] leading-[1.45]">
                 {{ notification.description }}
               </text>
             </view>
           </view>
         </view>
 
-        <view v-else class="empty-card min-h-820rpx flex flex-col items-center justify-center rounded-32rpx bg-white px-40rpx py-56rpx">
+        <view v-else class="empty-card min-h-820rpx flex flex-col items-center justify-center rounded-32rpx bg-white px-5 py-7">
           <image
             class="h-300rpx w-360rpx rounded-28rpx"
             src="/static/notification/DjcLa.png"
             mode="aspectFit"
             aria-label="蓝色消息盒插画"
           />
-          <text class="mt-24rpx block text-32rpx text-[#17233D] font-700">暂无历史消息</text>
-          <text class="mt-14rpx block text-center text-25rpx text-[#8793A7] leading-[1.6]">投递简历后，面试和进展消息都会在这里同步</text>
+          <text class="mt-3 block text-base text-[#17233D] font-700">暂无历史消息</text>
+          <text class="mt-1.5 block text-center text-xs text-[#8793A7] leading-[1.6]">投递简历后，面试和进展消息都会在这里同步</text>
           <button
-            class="action-button plain-button mx-0 mt-34rpx h-88rpx w-300rpx flex items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-28rpx text-white font-700 leading-none"
+            class="action-button plain-button mx-0 mt-4 h-88rpx w-300rpx flex items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-sm text-white font-700 leading-none"
             hover-class="button-pressed"
             @click="handleExplorePositions"
           >
@@ -268,35 +268,35 @@ onShow(() => {
         </view>
       </template>
 
-      <view v-else class="empty-card min-h-900rpx flex flex-col items-center justify-center rounded-32rpx bg-white px-36rpx py-60rpx">
+      <view v-else class="empty-card min-h-900rpx flex flex-col items-center justify-center rounded-32rpx bg-white px-4.5 py-7.5">
         <image
           class="h-308rpx w-368rpx rounded-28rpx"
           src="/static/notification/DjcLa.png"
           mode="aspectFit"
           aria-label="蓝色消息盒插画"
         />
-        <text class="mt-28rpx block text-35rpx text-[#17233D] font-700">登录后查看消息</text>
-        <text class="mt-16rpx block whitespace-pre-line text-center text-25rpx text-[#8793A7] leading-[1.65]">
+        <text class="mt-3.5 block text-lg text-[#17233D] font-700">登录后查看消息</text>
+        <text class="mt-2 block whitespace-pre-line text-center text-xs text-[#8793A7] leading-[1.65]">
           {{ '面试邀请、简历补充和投递进展\n都会在这里及时同步' }}
         </text>
 
-        <view class="mt-26rpx flex items-center justify-center gap-12rpx">
-          <view class="flex items-center gap-6rpx rounded-full bg-[#EAF1FF] px-16rpx py-10rpx text-[#3974F6]">
-            <view class="i-carbon-calendar text-24rpx" />
-            <text class="text-20rpx font-600">面试</text>
+        <view class="mt-3 flex items-center justify-center gap-1.5">
+          <view class="flex items-center gap-1 rounded-full bg-[#EAF1FF] px-2 py-1.5 text-[#3974F6]">
+            <view class="i-carbon-calendar text-xs leading-none" />
+            <text class="text-2xs font-600">面试</text>
           </view>
-          <view class="flex items-center gap-6rpx rounded-full bg-[#EAF1FF] px-16rpx py-10rpx text-[#3974F6]">
-            <view class="i-carbon-document text-24rpx" />
-            <text class="text-20rpx font-600">简历</text>
+          <view class="flex items-center gap-1 rounded-full bg-[#EAF1FF] px-2 py-1.5 text-[#3974F6]">
+            <view class="i-carbon-document text-xs leading-none" />
+            <text class="text-2xs font-600">简历</text>
           </view>
-          <view class="flex items-center gap-6rpx rounded-full bg-[#EAF1FF] px-16rpx py-10rpx text-[#3974F6]">
-            <view class="i-carbon-notification text-24rpx" />
-            <text class="text-20rpx font-600">进展</text>
+          <view class="flex items-center gap-1 rounded-full bg-[#EAF1FF] px-2 py-1.5 text-[#3974F6]">
+            <view class="i-carbon-notification text-xs leading-none" />
+            <text class="text-2xs font-600">进展</text>
           </view>
         </view>
 
         <button
-          class="action-button login-button plain-button mx-0 mt-34rpx h-90rpx w-420rpx flex items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-29rpx text-white font-700 leading-none"
+          class="action-button login-button plain-button mx-0 mt-4 h-90rpx w-420rpx flex items-center justify-center border-0 rounded-full bg-[#3974F6] p-0 text-sm text-white font-700 leading-none"
           hover-class="button-pressed"
           aria-label="登录或注册"
           @click="handleLogin"
@@ -304,12 +304,12 @@ onShow(() => {
           登录 / 注册
         </button>
         <button
-          class="plain-button mx-0 mt-25rpx flex items-center gap-7rpx border-0 p-0 text-24rpx text-[#3974F6] font-500 leading-none"
+          class="plain-button mx-0 mt-3 flex items-center gap-1 border-0 p-0 text-xs text-[#3974F6] font-500 leading-none"
           hover-class="link-pressed"
           @click="handleExplorePositions"
         >
           <text>先看看职位</text>
-          <view class="i-carbon-arrow-right text-25rpx" />
+          <view class="i-carbon-arrow-right text-xs leading-none" />
         </button>
       </view>
     </view>

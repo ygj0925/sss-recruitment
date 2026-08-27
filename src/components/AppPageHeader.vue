@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<{
   scrolled?: boolean
   scrolledBackground?: string
   scrolledLight?: boolean
+  centerWide?: boolean
 }>(), {
   align: 'center',
   prominent: false,
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<{
   scrolled: false,
   scrolledBackground: 'rgba(237, 246, 255, 0.96)',
   scrolledLight: false,
+  centerWide: false,
 })
 
 let statusBarHeight = 0
@@ -37,40 +39,60 @@ safeAreaTop = 'env(safe-area-inset-top)'
 // #endif
 
 const safeAreaStyle = { paddingTop: safeAreaTop }
-const headerStyle = computed(() => {
-  const background = props.scrolled ? props.scrolledBackground : props.background
-  return background ? { ...safeAreaStyle, background } : safeAreaStyle
-})
+const baseBackgroundStyle = computed(() => ({
+  background: props.background || (props.transparent ? 'transparent' : 'rgba(237, 246, 255, 0.96)'),
+}))
+const scrolledBackgroundStyle = computed(() => ({
+  background: props.scrolledBackground || 'var(--app-header-surface, rgba(255, 255, 255, 0.98))',
+}))
 </script>
 
 <template>
   <view class="box-content h-96rpx" :style="safeAreaStyle">
     <view
-      class="app-page-header transition-[background,box-shadow,color] fixed inset-x-0 top-0 z-100 box-content h-96rpx duration-180 ease-out"
+      class="app-page-header fixed inset-x-0 top-0 z-100 box-content h-96rpx overflow-hidden transition-[box-shadow,color] duration-180 ease-out"
       :class="[
         scrolled ? 'app-page-header--scrolled' : '',
         scrolled ? (scrolledLight ? 'text-white' : 'text-[#121c39]') : (light ? 'text-white' : 'text-[#121c39]'),
-        transparent && !scrolled ? 'bg-transparent' : 'bg-[rgba(237,246,255,0.96)]',
       ]"
-      :style="headerStyle"
+      :style="safeAreaStyle"
     >
+      <view class="app-page-header__surface pointer-events-none absolute inset-0" :style="baseBackgroundStyle" />
       <view
-        class="relative h-96rpx flex items-center px-24rpx"
+        class="app-page-header__surface pointer-events-none absolute inset-0"
+        :class="scrolled ? 'opacity-100' : 'opacity-0'"
+        :style="scrolledBackgroundStyle"
+      />
+
+      <view
+        class="relative z-1 h-96rpx flex items-center px-3"
         :class="align === 'left' ? 'justify-start' : 'justify-center'"
       >
-        <view class="absolute left-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">
+        <view class="absolute left-24rpx top-0 z-1 h-96rpx w-96rpx flex items-center justify-center">
           <slot name="left" />
         </view>
+
+        <view
+          v-if="$slots.center"
+          class="min-w-0"
+          :class="centerWide
+            ? 'absolute left-24rpx right-136rpx'
+            : (align === 'left' ? 'max-w-[calc(100%_-_130rpx)]' : 'max-w-[calc(100%_-_220rpx)]')"
+        >
+          <slot name="center" />
+        </view>
         <text
+          v-else
           class="overflow-hidden text-ellipsis whitespace-nowrap leading-[1.35] tracking-1rpx"
           :class="[
             align === 'left' ? 'max-w-[calc(100%_-_130rpx)]' : 'max-w-[calc(100%_-_220rpx)]',
-            prominent ? 'text-40rpx font-700' : 'text-34rpx font-600',
+            prominent ? 'text-xl font-700' : 'text-lg font-600',
           ]"
         >
           {{ title }}
         </text>
-        <view class="absolute right-24rpx top-0 h-96rpx w-96rpx flex items-center justify-center">
+
+        <view class="absolute right-24rpx top-0 z-1 h-96rpx w-96rpx flex items-center justify-center">
           <slot name="right" />
         </view>
       </view>
@@ -83,8 +105,18 @@ const headerStyle = computed(() => {
   border-bottom: 1rpx solid transparent;
 }
 
+.app-page-header__surface {
+  transition: opacity var(--app-motion-duration-fast, 180ms) var(--app-motion-easing-standard, ease-out);
+}
+
 .app-page-header--scrolled {
   border-bottom-color: rgba(107, 139, 204, 0.14);
   box-shadow: 0 8rpx 24rpx rgba(55, 94, 174, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-page-header__surface {
+    transition: none;
+  }
 }
 </style>

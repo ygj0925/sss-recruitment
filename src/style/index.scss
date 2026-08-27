@@ -19,18 +19,13 @@ page {
   --app-brand-mint: #4de3ba;
   --app-card-radius: 32rpx;
   --app-card-shadow: 0 14rpx 34rpx rgba(70, 104, 184, 0.12);
-  --app-brand-hero: linear-gradient(
-    135deg,
-    #0879ff 0%,
-    var(--app-brand-sky) 52%,
-    var(--app-brand-mint) 100%
-  );
-  --app-brand-header: linear-gradient(
-    104deg,
-    #0d68ed 0%,
-    #3d70ff 62%,
-    #567aff 100%
-  );
+  --app-brand-hero: linear-gradient(135deg, #0879ff 0%, var(--app-brand-sky) 52%, var(--app-brand-mint) 100%);
+  --app-brand-header: linear-gradient(104deg, #0d68ed 0%, #3d70ff 62%, #567aff 100%);
+  --app-blue-white-gradient: linear-gradient(180deg, #247cf0 0%, #43a9ef 18%, #9dd5f7 40%, #e7f4ff 68%, #ffffff 100%);
+  --app-position-hero-gradient: linear-gradient(180deg, #2f80ed 0%, #48b5ee 32%, #bfe6f8 72%, #ffffff 100%);
+  --app-header-surface: rgba(255, 255, 255, 0.98);
+  --app-motion-duration-fast: 180ms;
+  --app-motion-easing-standard: cubic-bezier(0.32, 0.72, 0, 1);
   --app-ai-background:
     radial-gradient(circle at 86% 12%, rgba(77, 227, 186, 0.2), transparent 30%),
     radial-gradient(circle at 8% 44%, rgba(19, 184, 237, 0.16), transparent 34%),

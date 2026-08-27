@@ -68,9 +68,23 @@ function findTabbarIndexByPath(path?: string) {
 const tabbarStore = reactive({
   curIdx: uni.getStorageSync('app-tabbar-index') || 0,
   prevIdx: uni.getStorageSync('app-tabbar-index') || 0,
+  backToTopPath: '',
   setCurIdx(idx: number) {
     this.curIdx = idx
     uni.setStorageSync('app-tabbar-index', idx)
+  },
+  setBackToTopVisible(path: string, visible: boolean) {
+    const normalizedPath = normalizeRoutePath(path)
+    if (visible) {
+      this.backToTopPath = normalizedPath
+      return
+    }
+    if (this.backToTopPath === normalizedPath) {
+      this.backToTopPath = ''
+    }
+  },
+  isBackToTopPath(path: string) {
+    return this.backToTopPath === normalizeRoutePath(path)
   },
   setTabbarItemBadge(idx: number, badge: CustomTabBarItemBadge) {
     const list = tabbarList.value

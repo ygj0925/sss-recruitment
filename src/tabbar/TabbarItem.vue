@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import type { CustomTabBarItem } from './types'
+import { computed } from 'vue'
 import { getI18nText } from './i18n'
 import { tabbarStore } from './store'
 
-defineProps<{
+const props = defineProps<{
   item: CustomTabBarItem
   index: number
   isBulge?: boolean
 }>()
+
+const showBackToTop = computed(() => !props.isBulge && tabbarStore.isBackToTopPath(props.item.pagePath))
+const displayText = computed(() => showBackToTop.value ? '回顶部' : getI18nText(props.item.text))
 
 function getImageByIndex(index: number, item: CustomTabBarItem) {
   if (!item.iconActive) {
@@ -22,15 +26,15 @@ function getImageByIndex(index: number, item: CustomTabBarItem) {
     <template v-if="item.iconType === 'uiLib'" />
 
     <template v-if="item.iconType === 'unocss' || item.iconType === 'iconfont'">
-      <view :class="[item.icon, isBulge ? 'text-80px' : 'text-20px']" />
+      <view class="leading-none" :class="[showBackToTop ? 'i-carbon-up-to-top' : item.icon, isBulge ? 'text-7xl' : 'text-xl']" />
     </template>
 
     <template v-if="item.iconType === 'image'">
       <image :src="getImageByIndex(index, item)" mode="scaleToFill" :class="isBulge ? 'h-116px w-116px' : 'h-24px w-24px'" />
     </template>
 
-    <view v-if="!isBulge" class="mt-2px text-12px">
-      {{ getI18nText(item.text) }}
+    <view v-if="!isBulge" class="mt-0.5 text-xs">
+      {{ displayText }}
     </view>
     <view v-if="item.badge">
       <template v-if="item.badge === 'dot'">
