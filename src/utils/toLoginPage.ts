@@ -1,5 +1,5 @@
 import { LOGIN_PAGE } from '@/router/config'
-import { getLastPage } from '@/utils'
+import { currRoute, getLastPage } from '@/utils'
 import { debounce } from '@/utils/debounce'
 
 interface ToLoginPageOptions {
@@ -15,6 +15,23 @@ interface ToLoginPageOptions {
   queryString?: string
 }
 
+function getRedirectQuery(queryString: string) {
+  if (queryString.includes('redirect=')) {
+    return queryString
+  }
+
+  const { path, query } = currRoute()
+  if (!path) {
+    return queryString
+  }
+  const queryStringFromRoute = Object.entries(query)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')
+  const redirect = `${path}${queryStringFromRoute ? `?${queryStringFromRoute}` : ''}`
+  const separator = queryString ? (queryString.startsWith('?') ? '&' : '?') : '?'
+  return `${queryString}${separator}redirect=${encodeURIComponent(redirect)}`
+}
+
 // 登录页由 router/config 统一维护，避免 Token 失效时跳往已删除的旧路径。
 
 /**
@@ -25,7 +42,7 @@ interface ToLoginPageOptions {
 export const toLoginPage = debounce((options: ToLoginPageOptions = {}) => {
   const { mode = 'navigateTo', queryString = '' } = options
 
-  const url = `${LOGIN_PAGE}${queryString}`
+  const url = `${LOGIN_PAGE}${getRedirectQuery(queryString)}`
 
   // 获取当前页面路径
   const currentPage = getLastPage()

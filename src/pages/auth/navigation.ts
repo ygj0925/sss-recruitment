@@ -30,5 +30,13 @@ export function navigateAfterAuthenticated(redirect?: string) {
     uni.switchTab({ url: target })
     return
   }
+
+  // 登录页通常由 navigateTo 打开，来源页仍在页面栈中。直接返回可保留来源页的
+  // 表单、滚动位置和查询参数；直接唤起登录页时则走下面的安全重定向兜底。
+  const pages = getCurrentPages()
+  if (pages.length > 1) {
+    uni.navigateBack({ delta: 1 })
+    return
+  }
   uni.reLaunch({ url: target })
 }

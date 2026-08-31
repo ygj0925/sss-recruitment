@@ -1,163 +1,132 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, onUnmounted, reactive, ref } from 'vue'
 import { wxLogin } from '@/api/login'
-import { AGREEMENT_PAGE, BIND_PHONE_PAGE, PRIVACY_PAGE, REGISTER_PAGE, RESET_PASSWORD_PAGE } from '@/router/config'
+import { AGREEMENT_PAGE, BIND_PHONE_PAGE, PRIVACY_PAGE } from '@/router/config'
 import { startWechatAuthorization } from '@/service/auth/wechat-auth'
 import { useTokenStore } from '@/store/token'
-import AuthAgreement from './components/AuthAgreement.vue'
-import AuthButton from './components/AuthButton.vue'
-import AuthInput from './components/AuthInput.vue'
-import AuthLayout from './components/AuthLayout.vue'
-import AuthSocialLogin from './components/AuthSocialLogin.vue'
-import { normalizePhone, validatePassword, validatePhone } from './auth'
+import { normalizePhone, validatePhone, validateVerificationCode } from './auth'
 import { navigateAfterAuthenticated } from './navigation'
 
 definePage({
   excludeLoginPath: true,
   style: {
     navigationStyle: 'custom',
-    navigationBarBackgroundColor: '#2D6FE6',
-    navigationBarTextStyle: 'white',
-    navigationBarTitleText: '账号密码登录',
+    navigationBarBackgroundColor: '#D9EDFF',
+    navigationBarTextStyle: 'black',
+    navigationBarTitleText: '会员登录',
     backgroundColor: '#FFFFFF',
-    backgroundColorTop: '#2D6FE6',
-    backgroundColorBottom: '#FFFFFF',
   },
 })
 
+type LoginMode = 'phone' | 'wechat'
+interface PhoneNumberEvent { detail: { code?: string, errMsg?: string } }
+
 const tokenStore = useTokenStore()
-const form = reactive({
-  phone: '',
-  password: '',
-  agreed: false,
-})
-const errors = reactive({
-  phone: '',
-  password: '',
-  agreement: '',
-})
-const feedback = ref('')
-const feedbackType = ref<'error' | 'info' | 'success'>('info')
+const mode = ref<LoginMode>('phone')
+const agreed = ref(false)
+const showAgreement = ref(false)
 const loading = ref(false)
+const seconds = ref(0)
 const redirectUrl = ref('')
+const feedback = ref('')
+const form = reactive({ phone: '', code: '' })
+const errors = reactive({ phone: '', code: '' })
+let timer: ReturnType<typeof setInterval> | undefined
 
-onLoad((options) => {
-  redirectUrl.value = typeof options?.redirect === 'string' ? options.redirect : ''
-})
+const phoneLoginEnabled = computed(() => !validatePhone(form.phone) && !validateVerificationCode(form.code) && agreed.value)
 
-function goBack() {
-  if (getCurrentPages().length > 1) {
-    uni.navigateBack()
-    return
-  }
-  uni.reLaunch({ url: '/pages/index/index' })
+onLoad((options) => { redirectUrl.value = typeof options?.redirect === 'string' ? options.redirect : '' })
+onUnmounted(() => { if (timer) clearInterval(timer) })
+
+function goTo(url: string) { uni.navigateTo({ url }) }
+function updatePhone(value: string) { form.phone = normalizePhone(value); if (errors.phone) errors.phone = validatePhone(form.phone) }
+function checkPhone() { errors.phone = validatePhone(form.phone) }
+function checkCode() { errors.code = validateVerificationCode(form.code) }
+function requireAgreement() { if (agreed.value) return true; showAgreement.value = true; return false }
+function confirmAgreement() { agreed.value = true; showAgreement.value = false }
+
+function requestCode() {
+  checkPhone()
+  if (errors.phone || seconds.value) return
+  // 当前项目未定义短信接口契约，保留真实页面交互，避免伪造服务端请求。
+  seconds.value = 60
+  feedback.value = '验证码发送服务待接入，当前为交互演示。'
+  timer = setInterval(() => {
+    seconds.value -= 1
+    if (seconds.value <= 0 && timer) { clearInterval(timer); timer = undefined }
+  }, 1000)
 }
 
-function goTo(url: string) {
-  uni.navigateTo({ url })
+function submitPhoneLogin() {
+  checkPhone(); checkCode()
+  if (!requireAgreement() || errors.phone || errors.code) return
+  feedback.value = '手机号验证码登录服务待接入，当前不会创建登录态。'
 }
 
-function checkField(field: 'phone' | 'password') {
-  errors[field] = field === 'phone' ? validatePhone(form.phone) : validatePassword(form.password)
-}
-
-function updatePhone(value: string) {
-  form.phone = normalizePhone(value)
-  if (errors.phone) {
-    checkField('phone')
-  }
-}
-
-function validateForm() {
-  checkField('phone')
-  checkField('password')
-  errors.agreement = form.agreed ? '' : '请先阅读并同意《用户协议》和《隐私政策》'
-  return !errors.phone && !errors.password && !errors.agreement
-}
-
-function showFeedback(message: string, type: 'error' | 'info' | 'success' = 'info') {
-  feedback.value = message
-  feedbackType.value = type
-}
-
-async function submitAccountLogin() {
-  if (!validateForm()) {
-    return
-  }
-
-  loading.value = true
-  try {
-    await tokenStore.login({
-      username: form.phone,
-      password: form.password,
-    })
-    navigateAfterAuthenticated(redirectUrl.value)
-  }
-  catch {
-    showFeedback('账号或密码不正确，请检查后重试。', 'error')
-  }
-  finally {
-    loading.value = false
-  }
-}
-
-async function loginWithWechat() {
-  if (!form.agreed) {
-    errors.agreement = '请先阅读并同意《用户协议》和《隐私政策》'
-    return
-  }
-
-  loading.value = true
-  const result = await startWechatAuthorization({
-    authenticate: code => wxLogin({ code }),
-  })
+async function startWechatLogin(phoneCode = '') {
+  if (!requireAgreement()) return
+  loading.value = true; feedback.value = ''
+  const result = await startWechatAuthorization({ authenticate: code => wxLogin({ code }) })
   loading.value = false
-
   if (result.status === 'binding_required') {
-    const query = `?wechatCode=${encodeURIComponent(result.code)}&mock=${result.isMock ? '1' : '0'}`
-    goTo(`${BIND_PHONE_PAGE}${query}`)
+    const phoneQuery = phoneCode ? `&wechatPhoneCode=${encodeURIComponent(phoneCode)}` : ''
+    const redirectQuery = redirectUrl.value ? `&redirect=${encodeURIComponent(redirectUrl.value)}` : ''
+    uni.navigateTo({ url: `${BIND_PHONE_PAGE}?wechatCode=${encodeURIComponent(result.code)}&mock=${result.isMock ? '1' : '0'}${phoneQuery}${redirectQuery}` })
     return
   }
-
   if (result.status === 'authenticated') {
-    try {
-      await tokenStore.completeExternalLogin(result.token)
-      navigateAfterAuthenticated(redirectUrl.value)
-    }
-    catch {
-      showFeedback('微信登录状态初始化失败，请重新尝试。', 'error')
-    }
+    await tokenStore.completeExternalLogin(result.token)
+    navigateAfterAuthenticated(redirectUrl.value)
     return
   }
+  feedback.value = result.message
+}
 
-  showFeedback(result.message, 'error')
+function onWechatPhoneNumber(event: PhoneNumberEvent) {
+  if (!requireAgreement()) return
+  if (!event.detail.code) {
+    feedback.value = event.detail.errMsg?.includes('deny') ? '你已取消手机号授权。' : '未获取到微信手机号授权凭证，请重试。'
+    return
+  }
+  // 微信手机号凭证只能交由后端解密；先取得同一会话的微信身份并进入绑定分支。
+  startWechatLogin(event.detail.code)
 }
 </script>
 
 <template>
-  <AuthLayout title="账号密码登录" subtitle="请使用已注册的账号密码" @back="goBack">
-    <AuthInput v-model="form.phone" icon="⌕" placeholder="请输入手机号" input-type="number" :maxlength="11" :error="errors.phone" @blur="checkField('phone')" @update:model-value="updatePhone" />
-    <AuthInput v-model="form.password" icon="⌑" placeholder="请输入 6-20 位密码" password :maxlength="20" :error="errors.password" @blur="checkField('password')" />
-    <view class="flex items-start justify-between">
-      <view class="min-w-0 flex-1">
-        <AuthAgreement v-model="form.agreed" @agreement="goTo(AGREEMENT_PAGE)" @privacy="goTo(PRIVACY_PAGE)" />
+  <view class="member-login min-h-[var(--app-viewport-height)] overflow-hidden bg-white text-[#222]">
+    <view class="hero relative h-700rpx overflow-hidden">
+      <view class="hero-glow absolute inset-0" />
+      <view class="brand-word absolute left-0 right-0 top-178rpx text-center text-76rpx text-[#8ecbff] font-900 tracking-2rpx">BUSY FOR YOU</view>
+      <view class="brand-cn absolute left-0 right-0 top-248rpx text-center text-82rpx text-[#262626] font-900 tracking-5rpx">零食很忙</view>
+      <view class="mascot absolute left-1/2 top-350rpx h-292rpx w-218rpx -translate-x-1/2" aria-label="品牌吉祥物">
+        <view class="hat absolute left-24rpx top-0 h-116rpx w-170rpx rounded-[50%_50%_25%_25%] bg-[#075fc2] shadow-[inset_0_14rpx_22rpx_rgba(255,255,255,0.32)]" />
+        <view class="face absolute left-12rpx top-76rpx h-144rpx w-194rpx rounded-[46%] bg-[#ffd8c7]" />
+        <view class="mask absolute left-0 top-58rpx h-102rpx w-218rpx rounded-[52%_52%_38%_38%] bg-[#77bcff]"><view class="eye left-46rpx" /><view class="eye right-46rpx" /></view>
+        <view class="body absolute bottom-0 left-42rpx h-108rpx w-134rpx rounded-t-42rpx bg-[#0870d9]" /><view class="shirt absolute bottom-40rpx left-77rpx h-72rpx w-64rpx rounded-t-28rpx bg-[#77bcff]" />
+        <view class="leg absolute bottom-0 left-32rpx h-74rpx w-54rpx rounded-b-28rpx bg-[#0574da] -rotate-12" /><view class="leg absolute bottom-0 right-32rpx h-74rpx w-54rpx rounded-b-28rpx bg-[#0574da] rotate-12" />
       </view>
-      <text class="mb-4 ml-2.5 mt-0.5 block min-h-50rpx cursor-pointer whitespace-nowrap text-2xs text-#467bff font-600" role="link" @tap="goTo(RESET_PASSWORD_PAGE)">忘记密码？</text>
+      <view class="stage absolute bottom-25rpx left-1/2 h-46rpx w-440rpx -translate-x-1/2 rounded-[50%] bg-[#2387ed]" />
     </view>
-    <text v-if="errors.agreement" class="mb-3 block text-center text-2xs text-#e95d63 leading-1.5 -mt-1.5">{{ errors.agreement }}</text>
-    <AuthButton :disabled="loading" :loading="loading" @tap="submitAccountLogin" />
-    <text class="mt-3 block min-h-74rpx cursor-pointer text-center text-xs text-#467bff font-600 leading-74rpx" role="link" @tap="goTo(REGISTER_PAGE)">使用验证码登录 / 注册</text>
-    <text
-      v-if="feedback"
-      class="mb-3 block text-center text-2xs leading-1.5 -mt-1.5"
-      :class="{
-        'text-#e95d63': feedbackType === 'error',
-        'text-#467bff': feedbackType === 'info',
-        'text-#1eae72': feedbackType === 'success',
-      }"
-    >
-      {{ feedback }}
-    </text>
-    <AuthSocialLogin @wechat="loginWithWechat" @unavailable="provider => showFeedback(`${provider} 登录暂未开放`)" />
-  </AuthLayout>
+
+    <view class="px-88rpx"><text class="block pt-16rpx text-center text-40rpx font-500">成为会员，立享更多优惠福利</text>
+      <view v-if="mode === 'phone'" class="mt-132rpx">
+        <view class="field"><text class="country">+86　⌄</text><input :value="form.phone" type="number" maxlength="11" placeholder="请输入手机号" placeholder-class="placeholder" @input="updatePhone($event.detail.value)" @blur="checkPhone"></view><text v-if="errors.phone" class="error">{{ errors.phone }}</text>
+        <view class="field"><input v-model="form.code" type="number" maxlength="6" placeholder="请输入验证码" placeholder-class="placeholder" @blur="checkCode"><text class="code-action" @tap="requestCode">{{ seconds ? `${seconds}s 后重试` : '获取验证码' }}</text></view><text v-if="errors.code" class="error">{{ errors.code }}</text>
+        <button class="login-button" :disabled="!phoneLoginEnabled" @tap="submitPhoneLogin">登录</button>
+      </view>
+      <view v-else class="mt-154rpx">
+        <!-- #ifdef MP-WEIXIN --><button v-if="agreed" class="login-button" :loading="loading" open-type="getPhoneNumber" @getphonenumber="onWechatPhoneNumber">一键登录</button><button v-else class="login-button" @tap="requireAgreement">一键登录</button><!-- #endif -->
+        <!-- #ifndef MP-WEIXIN --><button class="login-button" :loading="loading" @tap="startWechatLogin">微信一键登录</button><!-- #endif -->
+        <text class="block mt-42rpx text-center text-32rpx text-[#999]">手机号安全登录</text>
+      </view>
+      <view class="agreement" @tap="agreed = !agreed"><view class="agreement-check" :class="{ checked: agreed }">{{ agreed ? '✓' : '' }}</view><text>我已阅读并同意</text><text class="agreement-link" @tap.stop="goTo(AGREEMENT_PAGE)">《服务使用协议》</text><text>和</text><text class="agreement-link" @tap.stop="goTo(PRIVACY_PAGE)">《隐私政策》</text><text>，未注册手机号登录后自动生成会员账号</text></view>
+      <text v-if="feedback" class="feedback">{{ feedback }}</text><text class="switch-mode" @tap="mode = mode === 'phone' ? 'wechat' : 'phone'">{{ mode === 'phone' ? '切换为一键登录' : '切换为手机号登录' }}</text><text class="skip" @tap="uni.reLaunch({ url: '/pages/index/index' })">暂不登录</text>
+    </view>
+    <view v-if="showAgreement" class="agreement-mask" @tap="showAgreement = false"><view class="agreement-dialog" @tap.stop><text class="dialog-copy">请您认真阅读以下协议的全部条款，接受后可开始使用我们的服务，未注册手机号登录后自动生成会员账号。</text><view class="dialog-links"><text class="dialog-link" @tap="goTo(AGREEMENT_PAGE)">《服务使用协议》</text><text class="dialog-link" @tap="goTo(PRIVACY_PAGE)">《隐私政策》</text></view><view class="dialog-actions"><button class="dialog-button reject" @tap="showAgreement = false">不同意</button><button class="dialog-button accept" @tap="confirmAgreement">同意并登录</button></view></view></view>
+  </view>
 </template>
+
+<style scoped>
+.hero { background: linear-gradient(180deg, #d9edff 0%, #f0f8ff 66%, #fff 100%); }.hero-glow { background: radial-gradient(ellipse at 50% 35%, rgba(64, 151, 246, .22), transparent 58%); }.mascot { z-index: 2; }.hat { z-index: 3; }.face { z-index: 1; }.mask { z-index: 4; }.body, .shirt, .leg { z-index: 0; }.eye { position: absolute; top: 28rpx; height: 66rpx; width: 42rpx; border: 7rpx solid #252525; border-radius: 48%; background: #fff; }.eye::after { content: ''; position: absolute; left: 11rpx; top: 18rpx; height: 27rpx; width: 17rpx; border-radius: 50%; background: #151515; }.eye:first-child { left: 45rpx; }.field { height: 106rpx; display: flex; align-items: center; border-bottom: 1rpx solid #eee; font-size: 34rpx; }.field input { min-width: 0; flex: 1; height: 100%; color: #333; }.country { padding-right: 24rpx; white-space: nowrap; }.placeholder { color: #d8d8d8; }.code-action { border-left: 1rpx solid #ddd; padding-left: 28rpx; color: #1677df; font-weight: 600; white-space: nowrap; }.error, .feedback { display: block; margin-top: 12rpx; font-size: 24rpx; color: #d74b3f; }.login-button { margin-top: 58rpx; height: 108rpx; border: none; border-radius: 54rpx; background: #1677df; color: #fff; font-size: 42rpx; line-height: 108rpx; }.login-button::after { border: none; }.login-button[disabled] { background: #b8d9fa; color: #78a9d8; }.agreement { margin-top: 56rpx; display: flex; align-items: flex-start; flex-wrap: wrap; color: #777; font-size: 28rpx; line-height: 42rpx; }.agreement-check { box-sizing: border-box; margin: 5rpx 18rpx 0 0; width: 36rpx; height: 36rpx; flex: none; border: 2rpx solid #c8c8c8; border-radius: 50%; color: #fff; font-size: 27rpx; line-height: 32rpx; text-align: center; }.agreement-check.checked { border-color: #1677df; background: #1677df; }.agreement-link, .dialog-link { color: #1677df; }.feedback { text-align: center; color: #888; }.switch-mode, .skip { display: block; text-align: center; color: #999; font-size: 32rpx; }.switch-mode { margin-top: 260rpx; }.skip { margin-top: 48rpx; padding-bottom: calc(42rpx + env(safe-area-inset-bottom)); }.agreement-mask { position: fixed; z-index: 10; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0, 0, 0, .68); }.agreement-dialog { box-sizing: border-box; width: 592rpx; border-radius: 26rpx; background: #fff; padding: 48rpx 40rpx 38rpx; }.dialog-copy { color: #555; font-size: 29rpx; line-height: 46rpx; }.dialog-links { display: flex; flex-wrap: wrap; gap: 16rpx; margin-top: 24rpx; font-size: 28rpx; }.dialog-actions { display: flex; gap: 26rpx; margin-top: 46rpx; }.dialog-button { flex: 1; height: 78rpx; border-radius: 42rpx; font-size: 34rpx; line-height: 76rpx; }.dialog-button::after { border: none; }.reject { border: 2rpx solid #333; background: #fff; }.accept { background: #1677df; color: #fff; }
+</style>

@@ -16,8 +16,13 @@ const errors = reactive({ phone: '', code: '' })
 const showCaptcha = ref(false)
 const seconds = ref(0)
 const feedback = ref('')
+const redirectUrl = ref('')
 let timer: ReturnType<typeof setInterval> | undefined
 const canBind = computed(() => !validatePhone(form.phone) && !validateVerificationCode(form.code))
+
+onLoad((options) => {
+  redirectUrl.value = typeof options?.redirect === 'string' ? options.redirect : ''
+})
 
 function goBack() {
   uni.navigateBack()
@@ -65,7 +70,9 @@ function submit() {
   checkPhone()
   checkCode()
   if (canBind.value) {
-    feedback.value = '绑定服务待接入，当前不会修改账号状态。'
+    feedback.value = redirectUrl.value
+      ? '绑定服务待接入；接入成功后会自动返回你发起登录的页面。'
+      : '绑定服务待接入，当前不会修改账号状态。'
   }
 }
 

@@ -2,9 +2,10 @@
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import AppPageHeader from '@/components/AppPageHeader.vue'
-import { AGREEMENT_PAGE, LOGIN_PAGE, PRIVACY_PAGE } from '@/router/config'
+import { AGREEMENT_PAGE, PRIVACY_PAGE } from '@/router/config'
 import { usePositionStore, useUserStore } from '@/store'
 import { useTokenStore } from '@/store/token'
+import { toLoginPage } from '@/utils/toLoginPage'
 
 definePage({
   style: {
@@ -45,9 +46,7 @@ onPageScroll(({ scrollTop }) => {
 })
 
 function handleLogin() {
-  uni.navigateTo({
-    url: LOGIN_PAGE,
-  })
+  toLoginPage()
 }
 
 function handleProfileTap() {
@@ -172,7 +171,7 @@ function handleLogout() {
           <view class="min-h-116rpx flex cursor-pointer items-center border-b-1rpx border-b-[#edf1f7] border-b-solid last:border-b-0 active:opacity-70" role="link" @tap="handleLegalTap(AGREEMENT_PAGE)">
             <view class="i-carbon-document mr-2 w-48rpx flex flex-[0_0_48rpx] items-center justify-center text-lg text-brand-blue leading-none" />
             <view class="min-w-0 flex flex-1 flex-col">
-              <text class="text-sm text-[#263249] font-600">用户协议</text>
+              <text class="text-sm text-[#263249] font-600">服务使用协议</text>
               <text class="mt-1 block overflow-hidden text-ellipsis whitespace-nowrap text-xs text-[#9aa5b5]">了解服务使用规则</text>
             </view>
             <view class="i-carbon-chevron-right ml-2 text-base text-[#bec7d4] leading-none" />
@@ -191,14 +190,12 @@ function handleLogout() {
       <view v-if="!tokenStore.hasLogin" class="mt-3 flex flex-col items-center rounded-28rpx bg-white px-3.5 py-4 text-center">
         <text class="text-sm text-[#263249] font-600">登录后使用完整求职服务</text>
         <text class="mt-1 block text-xs text-[#9aa5b5]">同步简历、投递记录与面试消息</text>
-        <navigator
-          :url="LOGIN_PAGE"
-          open-type="navigate"
-          hover-class="none"
+        <view
+          @tap="handleLogin"
           class="mt-3 box-border min-h-84rpx w-full flex cursor-pointer items-center justify-center rounded-14rpx bg-brand-blue text-base text-white font-600 transition-[opacity,transform] duration-180 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-99 active:opacity-88 motion-reduce:transition-none"
         >
           前往登录
-        </navigator>
+        </view>
       </view>
 
       <view

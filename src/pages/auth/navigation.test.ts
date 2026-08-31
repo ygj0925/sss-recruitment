@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { DEFAULT_AUTH_REDIRECT, navigateAfterAuthenticated, resolveAuthRedirect } from './navigation'
 
 describe('resolveAuthRedirect', () => {
@@ -19,5 +19,15 @@ describe('resolveAuthRedirect', () => {
 
     navigateAfterAuthenticated('/pages/auth/agreement')
     expect(uni.reLaunch).toHaveBeenCalledWith({ url: '/pages/auth/agreement' })
+  })
+
+  it('returns to the source page when the login page was opened from it', () => {
+    vi.stubGlobal('getCurrentPages', vi.fn().mockReturnValue([
+      { route: 'pages/position/detail' },
+      { route: 'pages/auth/login' },
+    ]))
+
+    navigateAfterAuthenticated('/pages/position/detail?id=1')
+    expect(uni.navigateBack).toHaveBeenCalledWith({ delta: 1 })
   })
 })
