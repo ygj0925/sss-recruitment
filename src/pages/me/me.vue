@@ -39,7 +39,7 @@ const resumeShortcuts = [
   { label: '简历模板', icon: 'i-carbon-template' },
 ]
 
-const profileScrolledBackground = 'var(--app-header-surface, rgba(255,255,255,0.98))'
+const profileScrolledBackground = 'var(--app-brand-header)'
 
 onPageScroll(({ scrollTop }) => {
   headerScrolled.value = scrollTop > 16
@@ -77,15 +77,15 @@ function handleLogout() {
 </script>
 
 <template>
-  <view class="relative app-tab-page overflow-hidden bg-white font-['Noto_Sans_SC','Microsoft_YaHei',sans-serif]">
-    <view class="pointer-events-none absolute inset-x-0 top-0 h-[var(--app-viewport-height)] bg-[var(--app-blue-white-gradient)]" aria-hidden="true" />
-    <view class="relative z-1 box-border min-h-72 px-6.5 pb-20 text-white">
+  <view class="app-tab-page font-['Noto_Sans_SC','Microsoft_YaHei',sans-serif]">
+    <view class="box-border min-h-72 px-6.5 pb-20 text-white bg-brand-hero">
       <AppPageHeader
         title="我的"
         light
         transparent
         :scrolled="headerScrolled"
         :scrolled-background="profileScrolledBackground"
+        scrolled-light
       />
       <view
         class="flex items-center -mt-16"

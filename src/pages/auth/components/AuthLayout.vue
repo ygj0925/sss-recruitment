@@ -16,12 +16,13 @@ const emit = defineEmits<{
 }>()
 
 const headerScrolled = ref(false)
-const headerBackground = 'transparent'
-const scrolledHeaderBackground = 'var(--app-header-surface, rgba(255,255,255,0.98))'
+const headerBackground = 'var(--app-brand-hero)'
+const scrolledHeaderBackground = 'var(--app-brand-header)'
 const h5DesktopClasses = {
   root: '',
   scroll: '',
   content: '',
+  decoration: '',
   card: '',
   logo: '',
 }
@@ -31,6 +32,7 @@ Object.assign(h5DesktopClasses, {
   root: 'md:flex-row',
   scroll: 'md:h-full md:w-52% md:flex-none',
   content: 'md:flex md:flex-col md:p-0',
+  decoration: 'md:hidden',
   card: 'md:my-auto md:w-[calc(100%-128rpx)] md:rounded-40rpx md:px-12 md:py-11',
   logo: 'md:hidden',
 })
@@ -60,16 +62,16 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
     <AppPageHeader
       :title="title"
       light
-      transparent
       :background="headerBackground"
       :scrolled="headerScrolled"
       :scrolled-background="scrolledHeaderBackground"
+      scrolled-light
     >
       <template #left>
         <view
           v-if="showBack"
-          class="transition-[background,border-color,color] h-64rpx w-64rpx flex cursor-pointer items-center justify-center border-1rpx rounded-20rpx text-2xl leading-none duration-180 ease-out active:opacity-74 motion-reduce:transition-none"
-          :class="headerScrolled ? 'border-[#d9e3f2] bg-white text-brand-blue' : 'border-white/22 bg-white/12 text-white'"
+          class="transition-[background,border-color,color] h-64rpx w-64rpx flex cursor-pointer items-center justify-center border-1rpx rounded-20rpx text-2xl text-white leading-none duration-180 ease-out active:opacity-74 motion-reduce:transition-none"
+          :class="headerScrolled ? 'border-white/28 bg-white/14' : 'border-white/22 bg-white/12'"
           role="button"
           aria-label="返回"
           @tap="emit('back')"
@@ -80,8 +82,8 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
       </template>
       <template #right>
         <view
-          class="transition-[background,border-color,color] h-64rpx w-64rpx flex cursor-pointer items-center justify-center border-1rpx rounded-20rpx text-sm font-700 leading-none duration-180 ease-out active:opacity-74 motion-reduce:transition-none"
-          :class="headerScrolled ? 'border-[#d9e3f2] bg-white text-brand-blue' : 'border-white/22 bg-white/12 text-white'"
+          class="transition-[background,border-color,color] h-64rpx w-64rpx flex cursor-pointer items-center justify-center border-1rpx rounded-20rpx text-sm text-white font-700 leading-none duration-180 ease-out active:opacity-74 motion-reduce:transition-none"
+          :class="headerScrolled ? 'border-white/28 bg-white/14' : 'border-white/22 bg-white/12'"
           aria-label="帮助"
         >
           ?
@@ -92,6 +94,7 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
 
     <scroll-view class="auth-layout__scroll h-0 flex-1" :class="h5DesktopClasses.scroll" scroll-y @scroll="handleScroll">
       <view class="relative box-border min-h-full overflow-hidden pb-auth-layout-safe" :class="h5DesktopClasses.content">
+        <view class="pointer-events-none absolute inset-x-0 top-0 h-350rpx rounded-b-52rpx bg-brand-hero" :class="h5DesktopClasses.decoration" aria-hidden="true" />
         <!-- #ifdef H5 -->
         <view class="relative z-1 flex items-center justify-between px-4.5 pt-3 md:px-8 md:pt-4.5">
           <view
@@ -131,15 +134,12 @@ function handleScroll(event: { detail: { scrollTop?: number } }) {
 </template>
 
 <style scoped>
-.auth-layout {
-  background: var(--app-blue-white-gradient);
-}
-
+.auth-layout,
 .auth-layout__scroll {
-  background: var(--app-blue-white-gradient);
+  background: var(--app-page-background);
 }
 
 .auth-layout__brand {
-  background: linear-gradient(180deg, #247cf0 0%, #43a9ef 62%, #9dd5f7 100%);
+  background: var(--app-brand-hero);
 }
 </style>
